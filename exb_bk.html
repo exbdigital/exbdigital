@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>EXB Digital</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="EXB Digital is a Creative Company based in Lagos, Nigeria. We develop Web and Mobile Applications as well as 360 Degrees Digital Marketing">
+<meta name="keyword" content="web development, mobile apps development, branding, digital marketing, software testing">
+
+<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="css/exb-landing.css">
+<link rel="stylesheet" href="css/exb.css">
+</head>
+<body class="cb13">
+
+
+
+<div id="preload">
+    <div id="wave">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+</div>
+
+<!-- You write code for this content block in another file -->
+
+
+<div class="topWrapper text-center">
+    <div class="topHeader -vh-5">
+        <!-- top logo -->
+    </div>
+</div>
+<div class="centerWrapper -center -vh-15 text-center -absolute">
+    <a href="index.html" class="logo">
+        <img src="images/EXB.svg" width="125" class="main-logo m-b-30">
+    </a>
+    <!-- slide text -->
+    <div class="slide-cover">
+    	<div><h1 class="-light">Web & Mobile Application Development.</h1></div>
+    	<div><h1 class="-light">User Interface & User Xperience Design.</h1></div>
+    	<div><h1 class="-light">Branding & Identity Strategy.</h1></div>
+        <div><h1 class="-light">Search Engine Optimization.</h1></div>    
+    </div>
+    <!-- countdown -->
+    <!-- <div id="countdown" class="countdown -center -dashed   m-b-30 m-t-30"></div> -->
+    <!-- text content -->
+	<p style="line-height: 30px;">
+		Need Our Services? Say <strong><a class="exb-cta" title="Send us a mail: hello@exbdigital.com" alt="Send us a mail: hello@exbdigital.com" href="mailto:hello@exbdigital.com">hello@exbdigital.com</a></strong> <br />
+		or call <strong><a class="exb-cta" title="Call EXB on +234-(0)-906-0001-392" alt="Call EXB on +234-(0)-906-0001-392" href="tel:+2349060001392">0906 0001 <span style="color:red;">EXB</span></a></strong>
+	</p>
+	<!-- button info -->
+	<div class="btn-action text-center">
+		<a target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSd-vcpSJ6erl-PvG05w2FUdZAoudsRFF5avRhWXHIKDJ8Gb7w/viewform" class="btn btn-outline-danger -rounded" >Let's Build Together</a>
+		<a target="_blank" title="Send a quick WhatsApp message to EXB at +234-(0)-906-0001-392" alt="Send a quick WhatsApp message to EXB at +234-(0)-906-0001-392" href="https://api.whatsapp.com/send?phone=2349060001392&text=I%20am%20interested%20in%20building%20something%20exciting%20with%20EXB" class="btn btn-danger -rounded">Message Us</a>
+	</div>
+</div>
+<div class="footerWrapper text-center">
+    <!-- footer -->
+    <div class="mastfoot">
+    <p>© 2018  —  Made with <span class="love"> ♥︎ </span> by <a href="#">EXB Digital Ltd. - RC 1454469</a></p>
+</div>
+</div>
+
+<!-- overlay background -->
+<div id="overlay">
+    <div class="layer_1 bg-color -op-4"></div>
+</div>
+
+
+
+<!-- JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+<script src="js/exb-landing.js"></script>
+<script src="js/exb.js"></script>
+<script>
+
+
+			var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
+			//var container, stats;
+			var camera, scene, renderer;
+			var particles, particle, count = 0;
+			var mouseX = 0, mouseY = 0;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			init();
+			animate();
+			function init() {
+				container = document.createElement( 'div' );
+				document.body.appendChild( container ).setAttribute("id", "bg-animate");
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 1000;
+				scene = new THREE.Scene();
+				particles = new Array();
+				var PI2 = Math.PI * 2;
+				var material = new THREE.SpriteCanvasMaterial( {
+					color: 0xffffff,
+					program: function ( context ) {
+						context.beginPath();
+						context.arc( 0, 0, 0.5, 0, PI2, true );
+						context.fill();
+					}
+				} );
+				var i = 0;
+				for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+					for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
+						particle = particles[ i ++ ] = new THREE.Sprite( material );
+						particle.position.x = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 );
+						particle.position.z = iy * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
+						scene.add( particle );
+					}
+				}
+				renderer = new THREE.CanvasRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				//stats = new Stats();
+				//container.appendChild( stats.dom );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+			function onWindowResize() {
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+			//
+			function onDocumentMouseMove( event ) {
+				mouseX = event.clientX - windowHalfX;
+				mouseY = event.clientY - windowHalfY;
+			}
+			function onDocumentTouchStart( event ) {
+				if ( event.touches.length === 1 ) {
+					event.preventDefault();
+					mouseX = event.touches[ 0 ].pageX - windowHalfX;
+					mouseY = event.touches[ 0 ].pageY - windowHalfY;
+				}
+			}
+			function onDocumentTouchMove( event ) {
+				if ( event.touches.length === 1 ) {
+					event.preventDefault();
+					mouseX = event.touches[ 0 ].pageX - windowHalfX;
+					mouseY = event.touches[ 0 ].pageY - windowHalfY;
+				}
+			}
+			//
+			function animate() {
+				requestAnimationFrame( animate );
+				render();
+				//stats.update();
+			}
+			function render() {
+				camera.position.x += ( mouseX - camera.position.x ) * .05;
+				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+				camera.lookAt( scene.position );
+				var i = 0;
+				for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+					for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
+						particle = particles[ i++ ];
+						particle.position.y = ( Math.sin( ( ix + count ) * 0.3 ) * 50 ) +
+							( Math.sin( ( iy + count ) * 0.5 ) * 50 );
+						particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 4 +
+							( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 4;
+					}
+				}
+				renderer.render( scene, camera );
+				count += 0.1;
+			}
+
+
+
+</script>
+</body>
+</html>
