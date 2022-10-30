@@ -1,2 +1,2 @@
-# exbdigital
+# EXB Digital Landing Page
  
