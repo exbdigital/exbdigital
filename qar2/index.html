@@ -461,6 +461,10 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const itineraryContainer = document.getElementById('itinerary-container');
+            if (!itineraryContainer) {
+                console.error('Itinerary container not found');
+                return;
+            }
             itineraryData.forEach(item => {
                 const dayElement = document.createElement('div');
 
@@ -526,9 +530,11 @@
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
 
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('section');
@@ -544,27 +550,39 @@
 
                 navLinks.forEach(link => {
                     link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
+                    if (current && link.getAttribute('href').includes(current)) {
                         link.classList.add('active');
                     }
                 });
             });
 
-            const ctx = document.getElementById('budgetChart').getContext('2d');
+            const budgetChartCanvas = document.getElementById('budgetChart');
+            if (!budgetChartCanvas) {
+                console.error('Budget chart canvas not found');
+                return;
+            }
+            const ctx = budgetChartCanvas.getContext('2d');
             let budgetChart;
 
             const totalBtn = document.getElementById('total-view-btn');
             const personBtn = document.getElementById('person-view-btn');
             const budgetDetailsContainer = document.getElementById('budget-details');
+            
+            if (!totalBtn || !personBtn || !budgetDetailsContainer) {
+                console.error('Budget view buttons or details container not found');
+                return;
+            }
 
             const USD_TO_QAR = 3.64;
             const USD_TO_NGN = 1500;
 
-            Chart.register(ChartDataLabels);
+            // Register Chart.js plugins
+            if (typeof ChartDataLabels !== 'undefined') {
+                Chart.register(ChartDataLabels);
+            }
 
             function renderChart(view) {
                 const data = budgetData[view];
-                const total = Object.values(data).reduce((a, b) => a + b, 0);
                 const grandTotal = Object.values(data).reduce((a, b) => a + b, 0);
                 const grandTotalQAR = grandTotal * USD_TO_QAR;
                 const grandTotalNGN = grandTotal * USD_TO_NGN;
@@ -573,7 +591,8 @@
                     budgetChart.destroy();
                 }
 
-                budgetChart = new Chart(ctx, {
+                try {
+                    budgetChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
                         labels: ['Activities', 'Transportation', 'Dining'],
@@ -593,7 +612,7 @@
                                 formatter: (value, ctx) => {
                                     let sum = 0;
                                     let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => {
+                                    dataArr.forEach(data => {
                                         sum += data;
                                     });
                                     let percentage = (value * 100 / sum).toFixed(2) + "%";
@@ -630,6 +649,9 @@
                         }
                     }
                 });
+                } catch (error) {
+                    console.error('Error creating budget chart:', error);
+                }
 
                 budgetDetailsContainer.innerHTML = `
                     <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center md:text-left">Budget Details (${view === 'total' ? 'Group Total' : 'Per Person'})</h3>
@@ -733,6 +755,10 @@
             }
 
             const budgetTabContainer = document.getElementById('budgetTabContent');
+            if (!budgetTabContainer) {
+                console.error('Budget tab container not found');
+                return;
+            }
 
             function updateBudgetTabs() {
                 budgetTabContainer.innerHTML = `
@@ -749,7 +775,8 @@
                         document.querySelectorAll('#budgetTabContent [role="tabpanel"]').forEach(content => {
                             content.classList.add('hidden');
                         });
-                        document.getElementById(event.target.getAttribute('data-tabs-target').substring(1)).classList.remove('hidden');
+                        const currency = event.target.getAttribute('data-budget-currency');
+                        document.getElementById(currency).classList.remove('hidden');
                     });
                 });
                 document.getElementById('usd').classList.remove('hidden');
@@ -814,6 +841,11 @@
 
             const transportContainer = document.getElementById('transport-table-container');
             const transportTabs = document.querySelectorAll('[data-transport-currency]');
+            
+            if (!transportContainer) {
+                console.error('Transport container not found');
+                return;
+            }
 
             function updateTransportTable(currency) {
                 transportContainer.innerHTML = generateTransportTable(currency);
