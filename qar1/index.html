@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Itinerary: 7 Days in Doha 🇶🇦</title>
+    <title>Interactive Itinerary: 7 Days in Doha 🇶🇦 (Tentative Plan)</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3ctext y='.9em' font-size='90'%3e🇶🇦%3c/text%3e%3c/svg%3e">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -57,6 +60,11 @@
         .accordion-button.open+.accordion-content {
             max-height: 2000px;
         }
+
+        .tab-button.active {
+            border-color: #C07B58;
+            color: #C07B58;
+        }
     </style>
 </head>
 
@@ -70,6 +78,8 @@
                 <a href="#itinerary" class="nav-link text-gray-600 font-medium pb-1">Itinerary</a>
                 <a href="#logistics" class="nav-link text-gray-600 font-medium pb-1">Logistics</a>
                 <a href="#budget" class="nav-link text-gray-600 font-medium pb-1">Budget</a>
+                <a href="https://drive.google.com/drive/folders/15Bsi3ep4XDfzsn5IEfl-cSgMUAmc3YPj?usp=drive_link"
+                    target="_blank" class="nav-link text-gray-600 font-medium pb-1">Docs</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -84,6 +94,8 @@
             <a href="#itinerary" class="block py-2 text-gray-600">Itinerary</a>
             <a href="#logistics" class="block py-2 text-gray-600">Logistics</a>
             <a href="#budget" class="block py-2 text-gray-600">Budget</a>
+            <a href="https://drive.google.com/drive/folders/15Bsi3ep4XDfzsn5IEfl-cSgMUAmc3YPj?usp=drive_link"
+                target="_blank" class="block py-2 text-gray-600">Docs</a>
         </div>
     </header>
 
@@ -101,12 +113,12 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
                     <h3 class="text-lg font-semibold text-[#C07B58] mb-2">Total Estimated Cost</h3>
-                    <p class="text-3xl font-bold text-gray-800">$6,724</p>
+                    <p class="text-3xl font-bold text-gray-800">$6,272</p>
                     <p class="text-gray-500">for the group (excl. flights/hotel)</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
                     <h3 class="text-lg font-semibold text-[#C07B58] mb-2">Cost Per Person</h3>
-                    <p class="text-3xl font-bold text-gray-800">$961</p>
+                    <p class="text-3xl font-bold text-gray-800">$896</p>
                     <p class="text-gray-500">for activities, transport & dining</p>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
@@ -121,7 +133,7 @@
 
         <section id="itinerary" class="mb-16">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Interactive Itinerary (Alternative Plan)
+                <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Interactive Itinerary (Tentative Plan)
                 </h2>
                 <p class="max-w-2xl mx-auto text-gray-600">
                     Explore your daily schedule. Click on any day to expand and see the detailed plan, including
@@ -174,6 +186,29 @@
                         if you prefer not to drive.</p>
                 </div>
             </div>
+            <div class="mt-8 bg-white p-6 rounded-lg shadow-md border border-gray-100 max-w-6xl mx-auto">
+                <h3 class="text-2xl font-semibold text-[#2C3E50] mb-4 text-center">Daily Transportation Cost Breakdown
+                </h3>
+                <div class="mb-4 border-b border-gray-200">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="transportTabs" role="tablist">
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg tab-button active"
+                                data-transport-currency="usd">USD ($)</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg tab-button"
+                                data-transport-currency="qar">QAR (ر.ق)</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg tab-button"
+                                data-transport-currency="ngn">NGN (₦)</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="transport-table-container" class="overflow-x-auto">
+                    <!-- Transport table will be generated by JS -->
+                </div>
+            </div>
         </section>
 
         <hr class="my-16 border-gray-200">
@@ -210,6 +245,38 @@
                 </div>
             </div>
         </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <section id="master-budget" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Master Budget Sheet</h2>
+                <p class="max-w-2xl mx-auto text-gray-600">
+                    A detailed breakdown of all estimated costs for the trip. Use the tabs to switch between currencies.
+                </p>
+            </div>
+            <div class="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-md border border-gray-100">
+                <div class="mb-4 border-b border-gray-200">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="budgetTabs" role="tablist">
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg tab-button active"
+                                data-budget-currency="usd">USD ($)</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg tab-button"
+                                data-budget-currency="qar">QAR (ر.ق)</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg tab-button"
+                                data-budget-currency="ngn">NGN (₦)</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="budgetTabContent" class="overflow-x-auto">
+                    <!-- Budget tables will be generated by JS -->
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="bg-gray-800 text-white mt-16">
@@ -234,7 +301,8 @@
                     options: [],
                     description: "Enjoy dinner at one of the hotel's restaurants or order in.",
                     cost: "Varies"
-                }
+                },
+                timeframes: []
             },
             {
                 day: "Day 2: Tuesday, Sep 9th",
@@ -255,7 +323,16 @@
                     ],
                     description: "Enjoy a lively dinner at Opa or another restaurant of your choice in the vibrant Souq Waqif.",
                     cost: "Varies"
-                }
+                },
+                timeframes: [
+                    "<strong>9:30 AM - 11:30 AM:</strong> Museum of Islamic Art",
+                    "<strong>11:30 AM - 1:30 PM:</strong> National Museum of Qatar",
+                    "<strong>1:30 PM - 3:00 PM:</strong> Lunch",
+                    "<strong>3:00 PM - 6:00 PM:</strong> Explore Mina District, Old Port, Corniche",
+                    "<strong>6:00 PM - 8:00 PM:</strong> Explore Souq Waqif",
+                    "<strong>8:00 PM - 9:30 PM:</strong> Dinner",
+                    "<strong>9:30 PM onwards:</strong> Night Dhow Cruise"
+                ]
             },
             {
                 day: "Day 3: Wednesday, Sep 10th",
@@ -272,7 +349,12 @@
                     options: [],
                     description: "Lunch is included in the day pass.",
                     cost: "Included"
-                }
+                },
+                timeframes: [
+                    "<strong>9:00 AM:</strong> Ferry to Banana Island",
+                    "<strong>9:30 AM - 5:00 PM:</strong> Enjoy the resort",
+                    "<strong>5:00 PM:</strong> Return ferry to mainland"
+                ]
             },
             {
                 day: "Day 4: Thursday, Sep 11th",
@@ -292,7 +374,15 @@
                     options: [],
                     description: "Afternoon tea serves as a late lunch. Dinner can be enjoyed at The Pearl or near Villaggio.",
                     cost: "Varies"
-                }
+                },
+                timeframes: [
+                    "<strong>10:00 AM - 12:00 PM:</strong> Katara Cultural Village",
+                    "<strong>12:00 PM - 1:00 PM:</strong> The Pearl-Qatar",
+                    "<strong>1:00 PM - 2:30 PM:</strong> Lunch at The Pearl",
+                    "<strong>3:00 PM - 5:00 PM:</strong> Afternoon Tea at Raffles",
+                    "<strong>5:30 PM - 7:30 PM:</strong> Villaggio Mall & Gondola Ride",
+                    "<strong>8:00 PM onwards:</strong> Lusail Fountain & Dinner"
+                ]
             },
             {
                 day: "Day 5: Friday, Sep 12th",
@@ -303,14 +393,18 @@
                 ],
                 activities: [
                     { name: "Mall of Qatar", url: "https://www.google.com/maps/search/?api=1&query=Mall+of+Qatar", description: "Explore one of Doha's premier shopping and entertainment destinations.", cost: "Free" },
-                    { name: "Afternoon Desert Safari", url: "https://www.google.com/maps/search/?api=1&query=Khor+Al+Adaid", description: "Dune bashing, camel rides, and sunset views at the Inland Sea.", cost: "QAR 338" }
+                    { name: "Afternoon Desert Safari", url: "https://www.google.com/maps/search/?api=1&query=Khor+Al+Adaid", description: "Dune bashing, camel rides, and sunset views at the Inland Sea. A highly-rated operator is <a href='https://www.falcontoursqatar.net/' target='_blank' class='text-[#C07B58] hover:underline'>Falcon Tours</a>.", cost: "QAR 338" }
                 ],
                 dining: {
                     name: "Lunch & Dinner",
                     options: [],
                     description: "Lunch at the Mall of Qatar. A traditional BBQ dinner is included in the desert safari.",
                     cost: "Varies"
-                }
+                },
+                timeframes: [
+                    "<strong>1:00 PM onwards:</strong> Lunch & Shopping at Mall of Qatar",
+                    "<strong>4:30 PM - 9:00 PM:</strong> Afternoon Desert Safari"
+                ]
             },
             {
                 day: "Day 6: Saturday, Sep 13th",
@@ -330,7 +424,12 @@
                     options: [],
                     description: "Enjoy a final farewell dinner at a restaurant of your choice.",
                     cost: "Varies"
-                }
+                },
+                timeframes: [
+                    "<strong>11:00 AM - 4:00 PM:</strong> Quest Doha Theme Park",
+                    "<strong>Late Afternoon:</strong> Museum of Illusions",
+                    "<strong>Evening:</strong> Final shopping & Farewell Dinner"
+                ]
             }
         ];
 
@@ -347,6 +446,39 @@
             }
         };
 
+        const masterBudgetData = {
+            activities: [
+                { name: "Museum of Islamic Art (MIA)", cost: 50 },
+                { name: "National Museum of Qatar (NMoQ)", cost: 25 },
+                { name: "Night Dhow Cruise", cost: 153 },
+                { name: "Banana Island Resort Day Pass", cost: 395 },
+                { name: "Afternoon Tea at Raffles", cost: 350 },
+                { name: "Gondola Ride", cost: 11 },
+                { name: "Afternoon Desert Safari", cost: 338 },
+                { name: "Quest Doha Theme Park", cost: 235 },
+                { name: "Museum of Illusions", cost: 80 }
+            ],
+            transport: { name: "Nissan Sunny Rental + Fuel", cost: 408 },
+            dining: [
+                { name: "Day 1 Dinner (at leisure)", cost: 164 },
+                { name: "Day 2 Lunch & Dinner (Souq Area)", cost: 273 },
+                { name: "Day 3 Dinner (Optional)", cost: 182 },
+                { name: "Day 4 Dinner (The Pearl/Villaggio)", cost: 291 },
+                { name: "Day 5 Lunch (Mall of Qatar)", cost: 109 },
+                { name: "Day 6 Lunch & Farewell Dinner", cost: 546 }
+            ]
+        };
+
+        const dailyTransportCosts = [
+            { day: 1, destination: "No Travel", fuel: 0.00, ride: 0.00 },
+            { day: 2, destination: "Old Doha Loop", fuel: 3.00, ride: 22.00 },
+            { day: 3, destination: "Banana Island Ferry", fuel: 1.50, ride: 10.00 },
+            { day: 4, destination: "Modern Doha Tour", fuel: 4.00, ride: 45.00 },
+            { day: 5, destination: "Mall of Qatar", fuel: 2.50, ride: 20.00 },
+            { day: 6, destination: "Quest & Final Shopping", fuel: 2.00, ride: 17.00 }
+        ];
+        const rentalCostUSD = 91.36;
+
         document.addEventListener('DOMContentLoaded', function () {
             const itineraryContainer = document.getElementById('itinerary-container');
             itineraryData.forEach(item => {
@@ -358,6 +490,16 @@
                         `<a href="${opt.url}" target="_blank" class="text-[#C07B58] hover:underline">${opt.name}</a>`
                     ).join(' or ');
                     diningHtml = `<p class="font-medium text-gray-700">${diningLinks}</p>`;
+                }
+
+                let timeframesHtml = '';
+                if (item.timeframes && item.timeframes.length > 0) {
+                    timeframesHtml = `
+                        <div class="mt-6">
+                            <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">Suggested Times</h4>
+                            <ul class="list-disc list-inside space-y-1 text-gray-600">${item.timeframes.map(t => `<li>${t}</li>`).join('')}</ul>
+                        </div>
+                    `;
                 }
 
                 dayElement.className = 'bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden';
@@ -384,6 +526,7 @@
                                     <p class="text-sm text-gray-500 mt-1">Est. Cost: ${item.dining.cost}</p>
                                 </div>
                             </div>
+                            ${timeframesHtml}
                             <div class="mt-6">
                                 <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">Activities</h4>
                                 <div class="space-y-3">
@@ -448,8 +591,11 @@
             const USD_TO_QAR = 3.64;
             const USD_TO_NGN = 1500;
 
+            Chart.register(ChartDataLabels);
+
             function renderChart(view) {
                 const data = budgetData[view];
+                const total = Object.values(data).reduce((a, b) => a + b, 0);
                 const grandTotal = Object.values(data).reduce((a, b) => a + b, 0);
                 const grandTotalQAR = grandTotal * USD_TO_QAR;
                 const grandTotalNGN = grandTotal * USD_TO_NGN;
@@ -474,6 +620,21 @@
                         maintainAspectRatio: false,
                         cutout: '60%',
                         plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    let sum = 0;
+                                    let dataArr = ctx.chart.data.datasets[0].data;
+                                    dataArr.map(data => {
+                                        sum += data;
+                                    });
+                                    let percentage = (value * 100 / sum).toFixed(2) + "%";
+                                    return percentage;
+                                },
+                                color: '#fff',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
                             legend: {
                                 position: 'bottom',
                                 labels: {
@@ -550,6 +711,158 @@
                 totalBtn.classList.remove('bg-[#C07B58]', 'text-white');
             });
 
+            function generateBudgetTable(currency) {
+                let conversionRate = 1;
+                let currencySymbol = '$';
+                if (currency === 'qar') {
+                    conversionRate = 1; // Base is QAR
+                    currencySymbol = 'QAR ';
+                } else if (currency === 'usd') {
+                    conversionRate = 1 / USD_TO_QAR;
+                    currencySymbol = '$';
+                } else if (currency === 'ngn') {
+                    conversionRate = USD_TO_NGN / USD_TO_QAR;
+                    currencySymbol = '₦';
+                }
+
+                let totalActivities = 0;
+                const activitiesHtml = masterBudgetData.activities.map(item => {
+                    const costPerPerson = item.cost * conversionRate;
+                    totalActivities += costPerPerson;
+                    return `<tr class="border-b"><td class="p-3" colspan="2">${item.name}</td><td class="p-3 text-right">${currencySymbol}${costPerPerson.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td><td class="p-3 text-right">${currencySymbol}${(costPerPerson * 7).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>`;
+                }).join('');
+
+                let totalDining = 0;
+                const diningHtml = masterBudgetData.dining.map(item => {
+                    const costPerPerson = item.cost * conversionRate;
+                    totalDining += costPerPerson;
+                    return `<tr class="border-b"><td class="p-3" colspan="2">${item.name}</td><td class="p-3 text-right">${currencySymbol}${costPerPerson.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td><td class="p-3 text-right">${currencySymbol}${(costPerPerson * 7).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>`;
+                }).join('');
+
+                const transportCost = masterBudgetData.transport.cost * conversionRate;
+                const grandTotal = totalActivities + (transportCost / 7) + totalDining;
+
+                return `
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b bg-gray-50">
+                                <th class="p-3 font-medium" colspan="2">Item</th>
+                                <th class="p-3 font-medium text-right">Cost per Person</th>
+                                <th class="p-3 font-medium text-right">Group Total (7)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="font-bold bg-gray-50"><td class="p-3" colspan="4">Activities & Entrance Fees</td></tr>
+                            ${activitiesHtml}
+                            <tr class="font-semibold bg-gray-50"><td class="p-3" colspan="2">Subtotal (Activities)</td><td class="p-3 text-right">${currencySymbol}${totalActivities.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td><td class="p-3 text-right">${currencySymbol}${(totalActivities * 7).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+                            <tr class="font-bold bg-gray-50"><td class="p-3" colspan="4">Transportation</td></tr>
+                            <tr class="border-b"><td class="p-3" colspan="2">${masterBudgetData.transport.name}</td><td class="p-3 text-right">${currencySymbol}${(transportCost / 7).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td><td class="p-3 text-right">${currencySymbol}${transportCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+                            <tr class="font-bold bg-gray-50"><td class="p-3" colspan="4">Dining (Guideline)</td></tr>
+                            ${diningHtml}
+                            <tr class="font-semibold bg-gray-50"><td class="p-3" colspan="2">Subtotal (Dining)</td><td class="p-3 text-right">${currencySymbol}${totalDining.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td><td class="p-3 text-right">${currencySymbol}${(totalDining * 7).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+                            <tr class="font-extrabold bg-gray-200 text-gray-800"><td class="p-3" colspan="2">GRAND TOTAL ESTIMATE</td><td class="p-3 text-right">${currencySymbol}${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td><td class="p-3 text-right">${currencySymbol}${(grandTotal * 7).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            const budgetTabContainer = document.getElementById('budgetTabContent');
+
+            function updateBudgetTabs() {
+                budgetTabContainer.innerHTML = `
+                    <div id="usd" role="tabpanel" aria-labelledby="usd-tab">${generateBudgetTable('usd')}</div>
+                    <div class="hidden" id="qar" role="tabpanel" aria-labelledby="qar-tab">${generateBudgetTable('qar')}</div>
+                    <div class="hidden" id="ngn" role="tabpanel" aria-labelledby="ngn-tab">${generateBudgetTable('ngn')}</div>
+                `;
+                const budgetTabs = document.querySelectorAll('[data-budget-currency]');
+                budgetTabs.forEach(tab => {
+                    tab.addEventListener('click', (event) => {
+                        budgetTabs.forEach(t => t.classList.remove('active'));
+                        event.target.classList.add('active');
+
+                        document.querySelectorAll('#budgetTabContent [role="tabpanel"]').forEach(content => {
+                            content.classList.add('hidden');
+                        });
+                        document.getElementById(event.target.getAttribute('data-tabs-target').substring(1)).classList.remove('hidden');
+                    });
+                });
+                document.getElementById('usd').classList.remove('hidden');
+            }
+
+            function generateTransportTable(currency) {
+                let conversionRate = 1;
+                let currencySymbol = '$';
+                if (currency === 'qar') {
+                    conversionRate = USD_TO_QAR;
+                    currencySymbol = 'QAR ';
+                } else if (currency === 'ngn') {
+                    conversionRate = USD_TO_NGN;
+                    currencySymbol = '₦';
+                }
+
+                const rows = dailyTransportCosts.map(item => `
+                    <tr class="border-b">
+                        <td class="p-3 font-medium">Day ${item.day}</td>
+                        <td class="p-3">${item.destination}</td>
+                        <td class="p-3 text-center">${currencySymbol}${(item.fuel * conversionRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td class="p-3 text-center">${currencySymbol}${(item.ride * conversionRate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    </tr>
+                `).join('');
+
+                const totalFuel = dailyTransportCosts.reduce((sum, item) => sum + item.fuel, 0) * conversionRate;
+                const totalRide = dailyTransportCosts.reduce((sum, item) => sum + item.ride, 0) * conversionRate;
+                const rentalCost = rentalCostUSD * conversionRate;
+
+                return `
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b bg-gray-50">
+                                <th class="p-3 font-medium">Day</th>
+                                <th class="p-3 font-medium">Destination(s)</th>
+                                <th class="p-3 font-medium text-center">Self-Drive Cost (Fuel)</th>
+                                <th class="p-3 font-medium text-center">Ride-Hailing Cost (2 Cars)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="p-3" colspan="2">Subtotal (Trips)</td>
+                                <td class="p-3 text-center">${currencySymbol}${totalFuel.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                <td class="p-3 text-center">${currencySymbol}${totalRide.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                            </tr>
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="p-3" colspan="2">+ Nissan Sunny Rental</td>
+                                <td class="p-3 text-center">${currencySymbol}${rentalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                <td class="p-3 text-center">N/A</td>
+                            </tr>
+                            <tr class="bg-gray-200 font-extrabold text-gray-800">
+                                <td class="p-3" colspan="2">TOTAL ESTIMATED COST</td>
+                                <td class="p-3 text-center">${currencySymbol}${(totalFuel + rentalCost).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                <td class="p-3 text-center">${currencySymbol}${totalRide.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs text-gray-500 mt-2 text-center">*Note: The high-level summary totals include a buffer for incidental travel and potential surge pricing.</p>
+                `;
+            }
+
+            const transportContainer = document.getElementById('transport-table-container');
+            const transportTabs = document.querySelectorAll('[data-transport-currency]');
+
+            function updateTransportTable(currency) {
+                transportContainer.innerHTML = generateTransportTable(currency);
+            }
+
+            transportTabs.forEach(tab => {
+                tab.addEventListener('click', (event) => {
+                    transportTabs.forEach(t => t.classList.remove('active'));
+                    event.target.classList.add('active');
+                    updateTransportTable(event.target.dataset.transportCurrency);
+                });
+            });
+
+            updateTransportTable('usd');
+            updateBudgetTabs();
             renderChart('total');
         });
     </script>
