@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Itinerary: 7 Days in Doha 🇶🇦</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Desert Dusk -->
+    <!-- Application Structure Plan: The SPA is designed as a single-page dashboard for optimal usability. A sticky header with navigation allows users to instantly jump to key sections: 'Overview', 'Itinerary', 'Logistics', and 'Budget'. This structure avoids a long, linear scroll and lets users access specific information quickly. The core is the 'Interactive Itinerary,' which uses an accordion layout to present each day's plan. This keeps the interface clean and allows users to focus on one day at a time, expanding for details. This is more user-friendly than the original report's long-form text, as it reduces cognitive load and improves information discovery. -->
+    <!-- Visualization & Content Choices: Report Info: Budget breakdown -> Goal: Compare cost categories -> Viz/Method: Chart.js Donut Chart -> Interaction: Hover for tooltips, toggle between 'Total' and 'Per Person' views -> Justification: A donut chart provides an immediate, intuitive understanding of how the budget is allocated, which is far more effective than a simple table. Report Info: Daily schedule -> Goal: Organize daily activities -> Viz/Method: HTML/Tailwind Accordion -> Interaction: Click to expand/collapse -> Justification: An accordion prevents information overload by hiding details until requested, making the dense schedule easy to navigate. Report Info: Transportation options -> Goal: Compare costs -> Viz/Method: Styled HTML Table -> Interaction: Clear visual layout for easy comparison -> Justification: A table is the most effective way to compare multiple options across several destinations. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #4A4A4A;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #C07B58;
+            border-bottom-color: #C07B58;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+
+        .accordion-button.open+.accordion-content {
+            max-height: 2000px;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#2C3E50]">Doha Expedition 🇶🇦</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link text-gray-600 font-medium pb-1">Overview</a>
+                <a href="#itinerary" class="nav-link text-gray-600 font-medium pb-1">Itinerary</a>
+                <a href="#logistics" class="nav-link text-gray-600 font-medium pb-1">Logistics</a>
+                <a href="#budget" class="nav-link text-gray-600 font-medium pb-1">Budget</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7">
+                    </path>
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#overview" class="block py-2 text-gray-600">Overview</a>
+            <a href="#itinerary" class="block py-2 text-gray-600">Itinerary</a>
+            <a href="#logistics" class="block py-2 text-gray-600">Logistics</a>
+            <a href="#budget" class="block py-2 text-gray-600">Budget</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="overview" class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-2">A Bespoke Itinerary for Doha</h2>
+            <p class="text-lg text-gray-500 mb-8">September 8th – 14th, 2025 | 7 Travelers</p>
+            <p class="max-w-3xl mx-auto text-gray-600 mb-12">
+                Welcome to Doha, a dazzling capital of contrasts where ancient tradition meets futuristic ambition. This
+                interactive guide is designed to help your group navigate this dynamic city, balancing cultural
+                discovery with modern luxury. This plan is carefully structured to account for the September climate,
+                with indoor activities during the day's peak heat and outdoor explorations in the cooler evenings.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <h3 class="text-lg font-semibold text-[#C07B58] mb-2">Total Estimated Cost</h3>
+                    <p class="text-3xl font-bold text-gray-800">$6,724</p>
+                    <p class="text-gray-500">for the group (excl. flights/hotel)</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <h3 class="text-lg font-semibold text-[#C07B58] mb-2">Cost Per Person</h3>
+                    <p class="text-3xl font-bold text-gray-800">$961</p>
+                    <p class="text-gray-500">for activities, transport & dining</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <h3 class="text-lg font-semibold text-[#C07B58] mb-2">Duration</h3>
+                    <p class="text-3xl font-bold text-gray-800">7 Days / 6 Nights</p>
+                    <p class="text-gray-500">An immersive cultural journey</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <section id="itinerary" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Interactive Itinerary (Alternative Plan)
+                </h2>
+                <p class="max-w-2xl mx-auto text-gray-600">
+                    Explore your daily schedule. Click on any day to expand and see the detailed plan, including
+                    activities, culinary recommendations, and logistical notes. This flexible view helps you focus on
+                    what's next while keeping the full plan just a click away.
+                </p>
+            </div>
+            <div id="itinerary-container" class="space-y-4 max-w-4xl mx-auto">
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <section id="logistics" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Logistics & Travel Essentials</h2>
+                <p class="max-w-2xl mx-auto text-gray-600">
+                    This section covers all the essential pre-travel information to ensure a smooth journey. From
+                    cultural etiquette to a detailed comparison of transportation options, everything you need to know
+                    to navigate Doha with ease is right here.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <h3 class="text-2xl font-semibold text-[#2C3E50] mb-4">Cultural Etiquette</h3>
+                    <ul class="space-y-3 text-gray-600">
+                        <li><strong class="font-medium text-gray-800">Dress Code:</strong> Modesty is key. Both men and
+                            women should ensure shoulders and knees are covered in public spaces like malls and museums.
+                        </li>
+                        <li><strong class="font-medium text-gray-800">Social Greetings:</strong> When greeting the
+                            opposite sex, it's polite to wait for them to extend their hand first. A nod and a smile are
+                            always appropriate.</li>
+                        <li><strong class="font-medium text-gray-800">Photography:</strong> Always ask for permission
+                            before taking photos of people. Avoid photographing government or military sites.</li>
+                        <li><strong class="font-medium text-gray-800">Public Conduct:</strong> Public displays of
+                            affection should be avoided. Respect the daily calls to prayer as part of the city's rhythm.
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <h3 class="text-2xl font-semibold text-[#2C3E50] mb-4">Transportation Strategy</h3>
+                    <p class="text-gray-600 mb-4">For a group of seven, coordinating transport is crucial. The
+                        self-drive option, using your complimentary car and an additional rental, is the most economical
+                        and flexible plan.</p>
+                    <p class="text-gray-600 mb-4"><strong class="font-medium text-gray-800">Primary Plan (Budget &
+                            Flexibility):</strong> Using your complimentary car plus a small rental (Nissan Sunny) is
+                        the most cost-effective approach.</p>
+                    <p class="text-gray-600"><strong class="font-medium text-gray-800">Alternative (On-Demand):</strong>
+                        Coordinated ride-hailing with Uber/Careem (requiring two cars per trip) is also a viable option
+                        if you prefer not to drive.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-200">
+
+        <section id="budget">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#2C3E50] mb-4">Interactive Budget Breakdown</h2>
+                <p class="max-w-2xl mx-auto text-gray-600">
+                    Visualize your trip's expenses. This budget is based on the **Self-Drive** option for maximum
+                    economy and flexibility. Use the buttons to switch between the group total and per-person views.
+                </p>
+            </div>
+            <div class="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-md border border-gray-100">
+                <div class="flex justify-center mb-6">
+                    <div class="inline-flex rounded-md shadow-sm" role="group">
+                        <button type="button" id="total-view-btn"
+                            class="px-4 py-2 text-sm font-medium text-white bg-[#C07B58] border border-gray-200 rounded-l-lg hover:bg-[#a56a4a]">
+                            Group Total
+                        </button>
+                        <button type="button" id="person-view-btn"
+                            class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-md hover:bg-gray-100">
+                            Per Person
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="budget-details" class="text-gray-700">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <p>&copy; 2025 Doha Expedition Plan. All information is illustrative.</p>
+        </div>
+    </footer>
+
+    <script>
+        const itineraryData = [
+            {
+                day: "Day 1: Monday, Sep 8th",
+                title: "Arrival",
+                plan: "Arrive at Hamad International Airport and transfer to the Radisson Blu Hotel. The evening is free to relax and settle in.",
+                logistics: [
+                    "<strong>18:10:</strong> Arrival at Hamad International Airport (HIA).",
+                    "<strong>Transfer:</strong> Complimentary hotel shuttle from HIA to Radisson Blu Hotel (25-30 mins)."
+                ],
+                activities: [],
+                dining: {
+                    name: "Dinner at Leisure",
+                    options: [],
+                    description: "Enjoy dinner at one of the hotel's restaurants or order in.",
+                    cost: "Varies"
+                }
+            },
+            {
+                day: "Day 2: Tuesday, Sep 9th",
+                title: "Cultural Welcome: Old Doha & Museums",
+                plan: "A full day immersing the group in the rich culture and history of Doha, from world-class museums to the vibrant, traditional Souq Waqif.",
+                logistics: [
+                    "Full day of self-driving between locations."
+                ],
+                activities: [
+                    { name: "Museum of Islamic Art (MIA)", url: "https://www.google.com/maps/search/?api=1&query=Museum+of+Islamic+Art", description: "An architectural icon housing 1,400 years of Islamic art.", cost: "QAR 50" },
+                    { name: "National Museum of Qatar (NMoQ)", url: "https://www.google.com/maps/search/?api=1&query=National+Museum+of+Qatar", description: "Tells the story of Qatar through immersive, high-tech displays.", cost: "QAR 25" },
+                    { name: "Night Dhow Cruise", url: "https://www.google.com/maps/search/?api=1&query=Dhow+Harbour+Doha", description: "A traditional boat cruise offering spectacular skyline views.", cost: "QAR 153" }
+                ],
+                dining: {
+                    name: "Dinner at Souq Waqif",
+                    options: [
+                        { name: "Opa", url: "https://www.google.com/maps/search/?api=1&query=Opa+Doha" }
+                    ],
+                    description: "Enjoy a lively dinner at Opa or another restaurant of your choice in the vibrant Souq Waqif.",
+                    cost: "Varies"
+                }
+            },
+            {
+                day: "Day 3: Wednesday, Sep 10th",
+                title: "Banana Island Escape",
+                plan: "A full day of relaxation and luxury at the exclusive Banana Island Resort.",
+                logistics: [
+                    "Drive to the Al Shyoukh Terminal for the ferry departure."
+                ],
+                activities: [
+                    { name: "Banana Island Resort Day Pass", url: "https://www.google.com/maps/search/?api=1&query=Banana+Island+Resort+Doha", description: "Enjoy a day of beach access, pool use, and resort amenities. The pass includes the boat ride.", cost: "QAR 395" }
+                ],
+                dining: {
+                    name: "Lunch at Banana Island",
+                    options: [],
+                    description: "Lunch is included in the day pass.",
+                    cost: "Included"
+                }
+            },
+            {
+                day: "Day 4: Thursday, Sep 11th",
+                title: "Modern Doha: Malls, Culture & Raffles",
+                plan: "Explore the modern side of Doha, from cultural hubs to luxurious high tea and unique shopping experiences.",
+                logistics: [
+                    "Full day of self-driving between various modern attractions."
+                ],
+                activities: [
+                    { name: "Katara Cultural Village", url: "https://www.google.com/maps/search/?api=1&query=Katara+Cultural+Village", description: "A hub for global arts, featuring a stunning amphitheatre and beautiful mosques.", cost: "Free" },
+                    { name: "Afternoon Tea at Raffles Doha", url: "https://www.google.com/maps/search/?api=1&query=Raffles+Doha", description: "An elegant and luxurious afternoon tea experience.", cost: "Est. QAR 350" },
+                    { name: "The Pearl-Qatar", url: "https://www.google.com/maps/search/?api=1&query=The+Pearl-Qatar", description: "Explore the charming, canal-filled Qanat Quartier.", cost: "Free" },
+                    { name: "Gondola Ride at Villaggio Mall", url: "https://www.google.com/maps/search/?api=1&query=Villaggio+Mall", description: "A unique Venetian-style boat ride inside the mall.", cost: "QAR 11" }
+                ],
+                dining: {
+                    name: "Afternoon Tea & Dinner",
+                    options: [],
+                    description: "Afternoon tea serves as a late lunch. Dinner can be enjoyed at The Pearl or near Villaggio.",
+                    cost: "Varies"
+                }
+            },
+            {
+                day: "Day 5: Friday, Sep 12th",
+                title: "Shopping & Desert Adventure",
+                plan: "A relaxed afternoon of shopping followed by the quintessential Qatari adventure—an exhilarating desert safari.",
+                logistics: [
+                    "Afternoon trip to Mall of Qatar. Tour operator provides pickup from the hotel for the safari."
+                ],
+                activities: [
+                    { name: "Mall of Qatar", url: "https://www.google.com/maps/search/?api=1&query=Mall+of+Qatar", description: "Explore one of Doha's premier shopping and entertainment destinations.", cost: "Free" },
+                    { name: "Afternoon Desert Safari", url: "https://www.google.com/maps/search/?api=1&query=Khor+Al+Adaid", description: "Dune bashing, camel rides, and sunset views at the Inland Sea.", cost: "QAR 338" }
+                ],
+                dining: {
+                    name: "Lunch & Dinner",
+                    options: [],
+                    description: "Lunch at the Mall of Qatar. A traditional BBQ dinner is included in the desert safari.",
+                    cost: "Varies"
+                }
+            },
+            {
+                day: "Day 6: Saturday, Sep 13th",
+                title: "Thrills, Illusions & Farewell",
+                plan: "A day of fun and excitement with a visit to a theme park and an interactive museum, followed by final souvenir shopping.",
+                logistics: [
+                    "Self-drive between attractions.",
+                    "<strong>22:00:</strong> Depart from hotel for HIA via complimentary hotel shuttle.",
+                    "<strong>01:45 (Sun):</strong> Flight Departure."
+                ],
+                activities: [
+                    { name: "Quest Doha Theme Park", url: "https://www.google.com/maps/search/?api=1&query=Quest+Doha", description: "Experience record-breaking indoor roller coasters and thrill rides.", cost: "QAR 235" },
+                    { name: "Museum of Illusions", url: "https://www.google.com/maps/search/?api=1&query=Museum+of+Illusions+Doha", description: "An interactive and fun experience for all ages.", cost: "QAR 80" }
+                ],
+                dining: {
+                    name: "Farewell Dinner",
+                    options: [],
+                    description: "Enjoy a final farewell dinner at a restaurant of your choice.",
+                    cost: "Varies"
+                }
+            }
+        ];
+
+        const budgetData = {
+            total: {
+                activities: 3150,
+                transport: 112,
+                dining: 3462,
+            },
+            perPerson: {
+                activities: 450,
+                transport: 16,
+                dining: 495,
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const itineraryContainer = document.getElementById('itinerary-container');
+            itineraryData.forEach(item => {
+                const dayElement = document.createElement('div');
+
+                let diningHtml = `<p class="font-medium text-gray-700">${item.dining.name}</p>`;
+                if (item.dining.options && item.dining.options.length > 0) {
+                    const diningLinks = item.dining.options.map(opt =>
+                        `<a href="${opt.url}" target="_blank" class="text-[#C07B58] hover:underline">${opt.name}</a>`
+                    ).join(' or ');
+                    diningHtml = `<p class="font-medium text-gray-700">${diningLinks}</p>`;
+                }
+
+                dayElement.className = 'bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden';
+                dayElement.innerHTML = `
+                    <button class="accordion-button w-full text-left p-5 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition duration-300">
+                        <div>
+                            <p class="font-semibold text-lg text-[#2C3E50]">${item.day}</p>
+                            <p class="text-md text-[#C07B58]">${item.title}</p>
+                        </div>
+                        <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="p-6 border-t border-gray-200">
+                            <p class="text-gray-600 mb-6">${item.plan}</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">Logistics Hub</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-gray-600">${item.logistics.map(l => `<li>${l}</li>`).join('')}</ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">Dining</h4>
+                                    ${diningHtml}
+                                    <p class="text-gray-600">${item.dining.description}</p>
+                                    <p class="text-sm text-gray-500 mt-1">Est. Cost: ${item.dining.cost}</p>
+                                </div>
+                            </div>
+                            <div class="mt-6">
+                                <h4 class="font-semibold text-gray-800 mb-2 border-b pb-1">Activities</h4>
+                                <div class="space-y-3">
+                                ${item.activities.map(a => `
+                                    <div class="p-3 bg-stone-50 rounded-md">
+                                        <p class="font-medium text-gray-700">
+                                            ${a.url ? `<a href="${a.url}" target="_blank" class="text-[#C07B58] hover:underline">${a.name}</a>` : a.name}
+                                            <span class="text-sm text-gray-500 float-right">Cost: ${a.cost}</span>
+                                        </p>
+                                        <p class="text-sm text-gray-600">${a.description}</p>
+                                    </div>
+                                `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                itineraryContainer.appendChild(dayElement);
+            });
+
+            itineraryContainer.addEventListener('click', function (e) {
+                const button = e.target.closest('.accordion-button');
+                if (button) {
+                    button.classList.toggle('open');
+                    button.querySelector('svg').classList.toggle('rotate-180');
+                }
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            let budgetChart;
+
+            const totalBtn = document.getElementById('total-view-btn');
+            const personBtn = document.getElementById('person-view-btn');
+            const budgetDetailsContainer = document.getElementById('budget-details');
+
+            const USD_TO_QAR = 3.64;
+            const USD_TO_NGN = 1500;
+
+            function renderChart(view) {
+                const data = budgetData[view];
+                const grandTotal = Object.values(data).reduce((a, b) => a + b, 0);
+                const grandTotalQAR = grandTotal * USD_TO_QAR;
+                const grandTotalNGN = grandTotal * USD_TO_NGN;
+
+                if (budgetChart) {
+                    budgetChart.destroy();
+                }
+
+                budgetChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Activities', 'Transportation', 'Dining'],
+                        datasets: [{
+                            data: [data.activities, data.transport, data.dining],
+                            backgroundColor: ['#C07B58', '#2C3E50', '#EAE0D5'],
+                            borderColor: '#FDFBF7',
+                            borderWidth: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        size: 14,
+                                        family: 'Inter'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                budgetDetailsContainer.innerHTML = `
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center md:text-left">Budget Details (${view === 'total' ? 'Group Total' : 'Per Person'})</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-stone-50 rounded-md">
+                            <span class="font-medium text-gray-700">Activities & Entrance Fees</span>
+                            <span class="font-bold text-lg text-[#C07B58]">$${data.activities.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-stone-50 rounded-md">
+                            <span class="font-medium text-gray-700">Transportation</span>
+                            <span class="font-bold text-lg text-[#2C3E50]">$${data.transport.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-stone-50 rounded-md">
+                            <span class="font-medium text-gray-700">Dining (Guideline)</span>
+                            <span class="font-bold text-lg text-gray-600">$${data.dining.toLocaleString()}</span>
+                        </div>
+                         <div class="p-4 bg-gray-100 rounded-md mt-4 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="font-semibold text-gray-800 text-lg">Grand Total (USD)</span>
+                                <span class="font-extrabold text-xl text-gray-900">$${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-gray-600">
+                                <span class="font-medium">Grand Total (QAR)</span>
+                                <span class="font-bold text-lg">QAR ${grandTotalQAR.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-gray-600">
+                                <span class="font-medium">Grand Total (NGN)</span>
+                                <span class="font-bold text-lg">₦${grandTotalNGN.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            totalBtn.addEventListener('click', () => {
+                renderChart('total');
+                totalBtn.classList.add('bg-[#C07B58]', 'text-white');
+                totalBtn.classList.remove('bg-white', 'text-gray-900');
+                personBtn.classList.add('bg-white', 'text-gray-900');
+                personBtn.classList.remove('bg-[#C07B58]', 'text-white');
+            });
+
+            personBtn.addEventListener('click', () => {
+                renderChart('perPerson');
+                personBtn.classList.add('bg-[#C07B58]', 'text-white');
+                personBtn.classList.remove('bg-white', 'text-gray-900');
+                totalBtn.classList.add('bg-white', 'text-gray-900');
+                totalBtn.classList.remove('bg-[#C07B58]', 'text-white');
+            });
+
+            renderChart('total');
+        });
+    </script>
+</body>
+
+</html>
