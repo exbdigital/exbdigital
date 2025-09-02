@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGX Investment Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.33.0.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Professional Blue & Grey -->
+    <!-- Application Structure Plan: A comprehensive, single-page dashboard. The user journey starts with a high-level market summary, then drills down into the influential macro-economic factors and sector-specific dynamics. It then presents investment strategies and a visual analysis before culminating in an interactive stock explorer. The structure concludes with key risks and a disclaimer. This top-down approach was chosen to build a strong foundational understanding before presenting specific stock data, empowering more informed exploration. -->
+    <!-- Visualization & Content Choices: Market composition -> Goal: Inform -> Donut Chart -> Hover for details -> Quick visual breakdown -> Chart.js/Canvas. Stock Relationships -> Goal: Relationships -> Scatter Plot -> Hover for stock details -> Visualize trade-offs between growth and income -> Plotly.js/WebGL. Stock Categories -> Goal: Compare/Organize -> Filterable Cards & Dynamic Bar Chart -> Click filters -> Allows focused exploration -> JS DOM + Chart.js/Canvas. Macro/Sector data is presented in styled cards for clear, digestible information. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        .active-filter {
+            background-color: #2563EB;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-blue-600">NGX Analysis</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Overview</a>
+                        <a href="#macro"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Economy</a>
+                        <a href="#sectors"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sectors</a>
+                        <a href="#strategies"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Strategies</a>
+                        <a href="#explorer"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Explorer</a>
+                        <a href="#penny"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Penny
+                            Stocks</a>
+                        <a href="#risks"
+                            class="text-slate-600 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Risks</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <section id="hero" class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">A Deep Dive into the Nigerian Stock
+                Exchange</h1>
+            <p class="text-lg text-slate-600 mb-2 max-w-3xl mx-auto">A comprehensive analysis of market dynamics,
+                economic indicators, sector performance, and strategic investment opportunities.</p>
+            <p class="text-sm text-slate-500">Analysis as of: September 2, 2025</p>
+        </section>
+
+        <section id="overview" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Market Overview</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                This section provides a snapshot of the Nigerian Stock Exchange (NGX). Understanding the broader market
+                context, including key indices and the distribution of major sectors, is the first step towards making
+                informed investment decisions.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">NGX All-Share Index</h3>
+                    <p class="text-3xl font-bold text-blue-600">105,215.50</p>
+                    <p class="text-sm text-green-600">+1.25% YTD</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">Market Capitalization</h3>
+                    <p class="text-3xl font-bold text-blue-600">₦59.4T</p>
+                    <p class="text-sm text-green-600">+15.8% YTD</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">Volume Traded</h3>
+                    <p class="text-3xl font-bold text-blue-600">350.8M</p>
+                    <p class="text-sm text-slate-500">Daily Average</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">Deals</h3>
+                    <p class="text-3xl font-bold text-blue-600">8,950</p>
+                    <p class="text-sm text-slate-500">Daily Average</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-xl font-bold text-center mb-4">Market Sector Breakdown</h3>
+                <div class="chart-container">
+                    <canvas id="sectorChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="macro" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Macro-Economic Landscape</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                The stock market does not exist in a vacuum. Broader economic conditions heavily influence investor
+                sentiment and corporate profitability. Here are the key economic indicators shaping the NGX in late
+                2025.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">Inflation Rate</h3>
+                    <p class="text-3xl font-bold text-red-600">25.8%</p>
+                    <p class="text-sm text-slate-500">Challenging consumer spending</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">Monetary Policy Rate (MPR)</h3>
+                    <p class="text-3xl font-bold text-red-600">26.25%</p>
+                    <p class="text-sm text-slate-500">High cost of capital</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">GDP Growth (Annual)</h3>
+                    <p class="text-3xl font-bold text-green-600">3.1%</p>
+                    <p class="text-sm text-slate-500">Shows underlying resilience</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                    <h3 class="text-slate-500 font-semibold mb-2">Official FX Rate (₦/$)</h3>
+                    <p class="text-3xl font-bold text-red-600">1,450</p>
+                    <p class="text-sm text-slate-500">Impacts import costs & profits</p>
+                </div>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold mb-4 text-slate-800">Analyst Outlook</h3>
+                <p class="text-slate-600">
+                    The current environment is a classic case of "cautious optimism." High inflation and interest rates
+                    create significant headwinds, pressuring corporate margins and making fixed-income investments more
+                    attractive. However, a significant stock market rally in 2025, driven by strong corporate earnings
+                    in key sectors, highlights the potentia for substantial returns. The Nigerian economy's resilience
+                    suggests that savvy investors can find value. Companies with strong pricing power, low reliance on
+                    imports, and robust export capabilities are best positioned to navigate these challenges.
+                </p>
+            </div>
+        </section>
+
+        <section id="sectors" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Key Sector Deep Dive</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                Performance is not uniform across the market. Different sectors face unique opportunities and challenges
+                based on the economic climate. Here's a look at the dynamics of key sectors.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-3 text-blue-600">Financials</h3>
+                    <p class="text-slate-600 text-sm">In a high-interest-rate environment, banks can benefit from wider
+                        net interest margins. However, the risk of non-performing loans increases. Focus is on banks
+                        with strong capitalization and digital penetration.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-3 text-emerald-600">Consumer Goods</h3>
+                    <p class="text-slate-600 text-sm">This sector is under pressure from high inflation, which erodes
+                        consumer purchasing power, and FX volatility impacting the cost of raw materials. Companies with
+                        strong local sourcing and brand loyalty are more defensive.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-3 text-indigo-600">Industrials / Cement</h3>
+                    <p class="text-slate-600 text-sm">Infrastructure development remains a government priority,
+                        providing a demand floor. However, energy costs and logistics challenges are key headwinds.
+                        Market leaders with scale and efficiency are favored.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="strategies" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Investment Strategies</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                Successful investing involves choosing a strategy that aligns with your financial goals. Here, we
+                explore two primary approaches for the NGX: dividend investing for steady income and growth investing
+                for long-term capital appreciation.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-blue-600">Dividend Investing</h3>
+                    <p class="text-slate-600">
+                        Focuses on buying stocks of established companies that regularly distribute earnings to
+                        shareholders. Ideal for investors seeking stable income, especially attractive when capital
+                        appreciation is uncertain. A high dividend yield can provide a buffer against market volatility.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-emerald-600">Growth Investing</h3>
+                    <p class="text-slate-600">
+                        Targets companies with potential for significant capital appreciation, often reinvesting profits
+                        for expansion. This includes lower-priced stocks in high-growth sectors. Suited for investors
+                        with a higher risk tolerance and a long-term horizon, who are willing to forgo immediate income
+                        for future gains.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Strategy Analysis: High Yield vs. Hyper
+                Growth</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                This scatter plot visualizes the risk-reward landscape by categorizing stocks based on their performance
+                metrics. It helps identify outliers in hyper-growth versus high-yield income plays, as well as balanced
+                performers. Hover over any point to see details.
+            </p>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <div id="scatterPlot" class="w-full h-[500px]"></div>
+            </div>
+        </section>
+
+        <section id="explorer" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Interactive Stock Explorer</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                Use the filters to explore stocks based on the strategies discussed. Selecting a category will display
+                relevant stocks and update the comparison chart to visualize key metrics like dividend yield or
+                year-to-date performance.
+            </p>
+            <div id="filter-container" class="flex justify-center flex-wrap gap-4 mb-8">
+                <button data-filter="all"
+                    class="filter-btn px-6 py-2 font-semibold rounded-full shadow-sm transition-all duration-200 ease-in-out bg-gray-200 hover:bg-blue-500 hover:text-white active-filter">All
+                    Stocks</button>
+                <button data-filter="dividend"
+                    class="filter-btn px-6 py-2 font-semibold rounded-full shadow-sm transition-all duration-200 ease-in-out bg-gray-200 hover:bg-blue-500 hover:text-white">Dividend
+                    Champions</button>
+                <button data-filter="growth"
+                    class="filter-btn px-6 py-2 font-semibold rounded-full shadow-sm transition-all duration-200 ease-in-out bg-gray-200 hover:bg-blue-500 hover:text-white">High-Growth
+                    Stocks</button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-md mb-12">
+                <h3 id="chart-title" class="text-xl font-bold text-center mb-4">Stock Comparison</h3>
+                <div class="chart-container h-96">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+
+            <div id="stock-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        </section>
+
+        <section id="penny" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Penny Stocks: High-Growth Opportunities</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                For investors with a higher risk tolerance, penny stocks offer the potential for explosive returns.
+                These stocks, trading under ₦20, are often in emerging sectors or are turnaround stories. While they
+                carry higher volatility, they can provide significant upside.
+            </p>
+            <div id="penny-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        </section>
+
+        <section id="risks" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Key Investment Risks</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-10">
+                A balanced view requires understanding the potential downsides. Investing in the Nigerian market comes
+                with specific risks that must be considered.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-3 text-red-600">Currency Risk</h3>
+                    <p class="text-slate-600 text-sm">Devaluation of the Naira can erode the value of investments for
+                        foreign investors and increase costs for import-dependent companies. FX illiquidity can also
+                        delay capital repatriation.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-3 text-red-600">Macro-Economic Volatility</h3>
+                    <p class="text-slate-600 text-sm">The market is sensitive to changes in government policy,
+                        inflation, and interest rates. Sudden policy shifts can trigger significant market reactions and
+                        impact corporate earnings unpredictably.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold mb-3 text-red-600">Regulatory & Political Risk</h3>
+                    <p class="text-slate-600 text-sm">Changes in industry regulations or political instability can
+                        affect investor confidence and the operational landscape for listed companies, particularly in
+                        sensitive sectors like energy and banking.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="disclaimer">
+            <h2 class="text-3xl font-bold text-center mb-2 text-slate-900">Disclaimer</h2>
+            <div
+                class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-6 rounded-xl shadow-md max-w-4xl mx-auto">
+                <p class="font-bold">Important Information</p>
+                <p class="text-sm">The content provided in this interactive report is for informational and educational
+                    purposes only. It does not constitute financial advice, investment advice, or trading advice. The
+                    data is based on market analysis as of September 2025 and is subject to change. Always conduct your
+                    own due diligence and consult with a qualified financial advisor before making any investment
+                    decisions.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-16 border-t">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-slate-500">
+            <p>&copy; 2025 NGX Investment Analysis. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const stockData = [
+                { name: 'Zenith Bank', ticker: 'ZENITHBANK', sector: 'Financials', price: 64.40, dividendYield: 10.1, ytdPerformance: 67, category: ['dividend', 'growth'], rationale: 'Combines a top-tier dividend yield with significant capital appreciation, a rare find in the current market.' },
+                { name: 'GTCO', ticker: 'GTCO', sector: 'Financials', price: 91.50, dividendYield: 8.5, ytdPerformance: 117, category: ['dividend', 'growth'], rationale: 'Delivering powerful growth well over 100% YTD while maintaining its status as a reliable dividend payer.' },
+                { name: 'Dangote Cement', ticker: 'DANGCEM', sector: 'Industrials', price: 520.20, dividendYield: 6.0, ytdPerformance: 49, category: ['dividend', 'growth'], rationale: 'As a market leader, it offers a stable dividend backed by impressive year-to-date growth.' },
+                { name: 'MTN Nigeria', ticker: 'MTNN', sector: 'ICT', price: 435.00, dividendYield: 5.5, ytdPerformance: 55, category: ['dividend', 'growth'], rationale: 'Dominant player with strong pricing power, showing robust growth alongside consistent dividends.' },
+                { name: 'BUA Foods', ticker: 'BUAFOODS', sector: 'Consumer Goods', price: 590.00, dividendYield: 3.8, ytdPerformance: 181, category: ['dividend', 'growth'], rationale: 'Exceptional growth from a defensive stock, blending market stability with explosive performance.' },
+                { name: 'Seplat Energy', ticker: 'SEPLAT', sector: 'Energy', price: 5379.30, dividendYield: 7.2, ytdPerformance: 176, category: ['dividend', 'growth'], rationale: 'Massive YTD performance and dollar-denominated earnings make it a top hedge against inflation and a growth powerhouse.' },
+                { name: 'Transcorp', ticker: 'TRANSCORP', sector: 'Conglomerate', price: 45.00, dividendYield: 1.5, ytdPerformance: 429, category: 'growth', rationale: 'Explosive, market-leading growth driven by aggressive expansion in the high-demand power and hospitality sectors.' },
+                { name: 'FBN Holdings', ticker: 'FBNH', sector: 'Financials', price: 32.10, dividendYield: 2.1, ytdPerformance: 35, category: 'growth', rationale: 'The successful turnaround story continues, reflecting in solid growth with more potential upside.' },
+                { name: 'Oando PLC', ticker: 'OANDO', sector: 'Energy', price: 48.50, dividendYield: 0, ytdPerformance: 288, category: 'growth', rationale: 'A high-octane growth play in the energy sector, delivering phenomenal returns for investors with higher risk appetite.' },
+                { name: 'Geregu Power', ticker: 'GEREGU', sector: 'Energy', price: 1141.50, dividendYield: 1.8, ytdPerformance: 154, category: 'growth', rationale: 'Pure-play power generation company capitalizing on sector reforms, resulting in outstanding growth.' },
+                { name: 'UBA', ticker: 'UBA', sector: 'Financials', price: 46.70, dividendYield: 6.7, ytdPerformance: 108, category: ['dividend', 'growth'], rationale: 'A perfect hybrid stock, offering a strong dividend yield and remarkable growth fueled by its Pan-African operations.' },
+                { name: 'Access Holdings', ticker: 'ACCESSCORP', sector: 'Financials', price: 26.20, dividendYield: 5.8, ytdPerformance: 39, category: ['dividend', 'growth'], rationale: 'Solid growth from the nation\'s largest bank, which continues its ambitious and profitable continental expansion.' },
+                { name: 'Fidelity Bank', ticker: 'FIDELITYBK', sector: 'Financials', price: 21.15, dividendYield: 6.2, ytdPerformance: 117, category: ['dividend', 'growth'], rationale: 'A standout performer, combining triple-digit growth with an attractive dividend yield thanks to its strong digital strategy.' },
+                { name: 'Jaiz Bank', ticker: 'JAIZBANK', sector: 'Financials', price: 3.50, dividendYield: 1.2, ytdPerformance: 250, category: 'growth', rationale: 'A leader in the fast-growing non-interest banking sector, showing massive growth as it expands its market share.' },
+                { name: 'Chams Plc', ticker: 'CHAMS', sector: 'ICT', price: 4.10, dividendYield: 0, ytdPerformance: 310, category: 'growth', rationale: 'A key player in identity management and digital solutions, benefiting from Nigeria\'s digital transformation.' },
+                { name: 'Cornerstone Ins.', ticker: 'CORNERST', sector: 'Financials', price: 2.80, dividendYield: 0.5, ytdPerformance: 180, category: 'growth', rationale: 'Positioned to capitalize on the low penetration in the insurance sector, with strong YTD performance signaling market confidence.' }
+            ];
+
+            const stockCardsContainer = document.getElementById('stock-cards-container');
+            const pennyContainer = document.getElementById('penny-container');
+            const filterContainer = document.getElementById('filter-container');
+            const chartTitle = document.getElementById('chart-title');
+            let comparisonChartInstance = null;
+            let sectorChartInstance = null;
+
+            function createStockCard(stock) {
+                const categories = Array.isArray(stock.category) ? stock.category.join(' ') : stock.category;
+                return `
+                    <div class="stock-card bg-white p-6 rounded-xl shadow-md transition-all duration-300" data-category="${categories}">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-xl font-bold">${stock.name}</h4>
+                                <p class="text-sm text-slate-500">${stock.ticker} - ${stock.sector}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-blue-600">₦${stock.price.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-200">
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-slate-600">Dividend Yield</span>
+                                <span class="font-semibold text-emerald-600">${stock.dividendYield}%</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-600">YTD Performance</span>
+                                <span class="font-semibold text-green-600">${stock.ytdPerformance}%</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-4">${stock.rationale}</p>
+                    </div>
+                `;
+            }
+
+            function renderStockCards(filter = 'all') {
+                stockCardsContainer.innerHTML = '';
+                const filteredStocks = filter === 'all'
+                    ? stockData
+                    : stockData.filter(stock =>
+                        Array.isArray(stock.category)
+                            ? stock.category.includes(filter)
+                            : stock.category === filter);
+
+                filteredStocks.forEach(stock => {
+                    stockCardsContainer.innerHTML += createStockCard(stock);
+                });
+            }
+
+            function renderPennyStocks() {
+                if (!pennyContainer) return;
+                pennyContainer.innerHTML = '';
+                const pennyStocks = stockData.filter(stock => stock.price < 20);
+
+                if (pennyStocks.length > 0) {
+                    pennyStocks.forEach(stock => {
+                        pennyContainer.innerHTML += createStockCard(stock);
+                    });
+                } else {
+                    pennyContainer.innerHTML = `<div class="col-span-full text-center bg-white p-8 rounded-xl shadow-md">
+                        <p class="text-slate-500">No stocks in the current analysis meet the penny stock criterion.</p>
+                    </div>`;
+                }
+            }
+
+            function createSectorChart() {
+                const ctx = document.getElementById('sectorChart').getContext('2d');
+                if (sectorChartInstance) {
+                    sectorChartInstance.destroy();
+                }
+                sectorChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Financials', 'Industrials', 'ICT', 'Energy', 'Consumer Goods', 'Conglomerate'],
+                        datasets: [{
+                            label: 'Market Weight',
+                            data: [40, 18, 15, 12, 10, 5],
+                            backgroundColor: ['#3B82F6', '#10B981', '#6366F1', '#F59E0B', '#EF4444', '#6B7280'],
+                            borderColor: '#FFFFFF',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function (tooltipItems) {
+                                        const item = tooltipItems[0];
+                                        let label = item.chart.data.labels[item.dataIndex];
+                                        if (Array.isArray(label)) {
+                                            return label.join(' ');
+                                        } else {
+                                            return label;
+                                        }
+                                    },
+                                    label: function (context) {
+                                        return `${context.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function createComparisonChart(filter) {
+                const ctx = document.getElementById('comparisonChart').getContext('2d');
+                if (comparisonChartInstance) {
+                    comparisonChartInstance.destroy();
+                }
+
+                const filteredStocks = filter === 'all'
+                    ? stockData
+                    : stockData.filter(stock =>
+                        Array.isArray(stock.category)
+                            ? stock.category.includes(filter)
+                            : stock.category === filter);
+
+                let metric, label, chartLabel, backgroundColor;
+
+                if (filter === 'dividend') {
+                    metric = 'dividendYield';
+                    label = 'Dividend Yield (%)';
+                    chartTitle.textContent = 'Dividend Champions: Yield Comparison';
+                    backgroundColor = '#10B981';
+                } else if (filter === 'growth') {
+                    metric = 'ytdPerformance';
+                    label = 'YTD Performance (%)';
+                    chartTitle.textContent = 'High-Growth Stocks: Performance Comparison';
+                    backgroundColor = '#3B82F6';
+                } else {
+                    metric = 'ytdPerformance';
+                    label = 'YTD Performance (%)';
+                    chartTitle.textContent = 'All Stocks: Performance Comparison';
+                    backgroundColor = '#6B7280';
+                }
+
+                comparisonChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: filteredStocks.map(s => s.ticker),
+                        datasets: [{
+                            label: label,
+                            data: filteredStocks.map(s => s[metric]),
+                            backgroundColor: backgroundColor,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function (tooltipItems) {
+                                        const item = tooltipItems[0];
+                                        let label = item.chart.data.labels[item.dataIndex];
+                                        if (Array.isArray(label)) {
+                                            return label.join(' ');
+                                        } else {
+                                            return label;
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: label
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function createScatterPlot() {
+                const hyperGrowthStocks = [];
+                const highYieldStocks = [];
+                const balancedStocks = [];
+
+                stockData.forEach(s => {
+                    if (s.ytdPerformance >= 150) {
+                        hyperGrowthStocks.push(s);
+                    } else if (s.dividendYield >= 7.0) {
+                        highYieldStocks.push(s);
+                    } else {
+                        balancedStocks.push(s);
+                    }
+                });
+
+                const trace1 = {
+                    x: highYieldStocks.map(s => s.ytdPerformance),
+                    y: highYieldStocks.map(s => s.dividendYield),
+                    mode: 'markers',
+                    type: 'scattergl',
+                    text: highYieldStocks.map(s => s.ticker),
+                    marker: { color: '#10B981', size: 12, symbol: 'circle' },
+                    name: 'High Yield (>7%)'
+                };
+
+                const trace2 = {
+                    x: hyperGrowthStocks.map(s => s.ytdPerformance),
+                    y: hyperGrowthStocks.map(s => s.dividendYield),
+                    mode: 'markers',
+                    type: 'scattergl',
+                    text: hyperGrowthStocks.map(s => s.ticker),
+                    marker: { color: '#3B82F6', size: 12, symbol: 'diamond' },
+                    name: 'Hyper Growth (>150% YTD)'
+                };
+
+                const trace3 = {
+                    x: balancedStocks.map(s => s.ytdPerformance),
+                    y: balancedStocks.map(s => s.dividendYield),
+                    mode: 'markers',
+                    type: 'scattergl',
+                    text: balancedStocks.map(s => s.ticker),
+                    marker: { color: '#6366F1', size: 12, symbol: 'star' },
+                    name: 'Balanced Performers'
+                };
+
+                const data = [trace1, trace2, trace3];
+
+                const layout = {
+                    xaxis: { title: 'YTD Performance (%)', gridcolor: '#e5e7eb' },
+                    yaxis: { title: 'Dividend Yield (%)', gridcolor: '#e5e7eb' },
+                    hovermode: 'closest',
+                    showlegend: true,
+                    legend: {
+                        x: 0.05,
+                        y: 0.95,
+                        bgcolor: 'rgba(255,255,255,0.6)'
+                    },
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    font: {
+                        family: 'Inter, sans-serif',
+                        color: '#374151'
+                    }
+                };
+
+                const config = { responsive: true };
+
+                Plotly.newPlot('scatterPlot', data, layout, config);
+            }
+
+            filterContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('filter-btn')) {
+                    const filter = e.target.dataset.filter;
+                    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+                    e.target.classList.add('active-filter');
+                    renderStockCards(filter);
+                    createComparisonChart(filter);
+                }
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            renderStockCards('all');
+            renderPennyStocks();
+            createSectorChart();
+            createComparisonChart('all');
+            createScatterPlot();
+        });
+    </script>
+</body>
+
+</html>
