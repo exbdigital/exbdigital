@@ -7,13 +7,12 @@
     <title>NGX Investment Analysis</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.plot.ly/plotly-2.33.0.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Professional Blue & Grey -->
     <!-- Application Structure Plan: A comprehensive, single-page dashboard. The user journey starts with a high-level market summary, then drills down into the influential macro-economic factors and sector-specific dynamics. It then presents investment strategies and a visual analysis before culminating in an interactive stock explorer. The structure concludes with key risks and a disclaimer. This top-down approach was chosen to build a strong foundational understanding before presenting specific stock data, empowering more informed exploration. -->
-    <!-- Visualization & Content Choices: Market composition -> Goal: Inform -> Donut Chart -> Hover for details -> Quick visual breakdown -> Chart.js/Canvas. Stock Relationships -> Goal: Relationships -> Scatter Plot -> Hover for stock details -> Visualize trade-offs between growth and income -> Plotly.js/WebGL. Stock Categories -> Goal: Compare/Organize -> Filterable Cards & Dynamic Bar Chart -> Click filters -> Allows focused exploration -> JS DOM + Chart.js/Canvas. Macro/Sector data is presented in styled cards for clear, digestible information. -->
+    <!-- Visualization & Content Choices: Market composition -> Goal: Inform -> Donut Chart -> Hover for details -> Quick visual breakdown -> Chart.js/Canvas. Stock Relationships -> Goal: Relationships -> Scatter Plot -> Hover for stock details -> Visualize trade-offs between growth and income -> Chart.js/Canvas. Stock Categories -> Goal: Compare/Organize -> Filterable Cards & Dynamic Bar Chart -> Click filters -> Allows focused exploration -> JS DOM + Chart.js/Canvas. Macro/Sector data is presented in styled cards for clear, digestible information. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -81,7 +80,7 @@
                 Exchange</h1>
             <p class="text-lg text-slate-600 mb-2 max-w-3xl mx-auto">A comprehensive analysis of market dynamics,
                 economic indicators, sector performance, and strategic investment opportunities.</p>
-            <p class="text-sm text-slate-500">Analysis as of: September 2, 2025</p>
+            <p class="text-sm text-slate-500">Analysis as of: September 3, 2025 (Prices from Sep 2, 2025)</p>
         </section>
 
         <section id="overview" class="mb-16">
@@ -135,7 +134,7 @@
                     <p class="text-sm text-slate-500">Challenging consumer spending</p>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md text-center">
-                    <h3 class="text-slate-500 font-semibold mb-2">Monetary Policy Rate (MPR)</h3>
+                    <h3 class="text-slate-500 font-semibold mb-2">Monetary Policy Rate</h3>
                     <p class="text-3xl font-bold text-red-600">26.25%</p>
                     <p class="text-sm text-slate-500">High cost of capital</p>
                 </div>
@@ -228,7 +227,9 @@
                 performers. Hover over any point to see details.
             </p>
             <div class="bg-white p-6 rounded-xl shadow-md">
-                <div id="scatterPlot" class="w-full h-[500px]"></div>
+                <div class="chart-container h-[500px] max-w-4xl">
+                    <canvas id="scatterChart"></canvas>
+                </div>
             </div>
         </section>
 
@@ -326,23 +327,29 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             const stockData = [
-                { name: 'Zenith Bank', ticker: 'ZENITHBANK', sector: 'Financials', price: 64.40, dividendYield: 10.1, ytdPerformance: 67, category: ['dividend', 'growth'], rationale: 'Combines a top-tier dividend yield with significant capital appreciation, a rare find in the current market.' },
-                { name: 'GTCO', ticker: 'GTCO', sector: 'Financials', price: 91.50, dividendYield: 8.5, ytdPerformance: 117, category: ['dividend', 'growth'], rationale: 'Delivering powerful growth well over 100% YTD while maintaining its status as a reliable dividend payer.' },
-                { name: 'Dangote Cement', ticker: 'DANGCEM', sector: 'Industrials', price: 520.20, dividendYield: 6.0, ytdPerformance: 49, category: ['dividend', 'growth'], rationale: 'As a market leader, it offers a stable dividend backed by impressive year-to-date growth.' },
-                { name: 'MTN Nigeria', ticker: 'MTNN', sector: 'ICT', price: 435.00, dividendYield: 5.5, ytdPerformance: 55, category: ['dividend', 'growth'], rationale: 'Dominant player with strong pricing power, showing robust growth alongside consistent dividends.' },
-                { name: 'BUA Foods', ticker: 'BUAFOODS', sector: 'Consumer Goods', price: 590.00, dividendYield: 3.8, ytdPerformance: 181, category: ['dividend', 'growth'], rationale: 'Exceptional growth from a defensive stock, blending market stability with explosive performance.' },
-                { name: 'Seplat Energy', ticker: 'SEPLAT', sector: 'Energy', price: 5379.30, dividendYield: 7.2, ytdPerformance: 176, category: ['dividend', 'growth'], rationale: 'Massive YTD performance and dollar-denominated earnings make it a top hedge against inflation and a growth powerhouse.' },
-                { name: 'Transcorp', ticker: 'TRANSCORP', sector: 'Conglomerate', price: 45.00, dividendYield: 1.5, ytdPerformance: 429, category: 'growth', rationale: 'Explosive, market-leading growth driven by aggressive expansion in the high-demand power and hospitality sectors.' },
-                { name: 'FBN Holdings', ticker: 'FBNH', sector: 'Financials', price: 32.10, dividendYield: 2.1, ytdPerformance: 35, category: 'growth', rationale: 'The successful turnaround story continues, reflecting in solid growth with more potential upside.' },
-                { name: 'Oando PLC', ticker: 'OANDO', sector: 'Energy', price: 48.50, dividendYield: 0, ytdPerformance: 288, category: 'growth', rationale: 'A high-octane growth play in the energy sector, delivering phenomenal returns for investors with higher risk appetite.' },
-                { name: 'Geregu Power', ticker: 'GEREGU', sector: 'Energy', price: 1141.50, dividendYield: 1.8, ytdPerformance: 154, category: 'growth', rationale: 'Pure-play power generation company capitalizing on sector reforms, resulting in outstanding growth.' },
-                { name: 'UBA', ticker: 'UBA', sector: 'Financials', price: 46.70, dividendYield: 6.7, ytdPerformance: 108, category: ['dividend', 'growth'], rationale: 'A perfect hybrid stock, offering a strong dividend yield and remarkable growth fueled by its Pan-African operations.' },
-                { name: 'Access Holdings', ticker: 'ACCESSCORP', sector: 'Financials', price: 26.20, dividendYield: 5.8, ytdPerformance: 39, category: ['dividend', 'growth'], rationale: 'Solid growth from the nation\'s largest bank, which continues its ambitious and profitable continental expansion.' },
-                { name: 'Fidelity Bank', ticker: 'FIDELITYBK', sector: 'Financials', price: 21.15, dividendYield: 6.2, ytdPerformance: 117, category: ['dividend', 'growth'], rationale: 'A standout performer, combining triple-digit growth with an attractive dividend yield thanks to its strong digital strategy.' },
-                { name: 'Jaiz Bank', ticker: 'JAIZBANK', sector: 'Financials', price: 3.50, dividendYield: 1.2, ytdPerformance: 250, category: 'growth', rationale: 'A leader in the fast-growing non-interest banking sector, showing massive growth as it expands its market share.' },
-                { name: 'Chams Plc', ticker: 'CHAMS', sector: 'ICT', price: 4.10, dividendYield: 0, ytdPerformance: 310, category: 'growth', rationale: 'A key player in identity management and digital solutions, benefiting from Nigeria\'s digital transformation.' },
-                { name: 'Cornerstone Ins.', ticker: 'CORNERST', sector: 'Financials', price: 2.80, dividendYield: 0.5, ytdPerformance: 180, category: 'growth', rationale: 'Positioned to capitalize on the low penetration in the insurance sector, with strong YTD performance signaling market confidence.' }
+                { name: 'Zenith Bank', ticker: 'ZENITHBANK', sector: 'Financials', price: 66.00, ytdStartPrice: 38.55, dividendYield: 10.1, category: ['dividend', 'growth'], rationale: 'Combines a top-tier dividend yield with significant capital appreciation, a rare find in the current market.' },
+                { name: 'GTCO', ticker: 'GTCO', sector: 'Financials', price: 92.00, ytdStartPrice: 42.15, dividendYield: 8.5, category: ['dividend', 'growth'], rationale: 'Delivering powerful growth well over 100% YTD while maintaining its status as a reliable dividend payer.' },
+                { name: 'Dangote Cement', ticker: 'DANGCEM', sector: 'Industrials', price: 520.20, ytdStartPrice: 350.00, dividendYield: 6.0, category: ['dividend', 'growth'], rationale: 'As a market leader, it offers a stable dividend backed by impressive year-to-date growth.' },
+                { name: 'MTN Nigeria', ticker: 'MTNN', sector: 'ICT', price: 435.00, ytdStartPrice: 280.00, dividendYield: 5.5, category: ['dividend', 'growth'], rationale: 'Dominant player with strong pricing power, showing robust growth alongside consistent dividends.' },
+                { name: 'BUA Foods', ticker: 'BUAFOODS', sector: 'Consumer Goods', price: 590.00, ytdStartPrice: 210.00, dividendYield: 3.8, category: ['dividend', 'growth'], rationale: 'Exceptional growth from a defensive stock, blending market stability with explosive performance.' },
+                { name: 'Seplat Energy', ticker: 'SEPLAT', sector: 'Energy', price: 5379.30, ytdStartPrice: 1950.00, dividendYield: 7.2, category: ['dividend', 'growth'], rationale: 'Massive YTD performance and dollar-denominated earnings make it a top hedge against inflation and a growth powerhouse.' },
+                { name: 'Transcorp', ticker: 'TRANSCORP', sector: 'Conglomerate', price: 47.00, ytdStartPrice: 8.5, dividendYield: 1.5, category: 'growth', rationale: 'Explosive, market-leading growth driven by aggressive expansion in the high-demand power and hospitality sectors.' },
+                { name: 'FBN Holdings', ticker: 'FBNH', sector: 'Financials', price: 32.10, ytdStartPrice: 23.8, dividendYield: 2.1, category: 'growth', rationale: 'The successful turnaround story continues, reflecting in solid growth with more potential upside.' },
+                { name: 'Oando PLC', ticker: 'OANDO', sector: 'Energy', price: 50.30, ytdStartPrice: 12.5, dividendYield: 0, category: 'growth', rationale: 'A high-octane growth play in the energy sector, delivering phenomenal returns for investors with higher risk appetite.' },
+                { name: 'Geregu Power', ticker: 'GEREGU', sector: 'Energy', price: 1141.50, ytdStartPrice: 450.00, dividendYield: 1.8, category: 'growth', rationale: 'Pure-play power generation company capitalizing on sector reforms, resulting in outstanding growth.' },
+                { name: 'UBA', ticker: 'UBA', sector: 'Financials', price: 47.75, ytdStartPrice: 22.5, dividendYield: 6.7, category: ['dividend', 'growth'], rationale: 'A perfect hybrid stock, offering a strong dividend yield and remarkable growth fueled by its Pan-African operations.' },
+                { name: 'Access Holdings', ticker: 'ACCESSCORP', sector: 'Financials', price: 26.15, ytdStartPrice: 18.8, dividendYield: 5.8, category: ['dividend', 'growth'], rationale: 'Solid growth from the nation\'s largest bank, which continues its ambitious and profitable continental expansion.' },
+                { name: 'Fidelity Bank', ticker: 'FIDELITYBK', sector: 'Financials', price: 20.95, ytdStartPrice: 9.75, dividendYield: 6.2, category: ['dividend', 'growth'], rationale: 'A standout performer, combining triple-digit growth with an attractive dividend yield thanks to its strong digital strategy.' },
+                { name: 'Jaiz Bank', ticker: 'JAIZBANK', sector: 'Financials', price: 3.50, ytdStartPrice: 1.0, dividendYield: 1.2, category: 'growth', rationale: 'A leader in the fast-growing non-interest banking sector, showing massive growth as it expands its market share.' },
+                { name: 'Chams Plc', ticker: 'CHAMS', sector: 'ICT', price: 2.90, ytdStartPrice: 0.7, dividendYield: 0, category: 'growth', rationale: 'A key player in identity management and digital solutions, benefiting from Nigeria\'s digital transformation.' },
+                { name: 'Cornerstone Ins.', ticker: 'CORNERST', sector: 'Financials', price: 6.90, ytdStartPrice: 1.0, dividendYield: 0.5, category: 'growth', rationale: 'Positioned to capitalize on the low penetration in the insurance sector, with strong YTD performance signaling market confidence.' },
+                { name: 'Sterling Bank', ticker: 'STERLNBANK', sector: 'Financials', price: 7.10, ytdStartPrice: 2.2, dividendYield: 3.1, category: ['dividend', 'growth'], rationale: 'Transitioning into a holding company unlocks new growth avenues. Strong YTD performance with a consistent dividend makes it an attractive hybrid play.' },
+                { name: 'Intl. Breweries', ticker: 'INTBREW', sector: 'Consumer Goods', price: 12.65, ytdStartPrice: 1.8, dividendYield: 0, category: 'growth', rationale: 'A consumer goods player showing significant turnaround momentum. Its aggressive YTD performance signals renewed investor confidence.' }
             ];
+
+            stockData.forEach(stock => {
+                stock.ytdPerformance = Math.round(((stock.price - stock.ytdStartPrice) / stock.ytdStartPrice) * 100);
+            });
 
             const stockCardsContainer = document.getElementById('stock-cards-container');
             const pennyContainer = document.getElementById('penny-container');
@@ -350,6 +357,7 @@
             const chartTitle = document.getElementById('chart-title');
             let comparisonChartInstance = null;
             let sectorChartInstance = null;
+            let scatterChartInstance = null;
 
             function createStockCard(stock) {
                 const categories = Array.isArray(stock.category) ? stock.category.join(' ') : stock.category;
@@ -533,6 +541,11 @@
             }
 
             function createScatterPlot() {
+                const ctx = document.getElementById('scatterChart').getContext('2d');
+                if (scatterChartInstance) {
+                    scatterChartInstance.destroy();
+                }
+
                 const hyperGrowthStocks = [];
                 const highYieldStocks = [];
                 const balancedStocks = [];
@@ -547,59 +560,70 @@
                     }
                 });
 
-                const trace1 = {
-                    x: highYieldStocks.map(s => s.ytdPerformance),
-                    y: highYieldStocks.map(s => s.dividendYield),
-                    mode: 'markers',
-                    type: 'scattergl',
-                    text: highYieldStocks.map(s => s.ticker),
-                    marker: { color: '#10B981', size: 12, symbol: 'circle' },
-                    name: 'High Yield (>7%)'
-                };
-
-                const trace2 = {
-                    x: hyperGrowthStocks.map(s => s.ytdPerformance),
-                    y: hyperGrowthStocks.map(s => s.dividendYield),
-                    mode: 'markers',
-                    type: 'scattergl',
-                    text: hyperGrowthStocks.map(s => s.ticker),
-                    marker: { color: '#3B82F6', size: 12, symbol: 'diamond' },
-                    name: 'Hyper Growth (>150% YTD)'
-                };
-
-                const trace3 = {
-                    x: balancedStocks.map(s => s.ytdPerformance),
-                    y: balancedStocks.map(s => s.dividendYield),
-                    mode: 'markers',
-                    type: 'scattergl',
-                    text: balancedStocks.map(s => s.ticker),
-                    marker: { color: '#6366F1', size: 12, symbol: 'star' },
-                    name: 'Balanced Performers'
-                };
-
-                const data = [trace1, trace2, trace3];
-
-                const layout = {
-                    xaxis: { title: 'YTD Performance (%)', gridcolor: '#e5e7eb' },
-                    yaxis: { title: 'Dividend Yield (%)', gridcolor: '#e5e7eb' },
-                    hovermode: 'closest',
-                    showlegend: true,
-                    legend: {
-                        x: 0.05,
-                        y: 0.95,
-                        bgcolor: 'rgba(255,255,255,0.6)'
+                scatterChartInstance = new Chart(ctx, {
+                    type: 'scatter',
+                    data: {
+                        datasets: [
+                            {
+                                label: 'High Yield (>7%)',
+                                data: highYieldStocks.map(s => ({ x: s.ytdPerformance, y: s.dividendYield, ticker: s.ticker })),
+                                backgroundColor: '#10B981',
+                                pointStyle: 'circle',
+                                radius: 7
+                            },
+                            {
+                                label: 'Hyper Growth (>150% YTD)',
+                                data: hyperGrowthStocks.map(s => ({ x: s.ytdPerformance, y: s.dividendYield, ticker: s.ticker })),
+                                backgroundColor: '#3B82F6',
+                                pointStyle: 'rectRot',
+                                radius: 7
+                            },
+                            {
+                                label: 'Balanced Performers',
+                                data: balancedStocks.map(s => ({ x: s.ytdPerformance, y: s.dividendYield, ticker: s.ticker })),
+                                backgroundColor: '#6366F1',
+                                pointStyle: 'star',
+                                radius: 8
+                            }
+                        ]
                     },
-                    paper_bgcolor: 'rgba(0,0,0,0)',
-                    plot_bgcolor: 'rgba(0,0,0,0)',
-                    font: {
-                        family: 'Inter, sans-serif',
-                        color: '#374151'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: function (tooltipItems) {
+                                        return tooltipItems[0].dataset.label;
+                                    },
+                                    label: function (context) {
+                                        const ticker = context.raw.ticker;
+                                        return `${ticker}: (YTD: ${context.parsed.x}%, Yield: ${context.parsed.y}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom',
+                                title: {
+                                    display: true,
+                                    text: 'YTD Performance (%)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Dividend Yield (%)'
+                                }
+                            }
+                        }
                     }
-                };
-
-                const config = { responsive: true };
-
-                Plotly.newPlot('scatterPlot', data, layout, config);
+                });
             }
 
             filterContainer.addEventListener('click', (e) => {
