@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Bond Investment Dashboard: US vs. Nigeria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is designed as an interactive dashboard. It begins with a clear, sticky navigation to guide users. The first section provides a high-level "Market Snapshot" comparing the US and Nigerian economies side-by-side for immediate context. The core of the application is the "Interactive Strategy Explorer" which allows users to select their risk profile (Conservative, Moderate, Aggressive). Clicking a profile dynamically updates a central area, displaying a tailored strategy description, an asset allocation chart, and specific bond recommendations. This user-driven approach makes the complex information more personal and digestible. Following the interactive section, a "Risk Management" area offers essential advice. This structure guides the user from broad understanding to personalized, actionable insights in a logical and engaging flow. -->
+    <!-- Visualization & Content Choices: 
+        - Market Snapshot: Goal: Compare. Viz/Method: Side-by-side content cards. Interaction: None. Justification: Provides a direct, scannable comparison of the two economies' key characteristics. Method: HTML/Tailwind. CONFIRM: NO SVG/Mermaid.
+        - Strategy Explorer (Asset Allocation): Goal: Inform/Compare. Viz/Method: Doughnut Chart. Interaction: Updates based on user's risk profile selection from buttons. Justification: A doughnut chart is the ideal way to represent the part-to-whole relationship of the asset allocation percentages for each strategy. Library: Chart.js/Canvas. CONFIRM: NO SVG/Mermaid.
+        - Strategy Explorer (Text Content): Goal: Inform. Viz/Method: Dynamic text blocks. Interaction: Content updates based on user's risk profile selection. Justification: Delivers tailored explanations and recommendations, making the dashboard feel responsive and personalized. Method: JavaScript DOM manipulation. CONFIRM: NO SVG/Mermaid.
+        - Risk Management: Goal: Inform. Viz/Method: Styled cards with Unicode icons. Interaction: None. Justification: Breaks down important advice into easily digestible points, enhanced with simple visual cues. Method: HTML/Tailwind. CONFIRM: NO SVG/Mermaid.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDF8F0;
+            color: #3D3522;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #3D3522;
+            border-bottom-color: #A69C85;
+        }
+        .strategy-button {
+            transition: all 0.3s;
+        }
+        .strategy-button.active {
+            background-color: #3D3522;
+            color: #FDF8F0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#FDF8F0]/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold">Bondfolio</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500">Market Snapshot</a>
+                        <a href="#explorer" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500">Strategy Explorer</a>
+                        <a href="#risk" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-500">Risk Management</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <section id="overview" class="my-12">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold">Market Snapshot</h2>
+                <p class="mt-2 text-lg text-gray-500">A comparative look at the current economic landscapes of the United States and Nigeria to inform your investment strategy.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-4 text-[#3D3522]">United States 🇺🇸</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="mr-2 mt-1 text-green-500">✔</span><span><strong>Economic Climate:</strong> Stable with moderating inflation.</span></li>
+                        <li class="flex items-start"><span class="mr-2 mt-1 text-green-500">✔</span><span><strong>Monetary Policy:</strong> Higher interest rates make Treasury bonds attractive.</span></li>
+                        <li class="flex items-start"><span class="mr-2 mt-1 text-green-500">✔</span><span><strong>Overall Risk:</strong> Low, with government debt considered a safe-haven asset.</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+                    <h3 class="text-2xl font-semibold mb-4 text-[#3D3522]">Nigeria 🇳🇬</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="mr-2 mt-1 text-yellow-500">⚠</span><span><strong>Economic Climate:</strong> High inflation and currency volatility.</span></li>
+                        <li class="flex items-start"><span class="mr-2 mt-1 text-yellow-500">⚠</span><span><strong>Monetary Policy:</strong> Interest rate hikes lead to high nominal yields on bonds.</span></li>
+                        <li class="flex items-start"><span class="mr-2 mt-1 text-yellow-500">⚠</span><span><strong>Overall Risk:</strong> High, with potential currency depreciation and political instability.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="explorer" class="my-20">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold">Interactive Strategy Explorer</h2>
+                <p class="mt-2 text-lg text-gray-500">Select an investor profile below to see a tailored strategy, asset allocation, and specific bond recommendations.</p>
+            </div>
+
+            <div class="flex justify-center space-x-2 md:space-x-4 mb-8">
+                <button class="strategy-button font-semibold py-2 px-4 md:px-6 rounded-full border-2 border-[#D9CDBF] bg-[#FDF8F0]" data-profile="conservative">Conservative</button>
+                <button class="strategy-button font-semibold py-2 px-4 md:px-6 rounded-full border-2 border-[#D9CDBF] bg-[#FDF8F0]" data-profile="moderate">Moderate</button>
+                <button class="strategy-button font-semibold py-2 px-4 md:px-6 rounded-full border-2 border-[#D9CDBF] bg-[#FDF8F0]" data-profile="aggressive">Aggressive</button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 border border-gray-200">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 id="strategy-title" class="text-2xl md:text-3xl font-bold mb-2"></h3>
+                        <p id="strategy-description" class="text-gray-600 mb-6"></p>
+                        <h4 class="text-xl font-semibold mb-3">Recommended Bonds:</h4>
+                        <div id="strategy-recommendations" class="space-y-4"></div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="allocationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="risk" class="my-20">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-bold">Risk Management & Monitoring</h2>
+                <p class="mt-2 text-lg text-gray-500">Key considerations to protect your investments and stay ahead of market changes.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 text-center border border-gray-200">
+                    <div class="text-4xl mb-3">💱</div>
+                    <h3 class="text-xl font-semibold mb-2">Currency Hedging</h3>
+                    <p class="text-gray-600">For Nigerian bond investments, consider strategies like forward contracts to mitigate the risk of Naira volatility.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center border border-gray-200">
+                    <div class="text-4xl mb-3">📰</div>
+                    <h3 class="text-xl font-semibold mb-2">Stay Informed</h3>
+                    <p class="text-gray-600">Regularly monitor economic indicators, central bank policies, and political news in both the US and Nigeria.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center border border-gray-200">
+                    <div class="text-4xl mb-3">🎨</div>
+                    <h3 class="text-xl font-semibold mb-2">Diversification</h3>
+                    <p class="text-gray-600">Spread investments across different bond types, maturities, and issuers to minimize risk in your portfolio.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-16 border-t">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-gray-500">
+            <p>This application is for informational purposes only and does not constitute financial advice. Please consult a qualified financial advisor.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const strategyData = {
+                conservative: {
+                    title: 'Conservative Profile',
+                    description: 'This strategy prioritizes the safety of your principal with the goal of achieving modest, stable returns. It is ideal for investors with a low tolerance for risk.',
+                    allocation: [80, 20],
+                    recommendations: `
+                        <div class="border-l-4 border-[#A69C85] pl-4">
+                            <p class="font-semibold">🇺🇸 US: U.S. Treasury Inflation-Protected Securities (TIPS)</p>
+                            <p class="text-sm text-gray-500"><strong>Example:</strong> iShares TIPS Bond ETF (TIP)</p>
+                        </div>
+                        <div class="border-l-4 border-[#A69C85] pl-4">
+                            <p class="font-semibold">🇳🇬 Nigeria: FGN Eurobonds</p>
+                            <p class="text-sm text-gray-500"><strong>Example:</strong> FGN Eurobond maturing in 2032</p>
+                        </div>`
+                },
+                moderate: {
+                    title: 'Moderate Profile',
+                    description: 'A balanced approach seeking a blend of capital safety and higher yields. Suitable for those willing to accept moderate risk for potentially enhanced returns.',
+                    allocation: [60, 40],
+                    recommendations: `
+                        <div class="border-l-4 border-[#A69C85] pl-4">
+                            <p class="font-semibold">🇺🇸 US: Investment-Grade Corporate Bonds</p>
+                            <p class="text-sm text-gray-500"><strong>Examples:</strong> Bonds from Microsoft (MSFT), Johnson & Johnson (JNJ), or the iShares iBoxx $ ETF (LQD)</p>
+                        </div>
+                        <div class="border-l-4 border-[#A69C85] pl-4">
+                            <p class="font-semibold">🇳🇬 Nigeria: Top-Tier Corporate Bonds</p>
+                            <p class="text-sm text-gray-500"><strong>Examples:</strong> Bonds from Zenith Bank or MTN Nigeria</p>
+                        </div>`
+                },
+                aggressive: {
+                    title: 'Aggressive Profile',
+                    description: 'This strategy focuses on maximizing yield and is designed for investors with a high tolerance for risk, including currency fluctuations and potential defaults.',
+                    allocation: [30, 70],
+                    recommendations: `
+                        <div class="border-l-4 border-[#A69C85] pl-4">
+                            <p class="font-semibold">🇺🇸 US: High-Yield Corporate Bonds</p>
+                            <p class="text-sm text-gray-500"><strong>Example:</strong> SPDR Bloomberg High Yield Bond ETF (JNK)</p>
+                        </div>
+                        <div class="border-l-4 border-[#A69C85] pl-4">
+                            <p class="font-semibold">🇳🇬 Nigeria: Lower-Tier & State Bonds</p>
+                            <p class="text-sm text-gray-500"><strong>Example:</strong> Diversify via a fund like Stanbic IBTC Nigerian Equity Fund</p>
+                        </div>`
+                }
+            };
+
+            const strategyTitleEl = document.getElementById('strategy-title');
+            const strategyDescEl = document.getElementById('strategy-description');
+            const strategyRecsEl = document.getElementById('strategy-recommendations');
+            const strategyButtons = document.querySelectorAll('.strategy-button');
+            const ctx = document.getElementById('allocationChart').getContext('2d');
+            
+            let allocationChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['U.S. Bonds', 'Nigerian Bonds'],
+                    datasets: [{
+                        label: 'Asset Allocation',
+                        data: [],
+                        backgroundColor: ['#A69C85', '#3D3522'],
+                        borderColor: '#FFFFFF',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function updateStrategyView(profile) {
+                const data = strategyData[profile];
+                strategyTitleEl.textContent = data.title;
+                strategyDescEl.textContent = data.description;
+                strategyRecsEl.innerHTML = data.recommendations;
+                
+                allocationChart.data.datasets[0].data = data.allocation;
+                allocationChart.update();
+                
+                strategyButtons.forEach(button => {
+                    button.classList.toggle('active', button.dataset.profile === profile);
+                });
+            }
+
+            strategyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    updateStrategyView(button.dataset.profile);
+                });
+            });
+
+            updateStrategyView('conservative');
+        });
+    </script>
+</body>
+</html>
+
