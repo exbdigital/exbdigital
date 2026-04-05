@@ -1,298 +1,340 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  CheckCircle2, 
-  Circle, 
-  Info, 
-  FileText, 
-  Plane, 
-  Briefcase, 
-  User, 
-  CreditCard,
-  AlertTriangle,
-  Award
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schengen Visa Application Checklist</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-const checklistData = [
-  {
-    id: 's1',
-    title: '1. Application Forms & Identity',
-    icon: User,
-    items: [
-      { id: '1-1', title: 'VIDEX Application Form', desc: 'Completed online, printed out, and signed manually in all required places.' },
-      { id: '1-2', title: 'Declaration under Section 54 (6)', desc: 'Printed and signed (German Residence Act declaration, usually printed alongside the VIDEX form).' },
-      { id: '1-3', title: 'Valid Passport', desc: 'Must be valid for at least 3 months beyond your planned return date, issued within the last 10 years, and have at least 2 blank pages.' },
-      { id: '1-4', title: 'Passport Data Page Copy', desc: 'A clear A4 photocopy of your passport\'s bio-data page.' },
-      { id: '1-5', title: 'Previous Visa Copies', desc: 'A4 photocopies of your previous Schengen visas (the 3-week Italian and 3-month French visas), PLUS copies of the entry/exit stamps.' },
-      { id: '1-6', title: 'Old Passport (If applicable)', desc: 'If your previous visas are in an expired passport, you must bring the original old passport and copies of its data page/visas.' },
-      { id: '1-7', title: 'Biometric Photographs', desc: 'Two (2) recent passport-sized photos (35x45mm). They must have a white/light grey background, neutral expression, and be taken within the last 6 months.' },
-    ]
-  },
-  {
-    id: 's2',
-    title: '2. Purpose of Travel (The Conference)',
-    icon: Award,
-    items: [
-      { id: '2-1', title: 'Google I/O Connect Invitation', desc: 'A clear printout of the official invitation email/PDF from Google.' },
-      { id: '2-2', title: 'Event Registration', desc: 'Proof of your confirmed registration/ticket for the event.' },
-      { id: '2-3', title: 'Founder\'s Cover Letter', desc: 'A formal introductory letter printed on your company\'s official letterhead. State your name/role, trip purpose, exact dates, and a clear statement on who bears the financial responsibility.' },
-    ]
-  },
-  {
-    id: 's3',
-    title: '3. Business Legitimacy & Financial Proof',
-    icon: Briefcase,
-    note: 'Ensure all bank statements are strictly printed on A4 paper.',
-    items: [
-      { id: '3-1', title: 'CAC Incorporation Documents', desc: 'Copies of your Certificate of Incorporation, Memorandum and Articles of Association (or CAC Status Report).' },
-      { id: '3-2', title: 'Tax Clearance', desc: 'Copy of your company\'s recent FIRS / Company Income Tax Clearance Certificate.' },
-      { id: '3-3', title: 'Company Bank Statements', desc: 'Stamped and signed by your bank, covering the last 3 to 6 months. This proves the business is active.' },
-      { id: '3-4', title: 'Personal Bank Statements', desc: 'Stamped and signed by your bank, covering the last 3 to 6 months.' },
-      { id: '3-5', title: 'Proof of Active Business (Optional)', desc: 'Copies of recent client contracts, invoices, or business proposals to further prove operational status.' },
-    ]
-  },
-  {
-    id: 's4',
-    title: '4. Logistics & Accommodation',
-    icon: Plane,
-    items: [
-      { id: '4-1', title: 'Flight Itinerary', desc: 'A verifiable round-trip flight reservation (Do NOT purchase the actual ticket until the visa is approved).' },
-      { id: '4-2', title: 'Hotel Reservation', desc: 'Confirmed hotel booking in Berlin covering every single night of your intended stay. The booking must have your name on it.' },
-      { id: '4-3', title: 'Travel Medical Insurance', desc: 'A policy valid for the entire Schengen area covering your exact travel dates. It must have a minimum coverage of €30,000 for emergency medical expenses and repatriation.' },
-    ]
-  },
-  {
-    id: 's5',
-    title: '5. Proof of Ties to Nigeria (Crucial)',
-    icon: FileText,
-    items: [
-      { id: '5-1', title: 'Marriage Certificate', desc: 'A clear photocopy.' },
-      { id: '5-2', title: 'Children\'s Birth Certificates', desc: 'Photocopies of the birth certificates of your children.' },
-      { id: '5-3', title: 'Property Documents (Optional)', desc: 'If you own land or property, attaching a copy of the deed/CofO strongly reinforces your economic ties to Nigeria.' },
-    ]
-  },
-  {
-    id: 's6',
-    title: '6. Visa & Service Fees',
-    icon: CreditCard,
-    note: 'Fees at TLScontact in Nigeria are typically paid in cash in Naira (NGN) at the prevailing embassy exchange rate on the day of your appointment.',
-    items: [
-      { id: '6-1', title: 'Schengen Visa Fee (Type C)', desc: '€90 - The standard adult fee for a short-stay visa.' },
-      { id: '6-2', title: 'TLScontact Service Fee', desc: '~€20 to €30 (Equivalent) - The administrative fee charged by the submission center.' },
-      { id: '6-3', title: 'Premium Lounge (Optional)', desc: 'TLScontact offers a premium lounge service for a more comfortable submission experience, which comes at an additional optional cost.' },
-    ]
-  }
-];
+  <style>
+    /* Custom styles for transitions that Tailwind might not cover natively without config */
+    .transition-all-custom {
+      transition-property: all;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 500ms;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans pb-12">
 
-export default function App() {
-  const [checkedItems, setCheckedItems] = useState(() => {
-    if (typeof window !== 'undefined') {
+  <!-- Header Section -->
+  <div class="bg-blue-900 text-white pt-12 pb-24 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4 tracking-tight">Schengen Visa Application</h1>
+      <p class="text-blue-200 text-lg mb-6 max-w-2xl">
+        Interactive document checklist for your German Consulate appointment in Lagos/Abuja.
+      </p>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm font-medium">
+        <div class="bg-blue-800/50 p-4 rounded-lg flex items-center gap-3">
+          <i data-lucide="award" class="text-blue-300 w-5 h-5"></i>
+          <div>
+            <div class="text-blue-300 text-xs uppercase tracking-wider">Purpose</div>
+            <div>Google I/O Connect</div>
+          </div>
+        </div>
+        <div class="bg-blue-800/50 p-4 rounded-lg flex items-center gap-3">
+          <i data-lucide="user" class="text-blue-300 w-5 h-5"></i>
+          <div>
+            <div class="text-blue-300 text-xs uppercase tracking-wider">Profile</div>
+            <div>Business Founder</div>
+          </div>
+        </div>
+        <div class="bg-blue-800/50 p-4 rounded-lg flex items-center gap-3">
+          <i data-lucide="plane" class="text-blue-300 w-5 h-5"></i>
+          <div>
+            <div class="text-blue-300 text-xs uppercase tracking-wider">Destination</div>
+            <div>Berlin, Germany</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
+    
+    <!-- Progress Bar Card -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8 border border-slate-100 relative z-10">
+      <div class="flex justify-between items-end mb-2">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-900">Preparation Progress</h2>
+          <p class="text-sm text-slate-500">Track your required documents</p>
+        </div>
+        <span id="progress-text" class="text-2xl font-bold text-blue-600">0%</span>
+      </div>
+      <div class="w-full bg-slate-100 rounded-full h-3 mb-4 overflow-hidden">
+        <div 
+          id="progress-bar"
+          class="bg-blue-600 h-3 rounded-full transition-all-custom" 
+          style="width: 0%"
+        ></div>
+      </div>
+      <div class="flex justify-end">
+        <button 
+          onclick="clearChecklist()"
+          class="text-xs text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
+        >
+          Reset Checklist
+        </button>
+      </div>
+    </div>
+
+    <!-- Global Warning -->
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 flex gap-3 text-amber-800">
+      <i data-lucide="alert-triangle" class="w-6 h-6 shrink-0 text-amber-600"></i>
+      <div class="text-sm">
+        <strong class="block font-semibold mb-1">Crucial Formatting Rule</strong>
+        The German consulate is extremely strict: <strong>Every single document</strong> (especially bank statements) must be printed on standard <strong>A4 paper</strong>. Documents printed on Legal or Letter size may be rejected or require re-printing at the center.
+      </div>
+    </div>
+
+    <!-- Checklist Sections Container -->
+    <div id="checklist-container" class="space-y-8">
+      <!-- Dynamic content will be injected here via JavaScript -->
+    </div>
+    
+    <!-- Footer info block -->
+    <div class="mt-8 bg-slate-900 text-white rounded-xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <h4 class="font-semibold text-lg">Total Estimated Cost</h4>
+        <p class="text-slate-400 text-sm">Excluding optional premium lounge services</p>
+      </div>
+      <div class="text-right">
+        <span class="text-2xl font-bold">~€115 - €120</span>
+        <p class="text-slate-400 text-xs uppercase tracking-widest mt-1">Payable in Naira Cash</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Data definition
+    const checklistData = [
+      {
+        id: 's1',
+        title: '1. Application Forms & Identity',
+        icon: 'user',
+        items: [
+          { id: '1-1', title: 'VIDEX Application Form', desc: 'Completed online, printed out, and signed manually in all required places.' },
+          { id: '1-2', title: 'Declaration under Section 54 (6)', desc: 'Printed and signed (German Residence Act declaration, usually printed alongside the VIDEX form).' },
+          { id: '1-3', title: 'Valid Passport', desc: 'Must be valid for at least 3 months beyond your planned return date, issued within the last 10 years, and have at least 2 blank pages.' },
+          { id: '1-4', title: 'Passport Data Page Copy', desc: 'A clear A4 photocopy of your passport\'s bio-data page.' },
+          { id: '1-5', title: 'Previous Visa Copies', desc: 'A4 photocopies of your previous Schengen visas (the 3-week Italian and 3-month French visas), PLUS copies of the entry/exit stamps.' },
+          { id: '1-6', title: 'Old Passport (If applicable)', desc: 'If your previous visas are in an expired passport, you must bring the original old passport and copies of its data page/visas.' },
+          { id: '1-7', title: 'Biometric Photographs', desc: 'Two (2) recent passport-sized photos (35x45mm). They must have a white/light grey background, neutral expression, and be taken within the last 6 months.' },
+        ]
+      },
+      {
+        id: 's2',
+        title: '2. Purpose of Travel (The Conference)',
+        icon: 'award',
+        items: [
+          { id: '2-1', title: 'Google I/O Connect Invitation', desc: 'A clear printout of the official invitation email/PDF from Google.' },
+          { id: '2-2', title: 'Event Registration', desc: 'Proof of your confirmed registration/ticket for the event.' },
+          { id: '2-3', title: 'Founder\'s Cover Letter', desc: 'A formal introductory letter printed on your company\'s official letterhead. State your name/role, trip purpose, exact dates, and a clear statement on who bears the financial responsibility.' },
+        ]
+      },
+      {
+        id: 's3',
+        title: '3. Business Legitimacy & Financial Proof',
+        icon: 'briefcase',
+        note: 'Ensure all bank statements are strictly printed on A4 paper.',
+        items: [
+          { id: '3-1', title: 'CAC Incorporation Documents', desc: 'Copies of your Certificate of Incorporation, Memorandum and Articles of Association (or CAC Status Report).' },
+          { id: '3-2', title: 'Tax Clearance', desc: 'Copy of your company\'s recent FIRS / Company Income Tax Clearance Certificate.' },
+          { id: '3-3', title: 'Company Bank Statements', desc: 'Stamped and signed by your bank, covering the last 3 to 6 months. This proves the business is active.' },
+          { id: '3-4', title: 'Personal Bank Statements', desc: 'Stamped and signed by your bank, covering the last 3 to 6 months.' },
+          { id: '3-5', title: 'Proof of Active Business (Optional)', desc: 'Copies of recent client contracts, invoices, or business proposals to further prove operational status.' },
+        ]
+      },
+      {
+        id: 's4',
+        title: '4. Logistics & Accommodation',
+        icon: 'plane',
+        items: [
+          { id: '4-1', title: 'Flight Itinerary', desc: 'A verifiable round-trip flight reservation (Do NOT purchase the actual ticket until the visa is approved).' },
+          { id: '4-2', title: 'Hotel Reservation', desc: 'Confirmed hotel booking in Berlin covering every single night of your intended stay. The booking must have your name on it.' },
+          { id: '4-3', title: 'Travel Medical Insurance', desc: 'A policy valid for the entire Schengen area covering your exact travel dates. It must have a minimum coverage of €30,000 for emergency medical expenses and repatriation.' },
+        ]
+      },
+      {
+        id: 's5',
+        title: '5. Proof of Ties to Nigeria (Crucial)',
+        icon: 'file-text',
+        items: [
+          { id: '5-1', title: 'Marriage Certificate', desc: 'A clear photocopy.' },
+          { id: '5-2', title: 'Children\'s Birth Certificates', desc: 'Photocopies of the birth certificates of your children.' },
+          { id: '5-3', title: 'Property Documents (Optional)', desc: 'If you own land or property, attaching a copy of the deed/CofO strongly reinforces your economic ties to Nigeria.' },
+        ]
+      },
+      {
+        id: 's6',
+        title: '6. Visa & Service Fees',
+        icon: 'credit-card',
+        note: 'Fees at TLScontact in Nigeria are typically paid in cash in Naira (NGN) at the prevailing embassy exchange rate on the day of your appointment.',
+        items: [
+          { id: '6-1', title: 'Schengen Visa Fee (Type C)', desc: '€90 - The standard adult fee for a short-stay visa.' },
+          { id: '6-2', title: 'TLScontact Service Fee', desc: '~€20 to €30 (Equivalent) - The administrative fee charged by the submission center.' },
+          { id: '6-3', title: 'Premium Lounge (Optional)', desc: 'TLScontact offers a premium lounge service for a more comfortable submission experience, which comes at an additional optional cost.' },
+        ]
+      }
+    ];
+
+    // State management
+    let checkedItems = {};
+
+    // Load state from localStorage on startup
+    function loadState() {
       try {
-        const saved = window.localStorage.getItem('visaChecklistState');
+        const saved = localStorage.getItem('visaChecklistState');
         if (saved) {
-          return JSON.parse(saved);
+          checkedItems = JSON.parse(saved);
         }
       } catch (e) {
         console.error("Error reading localStorage", e);
       }
     }
-    return {};
-  });
-  const [progress, setProgress] = useState(0);
 
-  // Update progress bar and save to localStorage whenever checked items change
-  useEffect(() => {
-    let total = 0;
-    let checked = 0;
-    
-    checklistData.forEach(section => {
-      section.items.forEach(item => {
-        total++;
-        if (checkedItems[item.id]) {
-          checked++;
-        }
-      });
-    });
-    
-    setProgress(total === 0 ? 0 : Math.round((checked / total) * 100));
-    
-    try {
-      window.localStorage.setItem('visaChecklistState', JSON.stringify(checkedItems));
-    } catch (e) {
-      console.error("Error saving to localStorage", e);
-    }
-  }, [checkedItems]);
-
-  const toggleItem = (id) => {
-    setCheckedItems(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
-  const clearChecklist = () => {
-    if (window.confirm("Are you sure you want to clear all progress?")) {
-      setCheckedItems({});
+    // Save state to localStorage
+    function saveState() {
       try {
-        window.localStorage.removeItem('visaChecklistState');
+        localStorage.setItem('visaChecklistState', JSON.stringify(checkedItems));
       } catch (e) {
-        console.error("Error clearing localStorage", e);
+        console.error("Error saving to localStorage", e);
       }
     }
-  };
 
-  return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans pb-12">
-      {/* Header Section */}
-      <div className="bg-blue-900 text-white pt-12 pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4 tracking-tight">Schengen Visa Application</h1>
-          <p className="text-blue-200 text-lg mb-6 max-w-2xl">
-            Interactive document checklist for your German Consulate appointment in Lagos/Abuja.
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm font-medium">
-            <div className="bg-blue-800/50 p-4 rounded-lg flex items-center gap-3">
-              <Award className="text-blue-300 w-5 h-5" />
-              <div>
-                <div className="text-blue-300 text-xs uppercase tracking-wider">Purpose</div>
-                <div>Google I/O Connect</div>
-              </div>
-            </div>
-            <div className="bg-blue-800/50 p-4 rounded-lg flex items-center gap-3">
-              <User className="text-blue-300 w-5 h-5" />
-              <div>
-                <div className="text-blue-300 text-xs uppercase tracking-wider">Profile</div>
-                <div>Business Founder</div>
-              </div>
-            </div>
-            <div className="bg-blue-800/50 p-4 rounded-lg flex items-center gap-3">
-              <Plane className="text-blue-300 w-5 h-5" />
-              <div>
-                <div className="text-blue-300 text-xs uppercase tracking-wider">Destination</div>
-                <div>Berlin, Germany</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    // Calculate and update the progress bar UI
+    function updateProgress() {
+      let total = 0;
+      let checked = 0;
+      
+      checklistData.forEach(section => {
+        section.items.forEach(item => {
+          total++;
+          if (checkedItems[item.id]) {
+            checked++;
+          }
+        });
+      });
+      
+      const progress = total === 0 ? 0 : Math.round((checked / total) * 100);
+      
+      document.getElementById('progress-text').innerText = `${progress}%`;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+    }
 
-      {/* Main Content */}
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
-        
-        {/* Progress Bar Card */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-slate-100 relative z-10">
-          <div className="flex justify-between items-end mb-2">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900">Preparation Progress</h2>
-              <p className="text-sm text-slate-500">Track your required documents</p>
-            </div>
-            <span className="text-2xl font-bold text-blue-600">{progress}%</span>
-          </div>
-          <div className="w-full bg-slate-100 rounded-full h-3 mb-4 overflow-hidden">
-            <div 
-              className="bg-blue-600 h-3 rounded-full transition-all duration-500 ease-out" 
-              style={{ width: `${progress}%` }}
-            ></div>
-          </div>
-          <div className="flex justify-end">
-            <button 
-              onClick={clearChecklist}
-              className="text-xs text-slate-400 hover:text-red-500 transition-colors"
-            >
-              Reset Checklist
-            </button>
-          </div>
-        </div>
+    // Toggle an item's status
+    function toggleItem(id) {
+      checkedItems[id] = !checkedItems[id];
+      saveState();
+      updateProgress();
+      renderChecklist(); // Re-render to update classes and icons
+    }
 
-        {/* Global Warning */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-8 flex gap-3 text-amber-800">
-          <AlertTriangle className="w-6 h-6 shrink-0 text-amber-600" />
-          <div className="text-sm">
-            <strong className="block font-semibold mb-1">Crucial Formatting Rule</strong>
-            The German consulate is extremely strict: <strong>Every single document</strong> (especially bank statements) must be printed on standard <strong>A4 paper</strong>. Documents printed on Legal or Letter size may be rejected or require re-printing at the center.
-          </div>
-        </div>
+    // Clear all progress
+    function clearChecklist() {
+      if (window.confirm("Are you sure you want to clear all progress?")) {
+        checkedItems = {};
+        try {
+          localStorage.removeItem('visaChecklistState');
+        } catch (e) {
+          console.error("Error clearing localStorage", e);
+        }
+        updateProgress();
+        renderChecklist();
+      }
+    }
 
-        {/* Checklist Sections */}
-        <div className="space-y-8">
-          {checklistData.map((section) => {
-            const SectionIcon = section.icon;
-            
-            // Calculate section progress
-            const totalSectionItems = section.items.length;
-            const completedSectionItems = section.items.filter(item => checkedItems[item.id]).length;
-            const isSectionComplete = totalSectionItems === completedSectionItems;
+    // Render the dynamic checklist DOM
+    function renderChecklist() {
+      const container = document.getElementById('checklist-container');
+      let html = '';
 
-            return (
-              <div key={section.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                {/* Section Header */}
-                <div className={`p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between transition-colors ${isSectionComplete ? 'bg-slate-50' : 'bg-white'}`}>
-                  <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg ${isSectionComplete ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'}`}>
-                      <SectionIcon className="w-5 h-5" />
-                    </div>
-                    <h3 className="text-lg font-bold text-slate-900">{section.title}</h3>
-                  </div>
-                  <div className="text-sm font-medium text-slate-400">
-                    {completedSectionItems} / {totalSectionItems}
-                  </div>
+      checklistData.forEach(section => {
+        const totalSectionItems = section.items.length;
+        const completedSectionItems = section.items.filter(item => checkedItems[item.id]).length;
+        const isSectionComplete = totalSectionItems === completedSectionItems;
+
+        const headerBgClass = isSectionComplete ? 'bg-slate-50' : 'bg-white';
+        const iconContainerClass = isSectionComplete ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600';
+
+        let sectionHtml = `
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <!-- Section Header -->
+            <div class="p-4 sm:p-6 border-b border-slate-100 flex items-center justify-between transition-colors ${headerBgClass}">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg ${iconContainerClass}">
+                  <i data-lucide="${section.icon}" class="w-5 h-5"></i>
                 </div>
-
-                {/* Section Note */}
-                {section.note && (
-                  <div className="px-6 py-3 bg-slate-50 border-b border-slate-100 flex items-start gap-2 text-sm text-slate-600">
-                    <Info className="w-4 h-4 mt-0.5 shrink-0 text-blue-500" />
-                    <p>{section.note}</p>
-                  </div>
-                )}
-
-                {/* Section Items */}
-                <div className="divide-y divide-slate-100">
-                  {section.items.map((item) => {
-                    const isChecked = !!checkedItems[item.id];
-                    return (
-                      <div 
-                        key={item.id} 
-                        onClick={() => toggleItem(item.id)}
-                        className={`p-4 sm:p-6 flex items-start gap-4 cursor-pointer transition-colors hover:bg-slate-50 group ${isChecked ? 'opacity-75' : ''}`}
-                      >
-                        <button 
-                          className="mt-0.5 shrink-0 text-slate-300 group-hover:text-blue-500 focus:outline-none transition-colors"
-                          aria-label={isChecked ? "Mark as incomplete" : "Mark as complete"}
-                        >
-                          {isChecked ? (
-                            <CheckCircle2 className="w-6 h-6 text-green-500" />
-                          ) : (
-                            <Circle className="w-6 h-6" />
-                          )}
-                        </button>
-                        <div>
-                          <h4 className={`font-semibold text-base mb-1 transition-colors ${isChecked ? 'text-slate-500 line-through' : 'text-slate-900'}`}>
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-slate-500 leading-relaxed">
-                            {item.desc}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                <h3 class="text-lg font-bold text-slate-900">${section.title}</h3>
               </div>
-            );
-          })}
-        </div>
-        
-        {/* Footer info block */}
-        <div className="mt-8 bg-slate-900 text-white rounded-xl p-6 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <h4 className="font-semibold text-lg">Total Estimated Cost</h4>
-            <p className="text-slate-400 text-sm">Excluding optional premium lounge services</p>
-          </div>
-          <div className="text-right">
-            <span className="text-2xl font-bold">~€115 - €120</span>
-            <p className="text-slate-400 text-xs uppercase tracking-widest mt-1">Payable in Naira Cash</p>
-          </div>
-        </div>
+              <div class="text-sm font-medium text-slate-400">
+                ${completedSectionItems} / ${totalSectionItems}
+              </div>
+            </div>
+        `;
 
-      </div>
-    </div>
-  );
-}
+        if (section.note) {
+          sectionHtml += `
+            <!-- Section Note -->
+            <div class="px-6 py-3 bg-slate-50 border-b border-slate-100 flex items-start gap-2 text-sm text-slate-600">
+              <i data-lucide="info" class="w-4 h-4 mt-0.5 shrink-0 text-blue-500"></i>
+              <p>${section.note}</p>
+            </div>
+          `;
+        }
+
+        sectionHtml += `<div class="divide-y divide-slate-100">`;
+
+        section.items.forEach(item => {
+          const isChecked = !!checkedItems[item.id];
+          const rowClass = isChecked ? 'opacity-75' : '';
+          const titleClass = isChecked ? 'text-slate-500 line-through' : 'text-slate-900';
+          const iconName = isChecked ? 'check-circle-2' : 'circle';
+          const iconColor = isChecked ? 'text-green-500' : '';
+
+          sectionHtml += `
+            <div onclick="toggleItem('${item.id}')" class="p-4 sm:p-6 flex items-start gap-4 cursor-pointer transition-colors hover:bg-slate-50 group ${rowClass}">
+              <button class="mt-0.5 shrink-0 text-slate-300 group-hover:text-blue-500 focus:outline-none transition-colors">
+                <i data-lucide="${iconName}" class="w-6 h-6 ${iconColor}"></i>
+              </button>
+              <div>
+                <h4 class="font-semibold text-base mb-1 transition-colors ${titleClass}">
+                  ${item.title}
+                </h4>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                  ${item.desc}
+                </p>
+              </div>
+            </div>
+          `;
+        });
+
+        sectionHtml += `</div></div>`;
+        html += sectionHtml;
+      });
+
+      container.innerHTML = html;
+      
+      // Initialize Lucide icons for newly injected HTML
+      lucide.createIcons();
+    }
+
+    // Initialize the app when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderChecklist();
+      updateProgress();
+      // Initialize static icons already in the HTML header
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
