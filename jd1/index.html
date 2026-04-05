@@ -1,0 +1,2233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just Delish - Sumptuous Meals You Can't Resist</title>
+    <meta name="description" content="Just Delish - Authentic Nigerian restaurant in Gbagada, Lagos. Serving sumptuous jollof rice, egusi soup, pepper soup and more. Order online for delivery.">
+    <meta property="og:title" content="Just Delish - Sumptuous Meals You Can't Resist">
+    <meta property="og:description" content="Authentic Nigerian restaurant in Gbagada, Lagos. Serving sumptuous jollof rice, egusi soup, pepper soup and more. Order online for delivery.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="images/logo.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Just Delish - Sumptuous Meals You Can't Resist">
+    <meta name="twitter:description" content="Authentic Nigerian restaurant in Gbagada, Lagos. Serving sumptuous jollof rice, egusi soup, pepper soup and more.">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #E8611A;
+            --dark-red: #8B1A1A;
+            --flame: #C4371B;
+            --cream: #FFF8F0;
+            --dark: #1A1A1A;
+            --warm-gray: #F5F0EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .skip-nav {
+            position: absolute;
+            top: -100%;
+            left: 0;
+            background: var(--orange);
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            z-index: 1100;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 0 0 8px 0;
+            transition: top 0.2s;
+        }
+
+        .skip-nav:focus {
+            top: 0;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            height: 50px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links a:hover {
+            color: var(--orange);
+        }
+
+        .nav-links .order-btn {
+            background: var(--orange);
+            color: #fff;
+            padding: 0.7rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .nav-links .order-btn:hover {
+            background: var(--flame);
+            transform: translateY(-1px);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: var(--dark);
+            margin: 6px 0;
+            transition: all 0.3s;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--cream) 0%, #fff 50%, var(--warm-gray) 100%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(232, 97, 26, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-text h1 span {
+            color: var(--orange);
+        }
+
+        .hero-text p {
+            font-size: 1.15rem;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 480px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--orange);
+            color: #fff;
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: var(--flame);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(232, 97, 26, 0.3);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            color: var(--dark);
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 2px solid var(--dark);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--dark);
+            color: #fff;
+        }
+
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-logo-container {
+            width: 420px;
+            height: 420px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 30px 80px rgba(232, 97, 26, 0.15);
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-logo-container img {
+            width: 280px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            padding: 0.6rem 1rem 0.8rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: float 5s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .floating-badge.badge-1 {
+            top: 10%;
+            right: -10%;
+            animation-delay: -1s;
+        }
+
+        .floating-badge.badge-2 {
+            bottom: 10%;
+            left: -5%;
+            animation-delay: -3s;
+        }
+
+        .badge-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .badge-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .badge-icon {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        .badge-text {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header .label {
+            display: inline-block;
+            color: var(--orange);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.8rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: #666;
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* About */
+        .about {
+            background: var(--cream);
+        }
+
+        .about-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, var(--orange), var(--flame));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .about-image-text {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 2rem;
+            line-height: 1.3;
+        }
+
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .about-content p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--orange);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.3rem;
+        }
+
+        /* Menu */
+        .menu {
+            background: #fff;
+        }
+
+        .menu-categories {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            padding-bottom: 0.5rem;
+        }
+
+        .menu-cat-btn {
+            padding: 0.6rem 1.5rem;
+            border: 2px solid #eee;
+            border-radius: 50px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .menu-cat-btn:hover,
+        .menu-cat-btn.active {
+            border-color: var(--orange);
+            background: var(--orange);
+            color: #fff;
+        }
+
+        .menu-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu-card {
+            background: var(--warm-gray);
+            border-radius: 16px;
+            padding: 1.8rem;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .menu-card-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .menu-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .menu-card-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .menu-card-info p {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .menu-card-info .tag {
+            display: inline-block;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--orange);
+            font-weight: 600;
+            background: rgba(232, 97, 26, 0.1);
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+        }
+
+        .menu-card-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--orange);
+            white-space: nowrap;
+        }
+
+        .menu-card-price .price-old {
+            text-decoration: line-through;
+            color: #6b6b6b;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .menu-categories::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .menu-categories::-webkit-scrollbar-thumb {
+            background: var(--orange);
+            border-radius: 4px;
+        }
+
+        /* Specials Banner */
+        .specials-banner {
+            background: linear-gradient(135deg, var(--dark) 0%, #2a1a10 100%);
+            padding: 5rem 2rem;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .specials-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(232, 97, 26, 0.15), transparent 60%);
+        }
+
+        .specials-banner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .specials-banner p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .specials-banner .btn-primary {
+            position: relative;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--cream);
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+        }
+
+        .testimonial-stars {
+            color: #FFB800;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .testimonial-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .testimonial-location {
+            font-size: 0.8rem;
+            color: #6b6b6b;
+        }
+
+        /* Contact */
+        .contact {
+            background: #fff;
+        }
+
+        .contact-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(232, 97, 26, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .contact-info-item h4 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-info-item p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            padding: 1rem 1.3rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--orange);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(232, 97, 26, 0.2);
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        .contact-form .btn-primary {
+            align-self: flex-start;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: #fff;
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand img {
+            height: 50px;
+            margin-bottom: 1rem;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.2rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            margin-bottom: 0.7rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--orange);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-bottom p {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.85rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .social-links a:hover {
+            background: var(--orange);
+        }
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .hero-inner {
+                gap: 2rem;
+            }
+
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+
+            .hero-logo-container {
+                width: 320px;
+                height: 320px;
+            }
+
+            .hero-logo-container img {
+                width: 220px;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .about-grid,
+            .contact-grid {
+                gap: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.4rem;
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                gap: 1rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .hero-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-text p {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-logo-container {
+                width: 280px;
+                height: 280px;
+            }
+
+            .hero-logo-container img {
+                width: 180px;
+            }
+
+            .floating-badge {
+                display: none;
+            }
+
+            .about-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .specials-banner h2 {
+                font-size: 2rem;
+            }
+
+            .about-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-top {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#menu" class="skip-nav">Skip to menu</a>
+
+<!-- Navigation -->
+<nav>
+    <div class="nav-inner">
+        <img src="images/logo.png" alt="Just Delish" class="nav-logo">
+        <button class="mobile-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#reviews">Reviews</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="https://glovoapp.com/en/ng/lagos/stores/just-delish-restaurant-los" target="_blank" class="order-btn">Order Now</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-text">
+            <h1>Sumptuous Meals <span>You Can't Resist</span></h1>
+            <p>Experience authentic Nigerian flavours crafted with love and the freshest ingredients. From our kitchen in Lagos to your table.</p>
+            <div class="hero-buttons">
+                <a href="https://glovoapp.com/en/ng/lagos/stores/just-delish-restaurant-los" target="_blank" class="btn-primary">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    Order Now
+                </a>
+                <a href="#menu" class="btn-secondary">View Menu</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="hero-logo-container">
+                <img src="images/logo.png" alt="Just Delish Logo">
+            </div>
+            <div class="floating-badge badge-1">
+                <img class="badge-img" src="images/menu/35a6fd8d-d103-421d-bbb0-2c0119ba5af7.jpg" alt="Jollof Spaghetti and Turkey">
+                <div class="badge-content">
+                    <div class="badge-icon">&#x1F525;</div>
+                    <div class="badge-text">Fresh Daily</div>
+                </div>
+            </div>
+            <div class="floating-badge badge-2">
+                <img class="badge-img" src="images/menu/39047544695_41bfbc0b-32ee-405c-856d-01f67ac4ff66.jpg" alt="Egusi Soup">
+                <div class="badge-content">
+                    <div class="badge-icon">&#11088;</div>
+                    <div class="badge-text">Top Rated</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+    <div class="about-grid">
+        <div class="about-image">
+            <div class="about-image-text">Made with<br>Love &amp;<br>Passion</div>
+        </div>
+        <div class="about-content">
+            <div class="section-header" style="text-align:left;margin-bottom:0">
+                <span class="label">Our Story</span>
+            </div>
+            <h2>A Taste of Lagos in Every Bite</h2>
+            <p>Just Delish was born from a passion for authentic Nigerian cuisine and a desire to share the incredible flavours of Lagos with the world. Every dish is prepared with carefully sourced ingredients and time-honoured recipes.</p>
+            <p>Whether you crave the comforting warmth of a rich jollof rice, the hearty flavour of our egusi soup, or the bold spice of our pepper soup, we bring you the very best of Nigerian cooking.</p>
+            <div class="about-stats">
+                <div class="stat">
+                    <div class="stat-number">99+</div>
+                    <div class="stat-label">Menu Items</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">5K+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4.4</div>
+                    <div class="stat-label">Star Rating</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Menu -->
+<section class="menu" id="menu">
+    <div class="section-header">
+        <span class="label">Our Menu</span>
+        <h2>What's Cooking Today</h2>
+        <p>Explore our wide selection of delicious Nigerian dishes, freshly prepared and ready for delivery.</p>
+    </div>
+
+    <div class="menu-categories">
+        <button class="menu-cat-btn active" data-category="all">All</button>
+        <button class="menu-cat-btn" data-category="main">Main Dishes</button>
+        <button class="menu-cat-btn" data-category="combo">Combos</button>
+        <button class="menu-cat-btn" data-category="soups">Soups</button>
+        <button class="menu-cat-btn" data-category="swallows">Swallows</button>
+        <button class="menu-cat-btn" data-category="protein">Protein</button>
+        <button class="menu-cat-btn" data-category="appetizers">Appetizers</button>
+        <button class="menu-cat-btn" data-category="peppersoup">Pepper Soups</button>
+        <button class="menu-cat-btn" data-category="snacks">Snacks</button>
+        <button class="menu-cat-btn" data-category="breakfast">Breakfast</button>
+        <button class="menu-cat-btn" data-category="drinks">Drinks</button>
+        <button class="menu-cat-btn" data-category="yoghurt">Yoghurt</button>
+    </div>
+
+    <div class="menu-grid">
+
+        <!-- Main Dishes -->
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/459645aa80f1c700599654925dbdd06d578860988d6055f170029253980ea40e.jpg" alt="Village Rice with Beef, Ponmo &amp; Fish" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Village Rice with Beef, Ponmo &amp; Fish</h3>
+                <p>Village rice cooked with beef, ponmo and fish</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,600</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/a24f26ab43481c912fe3c191aef60ffc66b706f86f0fd8eb359f2edd66682478.jpg" alt="Mix Spicy Veggy Noodles with Goat Meat" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Mix Spicy Veggy Noodles with Goat Meat</h3>
+                <p>Noodles cooked with spicy veggies and goat meat</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,300</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/7a1febdce30887c53301223ff644137a41cfd301242bdf2fe866ac02b38ae06e.jpg" alt="Ofada Rice with Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ofada Rice with Sauce</h3>
+                <p>Ofada rice served with sauce, a boiled egg and ponmo</p>
+                <span class="tag">Chef's Pick</span>
+            </div>
+            <div class="menu-card-price">&#8358;5,100</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/f2ecbedb6fc6abf47b576ee51b811ec6b12dff5601c94071707da0dd5fe09c91.jpg" alt="Yam and Egg Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Yam and Egg Sauce</h3>
+                <p>Well cooked yam with egg mixed with fresh tomatoes, onions and pepper</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,600</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544766_1f1db87a-a062-492c-a8f4-1eccd5419289.jpg" alt="Jollof Spaghetti with Chicken" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Jollof Spaghetti with Chicken</h3>
+                <p>Spaghetti cooked in tomato puree and served with chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,400</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/35a6fd8d-d103-421d-bbb0-2c0119ba5af7.jpg" alt="Jollof Spaghetti and Turkey" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Jollof Spaghetti and Turkey</h3>
+                <p>Jollof spaghetti and fried peppered turkey</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,300</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/a33335bc88c97d4b28691918bc399de65143aa08db1ce0883399aba8b7180f1e.jpg" alt="Beans and Corn" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Beans and Corn</h3>
+                <p>Beans cooked in a broth with corn</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,900</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/a24f26ab43481c912fe3c191aef60ffc66b706f86f0fd8eb359f2edd66682478.jpg" alt="Spicy Spaghetti with Mix Veggies" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Spicy Spaghetti with Mix Veggies</h3>
+                <p>Spaghetti cooked with mixed veggies</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,600</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/a33335bc88c97d4b28691918bc399de65143aa08db1ce0883399aba8b7180f1e.jpg" alt="Porridge Beans" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Porridge Beans</h3>
+                <p>Softly cooked beans mixed with pepper sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,300</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/f6eb2f23327fc4685ea67df37a185bacf9d07241ac6a02190ccfd8186f54ad10.jpg" alt="Indomie and Fried Egg Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Indomie and Fried Egg Sauce</h3>
+                <p>Indomie and egg sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,950</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/00990f71a3b597b83586b31d00f838b810c9a941d325668b3c227af10caffdf1.jpg" alt="Egg Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Egg Sauce</h3>
+                <p>Scrambled eggs fried with tomatoes and onions</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544754_78662d93-aaf5-41a4-b2ee-c207d0662d85.jpg" alt="Jollof Spaghetti" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Jollof Spaghetti</h3>
+                <p>Tasty spaghetti cooked in pepper tomatoes sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/54cf7fa932febc83949b0da48ad9dff44f0aafa3cd213bf279822f90fb482b3d.jpg" alt="Jollof Rice &ndash; 1 Pack" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Jollof Rice &ndash; 1 Pack</h3>
+                <p>Made with tomato sauce, seasoning, rice, etc</p>
+                <span class="tag">Bestseller</span>
+            </div>
+            <div class="menu-card-price">&#8358;2,600</div>
+        </div>
+        <div class="menu-card" data-category="main">
+            <div class="menu-card-img">
+                <img src="images/menu/1161d6306f3a9dd8d51d0384b1397acadb70cb6398b137891976b527b5797821.jpg" alt="Fried Rice &ndash; 1 Pack" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Fried Rice &ndash; 1 Pack</h3>
+                <p>Made with carrots, green peas, spring onion, etc</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,500</div>
+        </div>
+
+        <!-- Combos -->
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/21dba8d811443aa67ab7278a4e6cd703a750bc31d8255237f5feda4d5498c649.jpg" alt="Spaghetti Asun" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Spaghetti Asun</h3>
+                <p>Spaghetti with vegetable oil, tomatoes, red pepper, bell peppers, onions, spices and chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;6,500</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/07b422e3336633130f32a5b5e3327ae74832876d7e7e59c91ffbfa2358dc4a87.jpg" alt="Jollof Rice, Moimoi, Plantain &amp; Chicken" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Jollof Rice, Moimoi, Plantain &amp; Chicken</h3>
+                <p>Jollof rice served with moi moi, plantain and chicken</p>
+                <span class="tag">Popular</span>
+            </div>
+            <div class="menu-card-price">&#8358;6,500</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/1161d6306f3a9dd8d51d0384b1397acadb70cb6398b137891976b527b5797821.jpg" alt="Fried Rice, Chicken &amp; Salad" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Fried Rice, Chicken &amp; Salad</h3>
+                <p>Fried rice served with chicken and salad</p>
+            </div>
+            <div class="menu-card-price">&#8358;6,000</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/e8467d615319a77c8f255be6d402984ef1fdbafab3b099d8c7c2412b0798652d.jpg" alt="Two Wraps of Amala, Ewedu &amp; Gbegiri with Assorted Meats" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Two Wraps of Amala, Ewedu &amp; Gbegiri with Assorted Meats</h3>
+                <p>Wraps of amala served with ewedu, gbegiri and assorted meats</p>
+            </div>
+            <div class="menu-card-price">&#8358;6,000</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/9711eec008dfecea85d797f6192d1aeed576a68c4f46789d269cfe61219e1344.jpg" alt="Ofada Rice and Chicken" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ofada Rice and Chicken</h3>
+                <p>Plain steamed Ofada rice with sauce and chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;6,100</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/f6eb2f23327fc4685ea67df37a185bacf9d07241ac6a02190ccfd8186f54ad10.jpg" alt="Spicy Noodles with Beef or Egg Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Spicy Noodles with Beef or Egg Sauce</h3>
+                <p>Spicy noodles served with beef or egg sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,500</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/ba7e7012c1f03571fd4c2f5b5fdb66a61cc8707f4af7ab21bb01d693f1e1707b.jpg" alt="Jollof Rice and Chicken" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Jollof Rice and Chicken</h3>
+                <p>Jollof rice served with chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,200</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/3910d6849599c3073e4f2d04e6c425816787cf0865e87abe6f159fb2ea71f5ee.jpg" alt="Yam and Titus Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Yam and Titus Sauce</h3>
+                <p>Yam served with Titus sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,200</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/5fe9415b0702f575411827ee243285760308159f08d0f7519fb3048b394bda86.jpg" alt="Ewa Agoyin, Plantain &amp; Round Fish" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ewa Agoyin, Plantain &amp; Round Fish</h3>
+                <p>Ewa agoyin served with plantain and round fish</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,200</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/2ae98df2c8b94714fdb72bacc107aad9bf49bca974b35577dd71cf55597110a4.jpg" alt="Two Wraps of Semo &amp; Ogbono with Beef &amp; Ponmo" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Two Wraps of Semo &amp; Ogbono with Beef &amp; Ponmo</h3>
+                <p>Wraps of semo served with ogbono, 1 beef and 1 ponmo</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,000</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/6ce1b2fe7d024826dbabf2ce421f5a265bafd7a678eb51d83ebea30cde5a46a4.jpg" alt="Ugwu Sauce &amp; White Rice with Plantain &amp; Beef" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ugwu Sauce &amp; White Rice with Plantain &amp; Beef</h3>
+                <p>White rice served with ugwu sauce with beef</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,800</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/1161d6306f3a9dd8d51d0384b1397acadb70cb6398b137891976b527b5797821.jpg" alt="Fried Rice &amp; Chicken with Salad" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Fried Rice &amp; Chicken with Salad</h3>
+                <p>Fried rice served with salad and chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,800</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/d0c3589ca6d9eb6da2618720b9bee14fba19cc735fd19d84dfe9b3893f971406.jpg" alt="Fried Rice and Chicken" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Fried Rice and Chicken</h3>
+                <p>Fried rice served with chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,900</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/5fe9415b0702f575411827ee243285760308159f08d0f7519fb3048b394bda86.jpg" alt="Ewagoyin, Yam &amp; Plantain with Zobo" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ewagoyin, Yam &amp; Plantain with Zobo</h3>
+                <p>Ewagoyin, yam and plantain with chilled zobo</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,500</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/5264149846daf61b1dcb36fda7a9600439b87286e509721e22c16386e0de1b86.jpg" alt="Yam Porridge with Titus Fish" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Yam Porridge with Titus Fish</h3>
+                <p>Well cooked yam stewed with sweet potatoes, very delish</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,300</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/d16a699d4bb71d4223fad75a0be0b3e734fe6784a8fb3f9d4de191b6b2b2177e.jpg" alt="Two Wraps of Eba with Okro Soup, Beef &amp; Ponmo" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Two Wraps of Eba with Okro Soup, Beef &amp; Ponmo</h3>
+                <p>Two wraps of eba served with okro soup, ponmo and beef</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,300</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/7dac90ce76950fcc234e4a0a6ccb800df314837d187b865d8e5583af37026804.jpg" alt="Bread and Akara with Zobo" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Bread and Akara with Zobo</h3>
+                <p>Bread coated with akara and chilled zobo</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,900</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/44ecdb968594d194948b89c1c78a1c031f4501afb3fecfaa5776a6767d7e7fb2.jpg" alt="Plantain and Pepper Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Plantain and Pepper Sauce</h3>
+                <p>Fried plantain and pepper sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,800</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/deed765e156d3654abe8ce02fd3bf013b18eb806fdebb2e2d48a253bc1d9eb46.jpg" alt="Boil Ripe Plantain with Vegetable" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Boil Ripe Plantain with Vegetable</h3>
+                <p>Boil plantain served with vegetables garnished with ponmo and fish</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,800</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/7dac90ce76950fcc234e4a0a6ccb800df314837d187b865d8e5583af37026804.jpg" alt="Ewa Agoyin with Bread" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ewa Agoyin with Bread</h3>
+                <p>Combo of ewa agoyin and bread</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,100</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/e8467d615319a77c8f255be6d402984ef1fdbafab3b099d8c7c2412b0798652d.jpg" alt="Amala with Ewedu and Gbegiri" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Amala with Ewedu and Gbegiri</h3>
+                <p>Amala with ewedu and gbegiri with beef</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,000</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/43749810f997e0b33fde7cf61c01d970883dc805072885ec9efd83b169c31b3b.jpg" alt="Beans and Rice" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Beans and Rice</h3>
+                <p>White rice served with beans</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="combo">
+            <div class="menu-card-img">
+                <img src="images/menu/31c4ab04fa96d99a15d290f1b49bf111efb90c1579951b350a5ee7139976cd98.jpg" alt="White Rice &amp; Stew" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>White Rice &amp; Stew</h3>
+                <p>Stew served with white steamed rice</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,300</div>
+        </div>
+
+        <!-- Soups -->
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/d4cb39ca-8a35-4d10-8772-140b238a21b5.jpg" alt="Ofada Sauce" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ofada Sauce</h3>
+                <p>Ofada rice sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,800</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/e9850a4a229d5d0f418d8e07dcb0b9e2b3ccb15875184a109a73c8a7c2288695.jpg" alt="Afang Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Afang Soup</h3>
+                <p>Slimy-textured soup loaded with spinach and okazi leaves, chunks of protein with spices</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,100</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/df16766c011d20e5800b4703a2334a0e3ff3ef40325ef47ab6f64ad575285db1.jpg" alt="Efo Riro Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Efo Riro Soup</h3>
+                <p>Stirred leafy vegetable soup loaded with assorted meat</p>
+                <span class="tag">Popular</span>
+            </div>
+            <div class="menu-card-price">&#8358;3,100</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/1b33068e-18c9-4b81-8b8c-c9b8f4779998.jpg" alt="Edi Kai Kong Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Edi Kai Kong Soup</h3>
+                <p>Made with bitter leaf and water leaf</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544697_a6f9112a-ca96-48d3-b730-1ff72028de62.jpg" alt="Vegetable Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Vegetable Soup</h3>
+                <p>Stirred leafy vegetable soup</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/a574d9dd-a17d-43a4-ae29-1e69ec60e6a1.jpg" alt="Okro Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Okro Soup</h3>
+                <p>Viscous textured okro mixed with seasoned meat and spices</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544753_2eb5bce6-e828-4f1c-863c-ef0d9509cd1c.jpg" alt="Banga Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Banga Soup</h3>
+                <p>Delicious soup made from palm nut fruit, an assortment of spices, meat and fish</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,800</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544695_41bfbc0b-32ee-405c-856d-01f67ac4ff66.jpg" alt="Egusi Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Egusi Soup</h3>
+                <p>Traditional delicacy made with melon, red oil, ugu leaves, pepper, seasoning</p>
+                <span class="tag">Bestseller</span>
+            </div>
+            <div class="menu-card-price">&#8358;2,500</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/50d519ef-b10a-4cf3-8969-7402b2ba4efa.jpg" alt="Mixed Assorted Stew (Bowl)" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Mixed Assorted Stew (Bowl)</h3>
+                <p>Pepper stew with different assorted meat</p>
+            </div>
+            <div class="menu-card-price">&#8358;30,000</div>
+        </div>
+        <div class="menu-card" data-category="soups">
+            <div class="menu-card-img">
+                <img src="images/menu/e57a51d440037ebd2fdcb7831eb476a7539606f87860c14f6447a4719556ebc3.jpg" alt="Efo Riro in Bowl" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Efo Riro in Bowl</h3>
+                <p>1 litre bowl with ten pieces of protein, beef, goat meat, ponmo, assorted</p>
+            </div>
+            <div class="menu-card-price">&#8358;25,000</div>
+        </div>
+
+        <!-- Swallows -->
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/4627aafe55e2308e5010217a64d9324b4e0d166d11de1d5f5140e35e873a68db.jpg" alt="Okro Combo with Eba" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Okro Combo with Eba</h3>
+                <p>Okro combo with ejakika and eba</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,200</div>
+        </div>
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/2b3fd726ced30470852e6726a5ffb942f31baa6ba244b7651f626d537a8a0318.jpg" alt="Pounded Yam" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Pounded Yam</h3>
+                <p>Puna yam boiled until fork tender then mashed into a doughy consistency</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,000</div>
+        </div>
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/8e8e4eb4870c89822f9179cda57e2f83effe1b3eb12af5cb6999753929eb1a22.jpg" alt="Poundo" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Poundo</h3>
+                <p>Made with processed yam flour stirred in boiling water to desired texture</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,600</div>
+        </div>
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/9511c031204f447f8d5729b62eefa8e71de99755447d653a8ea19635a4659f68.jpg" alt="Semo &ndash; Two Wraps" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Semo &ndash; Two Wraps</h3>
+                <p>Made with semovita flour and water</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,200</div>
+        </div>
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/e8467d615319a77c8f255be6d402984ef1fdbafab3b099d8c7c2412b0798652d.jpg" alt="Amala &ndash; Two Wraps" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Amala &ndash; Two Wraps</h3>
+                <p>Made with dried yam blended into flour, cooked into a doughy consistency</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,200</div>
+        </div>
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/9511c031204f447f8d5729b62eefa8e71de99755447d653a8ea19635a4659f68.jpg" alt="Fufu &ndash; Two Wraps" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Fufu &ndash; Two Wraps</h3>
+                <p>Grounded cassava and yam, peeled, boiled and pounded into a ball</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,200</div>
+        </div>
+        <div class="menu-card" data-category="swallows">
+            <div class="menu-card-img">
+                <img src="images/menu/4627aafe55e2308e5010217a64d9324b4e0d166d11de1d5f5140e35e873a68db.jpg" alt="Eba &ndash; Two Wraps" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Eba &ndash; Two Wraps</h3>
+                <p>Fried cassava grounded into flour combined with hot water</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,200</div>
+        </div>
+
+        <!-- Protein -->
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/6f1c8c98d19ac75d403ebbb95bde1a7ad1a7865607e8469037d2eb44643aa8fd.jpg" alt="Turkey &ndash; Medium" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Turkey &ndash; Medium</h3>
+                <p>Tender and juicy with crispy skin</p>
+            </div>
+            <div class="menu-card-price">&#8358;7,000</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/d98f982bef16020b22f5d89d8c5e5abb15029359db1a93ed8344f3e9cb25a6dc.jpg" alt="Goat Meat" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Goat Meat</h3>
+                <p>Delicious well seasoned goat meat cooked till tender</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,000</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/2c56183554eab9a7f8dcf5dc53d0872b3fbb2d6aadb02d2c0639b8a1fb813d18.jpg" alt="Cow Leg" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Cow Leg</h3>
+                <p>Delicious cow leg cooked till tender</p>
+            </div>
+            <div class="menu-card-price">&#8358;4,000</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/28252ef0298af0cee3266f5e947d1253c95ea25c47e00b10c174b9c8150e44f3.jpg" alt="Chicken &ndash; Small per Piece" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Chicken &ndash; Small per Piece</h3>
+                <p>Deliciously cooked chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,500</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/e76780a342498d5a909dae82df0ddcf1b7567567a5764c42c114ea69e74dca59.jpg" alt="Titus Fish per Piece" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Titus Fish per Piece</h3>
+                <p>Succulent fried titus fish</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,500</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544715_6c023091-92d5-4fcf-91ef-9e7c684a6ab1.jpg" alt="Hake Fish per Piece" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Hake Fish per Piece</h3>
+                <p>Pan-fried hake with red pepper relish</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,500</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/28252ef0298af0cee3266f5e947d1253c95ea25c47e00b10c174b9c8150e44f3.jpg" alt="Chicken &ndash; Big per Piece" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Chicken &ndash; Big per Piece</h3>
+                <p>Deliciously cooked chicken</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,000</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/af74e833afe565f7a3fc24206dc07f6232b902e96e3165dbf21a5747c3912218.jpg" alt="Beef per Piece" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Beef per Piece</h3>
+                <p>Fried beef</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,500</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/ee27b8ac8d6109e5d3e47e427192c38bad76cb3e1f40182d24ca6839cf680588.jpg" alt="Assorted Meat" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Assorted Meat</h3>
+                <p>Saki, heart, floater (fuku), roundabout, liver</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,000</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/bdebd3e126334122b4ac3c6643fef7b60510c7ceb2065acfcaeef1626478c5ac.jpg" alt="Eja Kika &ndash; Small" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Eja Kika &ndash; Small</h3>
+                <p>Smoked panla fish</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,500</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/26019b5e00320c9eb4129163a0ba5e12719dbeb0ce181bfc74ede03e205ebd48.jpg" alt="Ponmo" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Ponmo</h3>
+                <p>Succulent cow skin marinated and prepared in a spicy hot sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,500</div>
+        </div>
+        <div class="menu-card" data-category="protein">
+            <div class="menu-card-img">
+                <img src="images/menu/15d638fa-5ae8-4fa2-9e4c-a3f8e429c06e.jpg" alt="Boiled Egg" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Boiled Egg</h3>
+                <p>Well cooked boiled egg</p>
+            </div>
+            <div class="menu-card-price">&#8358;650</div>
+        </div>
+
+        <!-- Appetizers -->
+        <div class="menu-card" data-category="appetizers">
+            <div class="menu-card-img">
+                <img src="images/menu/d03c9096-33f0-4f5d-836c-495ecc8653ed.jpg" alt="Catfish Pepper Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Catfish Pepper Soup</h3>
+                <p>Small bowl of catfish pepper soup</p>
+            </div>
+            <div class="menu-card-price">&#8358;7,000</div>
+        </div>
+        <div class="menu-card" data-category="appetizers">
+            <div class="menu-card-img">
+                <img src="images/menu/42158601590_56db7290-58d3-43e2-96fc-96822e9a0081.jpg" alt="Chicken Wings Pepper Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Chicken Wings Pepper Soup</h3>
+                <p>Pepper soup and chicken wings</p>
+            </div>
+            <div class="menu-card-price">&#8358;6,700</div>
+        </div>
+        <div class="menu-card" data-category="appetizers">
+            <div class="menu-card-img">
+                <img src="images/menu/a51e7f4f-d84e-4f42-8c36-0c4d9acbb07d.jpg" alt="Assorted Pepper Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Assorted Pepper Soup</h3>
+                <p>Well prepared pepper soup with assorted meat</p>
+            </div>
+            <div class="menu-card-price">&#8358;5,300</div>
+        </div>
+        <div class="menu-card" data-category="appetizers">
+            <div class="menu-card-img">
+                <img src="images/menu/bcde9537c543960c8e98097ddbcf9732eea0755c761556be957cf077d8edcebc.jpg" alt="Moi Moi" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Moi Moi</h3>
+                <p>Steamed bean pudding made from black-eyed beans, onions and fresh ground red peppers</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,200</div>
+        </div>
+        <div class="menu-card" data-category="appetizers">
+            <div class="menu-card-img">
+                <img src="images/menu/44ecdb968594d194948b89c1c78a1c031f4501afb3fecfaa5776a6767d7e7fb2.jpg" alt="Plantain &ndash; Diced" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Plantain &ndash; Diced</h3>
+                <p>Fried diced plantain</p>
+            </div>
+            <div class="menu-card-price">&#8358;950</div>
+        </div>
+
+        <!-- Pepper Soups -->
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/2c56183554eab9a7f8dcf5dc53d0872b3fbb2d6aadb02d2c0639b8a1fb813d18.jpg" alt="Cowleg Pepper Soup with Sweet Potatoes" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Cowleg Pepper Soup with Sweet Potatoes</h3>
+                <p>Enjoy the spicy blend of tender cooked cowleg and spices in every bite</p>
+            </div>
+            <div class="menu-card-price">&#8358;8,500</div>
+        </div>
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/91af06c364a6e7fc152e755469fed28c2e33defed32c1825960c2c6e26a39caf.jpg" alt="Catfish Pepper Soup with Yam" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Catfish Pepper Soup with Yam</h3>
+                <p>Catfish cooked in watery spiced sauce served with yam</p>
+            </div>
+            <div class="menu-card-price">&#8358;8,500</div>
+        </div>
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/834176f3-5918-451b-b6a8-6f487f45acbd.jpg" alt="Catfish Pepper Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Catfish Pepper Soup</h3>
+                <p>Well spiced catfish cooked in light pepper sauce</p>
+                <span class="tag">Popular</span>
+            </div>
+            <div class="menu-card-price">&#8358;8,300</div>
+        </div>
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/0a9e327c811ec6151fa6f12e566871b635ffd7180b74dd2968649d6bb451c754.jpg" alt="Goat Meat Pepper Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Goat Meat Pepper Soup</h3>
+                <p>Goat meat well cooked to tender in light spicy pepper sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;7,800</div>
+        </div>
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/8d374b3897fdf017496d82b859a516f488b364d9c2539938a6905b9a4025d538.jpg" alt="Catfish Pepper Soup with Unripe Plantains" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Catfish Pepper Soup with Unripe Plantains</h3>
+                <p>Catfish cooked with unripe plantains in light spicy pepper sauce</p>
+            </div>
+            <div class="menu-card-price">&#8358;7,300</div>
+        </div>
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/9cd7a7e083ab0ea86edf3559b311c32fcbc78fc631dccbdb5920a5cfa4bc6101.jpg" alt="Catfish Pepper Soup with White Rice" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Catfish Pepper Soup with White Rice</h3>
+                <p>Catfish cooked in watery spicy sauce served with white rice</p>
+            </div>
+            <div class="menu-card-price">&#8358;7,000</div>
+        </div>
+        <div class="menu-card" data-category="peppersoup">
+            <div class="menu-card-img">
+                <img src="images/menu/39047544688_9185eb3e-b2a1-488f-8b3a-fe4045d2c396.jpg" alt="Assorted Meat Pepper Soup" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Assorted Meat Pepper Soup</h3>
+                <p>Mixed shaki, liver, heart, roundabout soft cooked in light pepper sauce, with rice or agidi</p>
+            </div>
+            <div class="menu-card-price">&#8358;6,600</div>
+        </div>
+
+        <!-- Snacks -->
+        <div class="menu-card" data-category="snacks">
+            <div class="menu-card-img">
+                <img src="images/menu/bb5b65d9-579a-468d-b3a2-ad45527a5bb2.jpg" alt="Small Chops" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Small Chops</h3>
+                <p>Puff puff, mosa, samosa, spring roll, chicken</p>
+                <span class="tag">Popular</span>
+            </div>
+            <div class="menu-card-price">&#8358;2,900</div>
+        </div>
+        <div class="menu-card" data-category="snacks">
+            <div class="menu-card-img">
+                <img src="images/menu/5638e891-140c-4878-a037-135a2689c002.jpg" alt="Samosa" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Samosa</h3>
+                <p>Crunchy samosas</p>
+            </div>
+            <div class="menu-card-price">&#8358;900</div>
+        </div>
+        <div class="menu-card" data-category="snacks">
+            <div class="menu-card-img">
+                <img src="images/menu/0c4ac550-7e88-45d3-afb0-7b8501f5cdce.jpg" alt="Spring Roll" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Spring Roll</h3>
+                <p>Spring rolls</p>
+            </div>
+            <div class="menu-card-price">&#8358;900</div>
+        </div>
+        <div class="menu-card" data-category="snacks">
+            <div class="menu-card-img">
+                <img src="images/menu/2bd3f696-3163-45c3-a3c9-dc86085b54f4.jpg" alt="Puff Puff" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Puff Puff</h3>
+                <p>Tasty crunchy puff puff</p>
+            </div>
+            <div class="menu-card-price">&#8358;850</div>
+        </div>
+        <div class="menu-card" data-category="snacks">
+            <div class="menu-card-img">
+                <img src="images/menu/a1003947-520e-4b77-871d-a0cff64af9dc.jpg" alt="Mosa" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Mosa</h3>
+                <p>5 pieces of tasty mosa</p>
+            </div>
+            <div class="menu-card-price">&#8358;800</div>
+        </div>
+
+        <!-- Breakfast -->
+        <div class="menu-card" data-category="breakfast">
+            <div class="menu-card-img">
+                <img src="images/menu/eb1a9a646d5c92aa93a7b0cfc033063f7276b46d35f5bda530d7effbb5b65555.jpg" alt="Moi Moi and Pap" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Moi Moi and Pap</h3>
+                <p>Bean pudding served with pap</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,800</div>
+        </div>
+        <div class="menu-card" data-category="breakfast">
+            <div class="menu-card-img">
+                <img src="images/menu/5fe4b34c-82f3-4e4f-a874-41201f8e3ce7.jpg" alt="Pap and Akara" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Pap and Akara</h3>
+                <p>Corn porridge and beans cake with milk and sugar</p>
+                <span class="tag">Popular</span>
+            </div>
+            <div class="menu-card-price">&#8358;3,400</div>
+        </div>
+        <div class="menu-card" data-category="breakfast">
+            <div class="menu-card-img">
+                <img src="images/menu/cc8cb63f-6f4a-4a92-87ab-f12c3eb2345e.jpg" alt="Akara" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Akara</h3>
+                <p>Fried beans cake</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,300</div>
+        </div>
+
+        <!-- Drinks -->
+        <div class="menu-card" data-category="drinks">
+            <div class="menu-card-img">
+                <img src="images/menu/1ab1a1eaf671d2c642ee1533b4f2a7c5b8c515ca07d355d904afefed9caac252.jpg" alt="Chi Exotic Can" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Chi Exotic Can</h3>
+                <p>Fruit nectar blend of distinctive tropical fruits</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,500</div>
+        </div>
+        <div class="menu-card" data-category="drinks">
+            <div class="menu-card-img"><img src="images/menu/d8045c0e-c336-4a27-b081-f43dc6e9b080.jpg" alt="Zobo" loading="lazy"></div>
+            <div class="menu-card-info">
+                <h3>Zobo</h3>
+                <p>Chilled zobo drink</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,000</div>
+        </div>
+        <div class="menu-card" data-category="drinks">
+            <div class="menu-card-img">
+                <img src="images/menu/eebd60dee6c926fa237fe0706da7be6c9e41571829364ab95f11ad18d68e200f.jpg" alt="Coca-Cola Original 50cl" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Coca-Cola Original 50cl</h3>
+                <p>Carbonated soft drink</p>
+            </div>
+            <div class="menu-card-price">&#8358;900</div>
+        </div>
+        <div class="menu-card" data-category="drinks">
+            <div class="menu-card-img">
+                <img src="images/menu/18ca9171863d3aeeffa9025d2158284a8d74595c119f681d01e73f1e321971d8.jpg" alt="Fanta Orange 50cl" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Fanta Orange 50cl</h3>
+                <p>Fruit flavored carbonated drink</p>
+            </div>
+            <div class="menu-card-price">&#8358;900</div>
+        </div>
+        <div class="menu-card" data-category="drinks">
+            <div class="menu-card-img">
+                <img src="images/menu/bf88f58b5b77b101ec0ca4b50e597a1e58271b760446bd7b9c381fd9ee2593ec.jpg" alt="Bottled Water" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Bottled Water</h3>
+                <p>Cold drinking water</p>
+            </div>
+            <div class="menu-card-price">&#8358;500</div>
+        </div>
+
+        <!-- Yoghurt -->
+        <div class="menu-card" data-category="yoghurt">
+            <div class="menu-card-img">
+                <img src="images/menu/c8bc593eacaa031d21e0ee80304879dadeee6772631f2c5f7b533575112695ce.jpg" alt="Habib Sweetened Yogurt – 550ml" loading="lazy">
+            </div>
+            <div class="menu-card-info">
+                <h3>Habib Sweetened Yogurt &ndash; 550ml</h3>
+                <p>550ml Habib yoghurt</p>
+            </div>
+            <div class="menu-card-price">&#8358;3,200</div>
+        </div>
+        <div class="menu-card" data-category="yoghurt">
+            <div class="menu-card-img"><img src="images/menu/3ec6f66b-fa4b-4058-901b-4c50a39d6d6e.jpg" alt="Cashew Nut" loading="lazy"></div>
+            <div class="menu-card-info">
+                <h3>Cashew Nut</h3>
+                <p>Tasty cashew nut</p>
+            </div>
+            <div class="menu-card-price">&#8358;2,600</div>
+        </div>
+        <div class="menu-card" data-category="yoghurt">
+            <div class="menu-card-img"><img src="images/menu/f3cc87a3-988e-4587-bf95-894dc43dad30.jpg" alt="Granola" loading="lazy"></div>
+            <div class="menu-card-info">
+                <h3>Granola</h3>
+                <p>Granola topping</p>
+            </div>
+            <div class="menu-card-price">&#8358;1,500</div>
+        </div>
+        <div class="menu-card" data-category="yoghurt">
+            <div class="menu-card-info">
+                <h3>Fura</h3>
+                <p>Fura yoghurt</p>
+            </div>
+            <div class="menu-card-price">&#8358;500</div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Specials Banner -->
+<section class="specials-banner">
+    <h2>Craving Something Delish?</h2>
+    <p>Order now and get your favourite meals delivered hot to your door.</p>
+    <a href="https://glovoapp.com/en/ng/lagos/stores/just-delish-restaurant-los" target="_blank" class="btn-primary">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        Order Now
+    </a>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials" id="reviews">
+    <div class="section-header">
+        <span class="label">Google Reviews</span>
+        <h2>What Our Customers Say</h2>
+        <p>Real reviews from our valued customers on Google. Rated 4.4 out of 5 from 94 reviews.</p>
+    </div>
+    <div class="testimonials-grid">
+        <div class="testimonial-card">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-text">"The customer service is top notch and the food here is superb. I highly recommend."</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar" style="background:#2196F3">M</div>
+                <div>
+                    <div class="testimonial-name">Muna Oyoh</div>
+                    <div class="testimonial-location">Google Review</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-text">"Beautiful and serene place, nice food and friendly staff, their Afang is super!"</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar" style="background:#9C27B0">O</div>
+                <div>
+                    <div class="testimonial-name">Oby Efobi</div>
+                    <div class="testimonial-location">Google Review</div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-text">"The kids can eat there, and the environment is friendly. Great spot for family dining."</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar" style="background:#FF5722">O</div>
+                <div>
+                    <div class="testimonial-name">Omonike Adetimehin</div>
+                    <div class="testimonial-location">Google Review</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="contact" id="contact">
+    <div class="section-header">
+        <span class="label">Get in Touch</span>
+        <h2>Visit Us or Say Hello</h2>
+        <p>We'd love to hear from you. Reach out for reservations, catering, or just to say hi.</p>
+    </div>
+    <div class="contact-grid">
+        <div class="contact-info">
+            <div class="contact-info-item">
+                <div class="contact-icon">&#x1F4CD;</div>
+                <div>
+                    <h4>Location</h4>
+                    <p><a href="https://www.google.com/maps/search/50+Diya+Street+Gbagada+Lagos" target="_blank" style="color: inherit; text-decoration: none; border-bottom: 1px solid var(--orange);">50, Diya Street, Gbagada, LAGOS</a></p>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <div class="contact-icon">&#x1F552;</div>
+                <div>
+                    <h4>Opening Hours</h4>
+                    <p>Monday - Saturday: 9:00 AM - 8:00 PM<br>Sunday: 9:00 AM - 4:00 PM</p>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <div class="contact-icon">&#x1F4F1;</div>
+                <div>
+                    <h4>Order Online</h4>
+                    <p>Available for <a href="https://glovoapp.com/en/ng/lagos/stores/just-delish-restaurant-los" target="_blank" style="color:var(--orange);font-weight:600;text-decoration:none;">online delivery</a></p>
+                </div>
+            </div>
+            <div class="contact-info-item">
+                <div class="contact-icon">&#x1F4E7;</div>
+                <div>
+                    <h4>Social Media</h4>
+                    <p>
+                        <a href="https://www.facebook.com/justdelishng/" target="_blank" style="color:var(--orange);font-weight:600;text-decoration:none;">Facebook</a> &middot;
+                        <a href="https://www.instagram.com/justdelishng/" target="_blank" style="color:var(--orange);font-weight:600;text-decoration:none;">Instagram</a> &middot;
+                        <a href="https://x.com/justdelishng" target="_blank" style="color:var(--orange);font-weight:600;text-decoration:none;">X</a>
+                        <br>@justdelishng
+                    </p>
+                </div>
+            </div>
+        </div>
+        <form class="contact-form" id="contact-form">
+            <label for="contact-name" class="visually-hidden">Your Name</label>
+            <input type="text" id="contact-name" placeholder="Your Name" required>
+            <label for="contact-email" class="visually-hidden">Your Email</label>
+            <input type="email" id="contact-email" placeholder="Your Email" required>
+            <label for="contact-subject" class="visually-hidden">Subject</label>
+            <input type="text" id="contact-subject" placeholder="Subject">
+            <label for="contact-message" class="visually-hidden">Your Message</label>
+            <textarea id="contact-message" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="images/logo.png" alt="Just Delish">
+                <p>Sumptuous meals you can't resist. Authentic Nigerian cuisine crafted with passion and delivered with love in Lagos.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#about">About Us</a>
+                <a href="#menu">Our Menu</a>
+                <a href="#reviews">Reviews</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-col">
+                <h4>Popular</h4>
+                <a href="#menu">Jollof Rice</a>
+                <a href="#menu">Egusi Soup</a>
+                <a href="#menu">The Delish Burger</a>
+                <a href="#menu">Catfish Pepper Soup</a>
+            </div>
+            <div class="footer-col">
+                <h4>Order</h4>
+                <a href="https://glovoapp.com/en/ng/lagos/stores/just-delish-restaurant-los" target="_blank">Order Online</a>
+                <a href="https://www.facebook.com/justdelishng/" target="_blank">Facebook</a>
+                <a href="https://www.instagram.com/justdelishng/" target="_blank">Instagram</a>
+                <a href="https://x.com/justdelishng" target="_blank">X (Twitter)</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Just Delish. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/justdelishng/" target="_blank" aria-label="Facebook">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/justdelishng/" target="_blank" aria-label="Instagram">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://x.com/justdelishng" target="_blank" aria-label="X (Twitter)">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://glovoapp.com/en/ng/lagos/stores/just-delish-restaurant-los" target="_blank" aria-label="Order Online">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    (function () {
+        var toggle = document.querySelector('.mobile-toggle');
+        var navLinks = document.querySelector('.nav-links');
+
+        toggle.addEventListener('click', function () {
+            var isOpen = navLinks.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', isOpen);
+        });
+
+        navLinks.querySelectorAll('a[href^="#"]').forEach(function (link) {
+            link.addEventListener('click', function () {
+                navLinks.classList.remove('active');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        document.querySelectorAll('.menu-cat-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.menu-cat-btn').forEach(function (b) {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                var category = btn.dataset.category;
+                document.querySelectorAll('.menu-card').forEach(function (card) {
+                    card.style.display = (category === 'all' || card.dataset.category === category) ? 'flex' : 'none';
+                });
+            });
+        });
+
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert("Thank you! We'll get back to you soon.");
+            this.reset();
+        });
+    })();
+</script>
+
+</body>
+</html>
