@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equity Research Portal | Tech, Materials & Energy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        bull: '#10b981', // Emerald 500
+                        bear: '#ef4444', // Red 500
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            /* Slate 900 for a dark, terminal-like feel */
+            color: #e2e8f0;
+            /* Slate 200 */
+        }
+
+        .ticker-card {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        .ticker-card:hover,
+        .ticker-card.active {
+            border-color: #0ea5e9;
+            background-color: #1e293b;
+            /* Slate 800 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .metric-value {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        /* Slider styling for interactive widget */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #334155;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-brand-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    <span class="font-bold text-xl tracking-tight text-white">AlphaTerminal Research</span>
+                </div>
+                <div class="text-sm text-slate-400 font-medium">
+                    <span class="hidden sm:inline">Live Data As Of: </span> May 19, 2026
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col md:flex-row gap-8">
+
+        <!-- Left Sidebar: Ticker Selection -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Coverage Universe</h2>
+            <div class="space-y-2 flex md:flex-col overflow-x-auto md:overflow-x-visible pb-4 md:pb-0" id="ticker-list">
+                <!-- Ticker cards will be injected here via JS -->
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <section class="flex-grow flex flex-col gap-6" id="main-content">
+
+            <!-- Default Welcome State -->
+            <div id="welcome-state"
+                class="flex flex-col items-center justify-center h-full min-h-[400px] text-center p-8 border border-slate-800 rounded-xl bg-slate-800/20">
+                <svg class="h-16 w-16 text-slate-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <h3 class="text-xl font-medium text-slate-300 mb-2">Select a Ticker</h3>
+                <p class="text-slate-500 max-w-md">Choose a company from the coverage universe on the left to view
+                    comprehensive fundamental analysis, price action summaries, and interactive price targets.</p>
+            </div>
+
+            <!-- Ticker Data View (Hidden initially) -->
+            <div id="ticker-data-view" class="hidden flex-col gap-6">
+
+                <!-- Header: Price & Basic Info -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <!-- Background icon -->
+                        <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24" id="header-icon">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+                        </svg>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end z-10 relative">
+                        <div>
+                            <div class="flex items-baseline gap-3 mb-1">
+                                <h1 class="text-3xl font-bold text-white tracking-tight" id="detail-ticker">TICKER</h1>
+                                <span class="text-lg text-slate-400 font-medium" id="detail-name">Company Name</span>
+                            </div>
+                            <div class="flex gap-4 text-sm text-slate-400">
+                                <span>Market Cap: <strong class="text-slate-200" id="detail-mcap">$0.0B</strong></span>
+                                <span>Sector: <strong class="text-slate-200"
+                                        id="detail-sector">Technology</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 md:mt-0 text-left md:text-right">
+                            <div class="text-4xl font-bold text-white metric-value mb-1" id="detail-price">$0.00</div>
+                            <div class="flex items-center gap-2 font-medium" id="detail-perf-container">
+                                <span id="detail-perf" class="metric-value">+0.0%</span>
+                                <span class="text-slate-500 text-sm">30-Day</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary & Narrative -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm">
+                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H15" />
+                            </svg>
+                            Price Action Summary
+                        </h3>
+                        <div class="space-y-4 text-sm text-slate-300">
+                            <div>
+                                <strong class="text-slate-100">Social Narrative:</strong> <span
+                                    id="text-narrative">...</span>
+                            </div>
+                            <div>
+                                <strong class="text-slate-100">Actual Catalyst:</strong> <span
+                                    id="text-catalyst">...</span>
+                            </div>
+                            <div>
+                                <strong class="text-slate-100">Institutional View:</strong> <span
+                                    id="text-institutional">...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                                <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                                The Bottom Line
+                            </h3>
+                            <blockquote class="border-l-4 border-brand-500 pl-4 py-1 italic text-slate-200 text-lg"
+                                id="text-oneliner">
+                                "The stock is moving because [x], but [Y] is the part nobody is talking about."
+                            </blockquote>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-700 grid grid-cols-2 gap-4">
+                            <div class="bg-emerald-900/20 border border-emerald-800/50 rounded-lg p-3">
+                                <div class="text-xs text-emerald-400 uppercase font-semibold mb-1">Entry Zone</div>
+                                <div class="font-mono text-emerald-200 font-bold" id="detail-entry">$0.00 - $0.00</div>
+                            </div>
+                            <div class="bg-amber-900/20 border border-amber-800/50 rounded-lg p-3">
+                                <div class="text-xs text-amber-400 uppercase font-semibold mb-1">Trim Levels</div>
+                                <div class="font-mono text-amber-200 font-bold" id="detail-trim">$0.00 - $0.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fundamental Snapshot -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm">
+                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Fundamental Snapshot
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm mb-6">
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-slate-400">Forward Valuation</span>
+                            <strong class="text-slate-200 metric-value" id="fund-val">...</strong>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-slate-400">Latest Rev Growth</span>
+                            <strong class="text-slate-200 metric-value" id="fund-rev">...</strong>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-slate-400">Earnings Growth</span>
+                            <strong class="text-slate-200 metric-value" id="fund-earn">...</strong>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-slate-400">Balance Sheet/Dilution</span>
+                            <strong class="text-slate-200 metric-value text-right max-w-[200px] truncate" id="fund-bs"
+                                title="">...</strong>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2"
+                            id="valuation-badge">
+                            Fair Value Assessment
+                        </span>
+                        <p class="text-sm text-slate-300" id="fund-assessment">...</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Scenario Modeler -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-sm overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-slate-700 bg-slate-800/80">
+                        <h3 class="text-lg font-semibold text-white flex items-center">
+                            <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                            </svg>
+                            Interactive Price Target Framework
+                        </h3>
+                        <p class="text-sm text-slate-400 mt-1">Adjust revenue or EPS estimates and multiples to model
+                            target prices based on execution.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-700">
+
+                        <!-- Scenario: Bear -->
+                        <div
+                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
+                            <h4 class="text-sm font-bold text-red-400 uppercase tracking-wider mb-1">Bear Case</h4>
+                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-bear-desc">Disappointing catalyst</p>
+
+                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-bear-price">$0.00
+                            </div>
+
+                            <div class="space-y-4 mt-auto">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400" id="label-bear-metric">Rev ($M)</span>
+                                        <span class="text-slate-200 font-mono" id="val-bear-metric">0</span>
+                                    </div>
+                                    <input type="range" id="input-bear-metric" min="0" max="1000" step="1"
+                                        class="w-full">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400">Multiple</span>
+                                        <span class="text-slate-200 font-mono" id="val-bear-mult">0.0x</span>
+                                    </div>
+                                    <input type="range" id="input-bear-mult" min="0" max="50" step="0.1" class="w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scenario: Base -->
+                        <div
+                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-slate-400"></div>
+                            <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-1">Base Case</h4>
+                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-base-desc">Execution holds</p>
+
+                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-base-price">$0.00
+                            </div>
+
+                            <div class="space-y-4 mt-auto">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400" id="label-base-metric">Rev ($M)</span>
+                                        <span class="text-slate-200 font-mono" id="val-base-metric">0</span>
+                                    </div>
+                                    <input type="range" id="input-base-metric" min="0" max="1000" step="1"
+                                        class="w-full">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400">Multiple</span>
+                                        <span class="text-slate-200 font-mono" id="val-base-mult">0.0x</span>
+                                    </div>
+                                    <input type="range" id="input-base-mult" min="0" max="50" step="0.1" class="w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scenario: Bull -->
+                        <div
+                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
+                            <h4 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-1">Bull Case</h4>
+                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-bull-desc">Everything works</p>
+
+                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-bull-price">$0.00
+                            </div>
+
+                            <div class="space-y-4 mt-auto">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400" id="label-bull-metric">Rev ($M)</span>
+                                        <span class="text-slate-200 font-mono" id="val-bull-metric">0</span>
+                                    </div>
+                                    <input type="range" id="input-bull-metric" min="0" max="1000" step="1"
+                                        class="w-full">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400">Multiple</span>
+                                        <span class="text-slate-200 font-mono" id="val-bull-mult">0.0x</span>
+                                    </div>
+                                    <input type="range" id="input-bull-mult" min="0" max="50" step="0.1" class="w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Scenario: Stretched -->
+                        <div
+                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-brand-500"></div>
+                            <h4 class="text-sm font-bold text-brand-400 uppercase tracking-wider mb-1">Stretched Bull
+                            </h4>
+                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-stretch-desc">Absolute ceiling</p>
+
+                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-stretch-price">$0.00
+                            </div>
+
+                            <div class="space-y-4 mt-auto">
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400" id="label-stretch-metric">Rev ($M)</span>
+                                        <span class="text-slate-200 font-mono" id="val-stretch-metric">0</span>
+                                    </div>
+                                    <input type="range" id="input-stretch-metric" min="0" max="1000" step="1"
+                                        class="w-full">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-xs mb-1">
+                                        <span class="text-slate-400">Multiple</span>
+                                        <span class="text-slate-200 font-mono" id="val-stretch-mult">0.0x</span>
+                                    </div>
+                                    <input type="range" id="input-stretch-mult" min="0" max="50" step="0.1"
+                                        class="w-full">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div
+                        class="bg-slate-900 px-6 py-3 border-t border-slate-700 flex justify-between items-center text-xs text-slate-500">
+                        <span>Shares Outstanding used for calculation: <span id="calc-shares"
+                                class="font-mono text-slate-300">...</span>M</span>
+                        <span id="calc-metric-type">Calculating based on Revenue Multiple</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Data payload derived from previous analysis
+        const stockData = {
+            "FLNC": {
+                name: "Fluence Energy",
+                sector: "Renewable Energy Tech",
+                price: 26.74,
+                mcap: "4.8B",
+                perf30: 101.0,
+                iconPath: "M13 10V3L4 14h7v7l9-11h-7z", // Lightning bolt
+
+                narrative: "Retail investors are framing Fluence as the ultimate picks-and-shovels play for the renewable energy transition, heavily hyping the stock's massive 100% spike.",
+                catalyst: "Reported Q2 results showing EPS of -$0.16 alongside $465M revenue, but the true driver was a record-breaking $5.6 billion backlog announcement.",
+                institutional: "Increasingly bullish but cautious on supply chain execution. Confident in $3.2B-$3.6B guidance, though some targets remain conservative around $17-$20.",
+                oneliner: "The stock is moving because of a massive $5.6 billion backlog and earnings beat, but the ongoing challenge of converting that backlog into sustained GAAP profitability is the part nobody is talking about.",
+
+                entryZone: "$18.00 - $21.00",
+                trimZone: "$28.00 - $32.00",
+
+                fundVal: "EV/Sales: ~1.4x",
+                fundRev: "+8.0% YoY ($465M)",
+                fundEarn: "Negative (EPS -$0.16)",
+                fundBs: "Healthy cash vs debt; dilution stabilizing",
+                fairValueDir: "at",
+                fairValueText: "FLNC is trading AT its fundamental fair value. A conservative 1.5x EV/Sales on $3.4B midpoint guidance yields $5.1B EV, aligning with current market cap.",
+
+                calcType: "sales", // 'sales' or 'eps'
+                shares: 180,
+                scenarios: {
+                    bear: { desc: "Supply chain issues stall backlog", metric: 3200, mult: 1.0 }, // $17.77
+                    base: { desc: "Steady execution of $5.6B backlog", metric: 3400, mult: 1.5 }, // $28.33
+                    bull: { desc: "Margins expand past 13%, hits profit", metric: 4000, mult: 2.0 }, // $44.44
+                    stretch: { desc: "Undisputed grid-storage dominance", metric: 4500, mult: 2.5 }  // $62.50
+                }
+            },
+            "SOFI": {
+                name: "SoFi Technologies",
+                sector: "Fintech / Banking",
+                price: 16.00,
+                mcap: "16.5B",
+                perf30: -1.8,
+                iconPath: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z", // Credit card/bank
+
+                narrative: "Retail traders are frustrated by YTD decline despite GAAP profitability, arguing the market unfairly punishes over student loan macros.",
+                catalyst: "Q1 delivered record net revenue of $1.1B and $166.7M net income, fully validating transition to a vertically integrated financial ecosystem.",
+                institutional: "Wall Street remains stubbornly mixed; acknowledging the beat, but fair value consensus hovers around $14.00 expecting near-term deceleration.",
+                oneliner: "The stock is moving because of fading near-term momentum and macro loan fears, but their accelerating transition to higher-margin, non-lending fee streams is the part nobody is talking about.",
+
+                entryZone: "$12.50 - $14.00",
+                trimZone: "$18.00 - $22.00",
+
+                fundVal: "Fwd P/E: ~24x | P/B: ~2.5x",
+                fundRev: "+26% YoY ($1.1B)",
+                fundEarn: "Positive ($166.7M Net)",
+                fundBs: "Deposit growth funding loans; dilution slowed",
+                fairValueDir: "above",
+                fairValueText: "SOFI is trading SLIGHTLY ABOVE fair value as a bank, but below as a fintech. A 20x P/E on estimated $0.70 EPS gives a target of $14.00.",
+
+                calcType: "eps",
+                shares: 1030, // Approx
+                scenarios: {
+                    bear: { desc: "Default rates spike, originations stall", metric: 0.60, mult: 15.0 }, // $9.00
+                    base: { desc: "Steady deposit and member growth", metric: 0.80, mult: 20.0 }, // $16.00
+                    bull: { desc: "Tech platform monetization accelerates", metric: 1.00, mult: 25.0 }, // $25.00
+                    stretch: { desc: "Definitive mega-app for US finance", metric: 1.20, mult: 30.0 }  // $36.00
+                }
+            },
+            "VALE": {
+                name: "Vale S.A.",
+                sector: "Basic Materials / Mining",
+                price: 15.85,
+                mcap: "65.0B",
+                perf30: -5.2,
+                iconPath: "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z", // Beaker/Mining related
+
+                narrative: "Viewed as an attractive high-yield dividend play (6.5%) and under-the-radar copper/nickel electrification bet, brushing off recent earnings miss.",
+                catalyst: "Q1 missed estimates (Rev $9.26B, EPS $0.44 vs $0.51 est), triggering a 7% selloff despite a 21% YoY increase in pro forma EBITDA.",
+                institutional: "Dialing back short-term targets due to China demand, but maintain 'Buy' ratings based on $813M Q1 FCF and base metals expansion.",
+                oneliner: "The stock is moving because of an unexpected Q1 top/bottom-line miss, but the 48% surge in copper prices driving base metals EBITDA to $1.2B is the part nobody is talking about.",
+
+                entryZone: "$13.50 - $14.50",
+                trimZone: "$18.00 - $19.50",
+
+                fundVal: "Fwd P/E: ~7.6x | EV/EBITDA: ~4.1x",
+                fundRev: "+14% YoY ($9.26B)",
+                fundEarn: "+36% YoY ($1.89B Net)",
+                fundBs: "Massive FCF supports debt/dividends",
+                fairValueDir: "below",
+                fairValueText: "VALE is trading BELOW fundamental fair value. Annualizing Q1 $3.9B EBITDA at a 5x multiple implies equity fair value near $18.50/share.",
+
+                calcType: "eps",
+                shares: 4100, // Approx
+                scenarios: {
+                    bear: { desc: "China real estate collapses further", metric: 1.50, mult: 5.0 }, // $7.50
+                    base: { desc: "Stable commodity prices & dividends", metric: 2.07, mult: 8.0 }, // $16.56
+                    bull: { desc: "Copper/Nickel explode on EV mandates", metric: 2.20, mult: 10.0 }, // $22.00
+                    stretch: { desc: "Sustained commodity supercycle", metric: 2.50, mult: 12.0 }  // $30.00
+                }
+            },
+            "NOK": {
+                name: "Nokia",
+                sector: "Communication Equipment",
+                price: 13.74,
+                mcap: "78.5B",
+                perf30: 8.5,
+                iconPath: "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9", // Globe/Network
+
+                narrative: "Touted as a sleeper AI infrastructure/cloud networking play. Retail excited by optical network hardware handling data center backbone.",
+                catalyst: "Solid Q1 (EUR 4.5B rev) with margin expanding 320bps. Major highlight: 49% growth in net sales from AI & Cloud customers.",
+                institutional: "Upgrading from legacy telecom to AI-adjacent infra provider. Supportive of projected 12%-14% Network Infrastructure growth.",
+                oneliner: "The stock is moving because of margin expansion and a solid beat, but their strategic shift to high-margin Optical Networks for AI data centers is the part nobody is talking about.",
+
+                entryZone: "$11.00 - $12.50",
+                trimZone: "$18.00 - $21.00",
+
+                fundVal: "Fwd P/E: ~18x | EV/EBITDA: ~8.5x",
+                fundRev: "+4% YoY (EUR 4.5B)",
+                fundEarn: "+67% YoY (Diluted EPS EUR 0.05)",
+                fundBs: "EUR 3.8B net cash; active buybacks",
+                fairValueDir: "below",
+                fairValueText: "NOK is trading SLIGHTLY BELOW fair value. Applying a 12x multiple to EUR 2.25B operating profit + EUR 3.8B cash suggests $16-$18 range.",
+
+                calcType: "eps",
+                shares: 5600, // Approx
+                scenarios: {
+                    bear: { desc: "5G CAPEX from carriers dries up", metric: 0.60, mult: 10.0 }, // $6.00
+                    base: { desc: "Steady Optical Network execution", metric: 0.85, mult: 15.0 }, // $12.75
+                    bull: { desc: "AI infra orders accelerate massively", metric: 1.00, mult: 20.0 }, // $20.00
+                    stretch: { desc: "Premier global backbone for hyperscalers", metric: 1.20, mult: 25.0 }  // $30.00
+                }
+            },
+            "MRAM": {
+                name: "Everspin Technologies",
+                sector: "Semiconductors",
+                price: 13.16,
+                mcap: "972.1M",
+                perf30: 135.3,
+                iconPath: "M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z", // Microchip
+
+                narrative: "Micro-cap tech hunters obsessed post-earnings. Viewed as a bottleneck component for industrial automation and edge AI.",
+                catalyst: "Blowout Q1: EPS $0.40 (3900% surprise). Revenue $14.9M driven by 28% spike in core MRAM product sales.",
+                institutional: "Light coverage but turning bullish. Focused on new UNISYST line targeting $3B TAM, noting undervaluation relative to growth.",
+                oneliner: "The stock is moving because of a historic 3900% EPS surprise, but the 52.7% gross margin and rapid industrial MRAM adoption is the part nobody is talking about.",
+
+                entryZone: "$9.50 - $11.00",
+                trimZone: "$18.00 - $22.00",
+
+                fundVal: "Fwd P/E: ~35x | Fwd EV/Sales: ~15x",
+                fundRev: "+14% YoY ($14.9M)",
+                fundEarn: "EPS $0.40 (vs $0.02 YoY)",
+                fundBs: "$40.5M cash; zero debt",
+                fairValueDir: "at",
+                fairValueText: "Trading AT momentum fair value, but ABOVE traditional valuation. A 15x EV/Sales on $60M run-rate yields $900M EV, pricing in near-perfect execution.",
+
+                calcType: "sales",
+                shares: 23.3,
+                scenarios: {
+                    bear: { desc: "Q1 anomaly (one-time orders)", metric: 60, mult: 5.0 }, // $12.87
+                    base: { desc: "Consistent 15-20% YoY growth", metric: 75, mult: 8.0 }, // $25.75
+                    bull: { desc: "UNISYST captures 5% of $3B TAM", metric: 150, mult: 10.0 }, // $64.37
+                    stretch: { desc: "Undisputed standard for edge AI mem", metric: 250, mult: 15.0 }  // $160ish
+                }
+            },
+            "NVTS": {
+                name: "Navitas Semiconductor",
+                sector: "Power Semiconductors",
+                price: 18.25,
+                mcap: "5.4B",
+                perf30: 27.6,
+                iconPath: "M13 10V3L4 14h7v7l9-11h-7z", // Lightning
+
+                narrative: "Retail sees a hyper-growth play on electrification of everything—fast-chargers, EV drivetrains, and AI server power management.",
+                catalyst: "Surged 27% despite EPS miss (-$0.15). Driven by $8.6M rev beat and bullish metrics: AI infra rev grew 50% sequentially.",
+                institutional: "Forgiving unprofitability right now. Upgrading targets based on massive design-win pipeline and operating leverage potential.",
+                oneliner: "The stock is moving because of massive 50% sequential growth in AI infrastructure revenue, but their deliberate, margin-improving exit from lower-tier consumer markets is the part nobody is talking about.",
+
+                entryZone: "$12.00 - $14.50",
+                trimZone: "$22.00 - $26.00",
+
+                fundVal: "Fwd EV/Sales: ~130x (Premium)",
+                fundRev: "$8.6M (+18% sequentially)",
+                fundEarn: "Negative (EPS -$0.15)",
+                fundBs: "Heavy cash burn phase; margins +30bps",
+                fairValueDir: "above",
+                fairValueText: "Trading SIGNIFICANTLY ABOVE current fundamentals. At ~130x Fwd Sales, investors are paying purely for terminal value in 2030 data center/EV markets.",
+
+                calcType: "sales",
+                shares: 185,
+                scenarios: {
+                    bear: { desc: "Slower AI build-outs collapse multiple", metric: 41.3, mult: 20.0 }, // $4.46
+                    base: { desc: "Rev hits $80M in 2027 as EV scales", metric: 80, mult: 40.0 }, // $17.29
+                    bull: { desc: "Reaches profit, corners AI server pwr", metric: 150, mult: 50.0 }, // $40.54
+                    stretch: { desc: "Indispensable next-gen power monopoly", metric: 250, mult: 60.0 }  // $81.08
+                }
+            },
+            "MU": {
+                name: "Micron Technology",
+                sector: "Semiconductors",
+                price: 682.54,
+                mcap: "817.0B",
+                perf30: 15.2,
+                iconPath: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10", // Server/Database
+
+                narrative: "Dubbed the 'Next Nvidia'. AI accelerators are useless without High-Bandwidth Memory (HBM), and MU is 1 of 3 global suppliers.",
+                catalyst: "Spectacular Q2: $23.9B revenue (+196% YoY). Margins past 70%. Confirmed HBM capacity is 100% sold out through 2026.",
+                institutional: "Aggressively revising targets up. Believe AI super-cycle structurally changed MU's earnings floor, justifying premium.",
+                oneliner: "The stock is moving because of 196% revenue growth and HBM being sold out, but the transition from cyclical commodity maker to indispensable AI tollbooth is the part nobody is talking about.",
+
+                entryZone: "$550.00 - $600.00",
+                trimZone: "$850.00 - $1,000.00",
+
+                fundVal: "Fwd P/E: ~9.5x | EV/EBITDA: ~7x",
+                fundRev: "+196% YoY ($23.9B)",
+                fundEarn: "Explosive (ROE hits 40%)",
+                fundBs: "Fortress balance sheet; active buybacks",
+                fairValueDir: "below",
+                fairValueText: "Trading BELOW fair value if AI cycle persists. If market rerates MU from cyclical (10x) to critical AI hardware (25x), fair value expands drastically.",
+
+                calcType: "eps",
+                shares: 1100, // Approx
+                scenarios: {
+                    bear: { desc: "AI hardware bubble pops, CAPEX drops", metric: 50.00, mult: 8.0 }, // $400
+                    base: { desc: "HBM demand steady, competitors add cap", metric: 65.00, mult: 12.0 }, // $780
+                    bull: { desc: "Maintains HBM monopoly & pricing power", metric: 75.00, mult: 18.0 }, // $1350
+                    stretch: { desc: "Market fully rerates MU like Nvidia", metric: 85.00, mult: 30.0 }  // $2550
+                }
+            }
+        };
+
+        let currentTicker = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSidebar();
+
+            // Select first ticker by default if not on mobile
+            if (window.innerWidth >= 768) {
+                selectTicker('FLNC');
+            }
+        });
+
+        function renderSidebar() {
+            const list = document.getElementById('ticker-list');
+            Object.keys(stockData).forEach(ticker => {
+                const data = stockData[ticker];
+                const perfColor = data.perf30 >= 0 ? 'text-emerald-400' : 'text-red-400';
+                const perfSign = data.perf30 >= 0 ? '+' : '';
+
+                const btn = document.createElement('div');
+                btn.className = `ticker-card w-48 md:w-full flex-shrink-0 flex items-center justify-between p-3 rounded-lg border border-slate-700 bg-slate-800/50 hover:bg-slate-700 text-left`;
+                btn.id = `nav-${ticker}`;
+                btn.onclick = () => selectTicker(ticker);
+
+                btn.innerHTML = `
+                    <div>
+                        <div class="font-bold text-slate-100">${ticker}</div>
+                        <div class="text-xs text-slate-400 truncate max-w-[100px] md:max-w-[120px]">${data.name}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-mono text-sm text-slate-200">$${data.price.toFixed(2)}</div>
+                        <div class="text-xs ${perfColor}">${perfSign}${data.perf30}%</div>
+                    </div>
+                `;
+                list.appendChild(btn);
+            });
+        }
+
+        function selectTicker(ticker) {
+            currentTicker = ticker;
+            const data = stockData[ticker];
+
+            // Update Active State in Sidebar
+            document.querySelectorAll('.ticker-card').forEach(el => {
+                el.classList.remove('border-brand-500', 'bg-slate-800');
+                el.classList.add('border-slate-700', 'bg-slate-800/50');
+            });
+            const activeBtn = document.getElementById(`nav-${ticker}`);
+            if (activeBtn) {
+                activeBtn.classList.add('border-brand-500', 'bg-slate-800');
+                activeBtn.classList.remove('border-slate-700', 'bg-slate-800/50');
+            }
+
+            // Show Content, Hide Welcome
+            document.getElementById('welcome-state').classList.add('hidden');
+            document.getElementById('ticker-data-view').classList.remove('hidden');
+            document.getElementById('ticker-data-view').classList.add('flex');
+
+            // Bind Basic Info
+            document.getElementById('detail-ticker').textContent = ticker;
+            document.getElementById('detail-name').textContent = data.name;
+            document.getElementById('detail-mcap').textContent = data.mcap;
+            document.getElementById('detail-sector').textContent = data.sector;
+            document.getElementById('detail-price').textContent = `$${data.price.toFixed(2)}`;
+
+            const perfEl = document.getElementById('detail-perf');
+            perfEl.textContent = `${data.perf30 >= 0 ? '+' : ''}${data.perf30}%`;
+            perfEl.className = `metric-value ${data.perf30 >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+
+            // Set SVG Icon
+            document.getElementById('header-icon').innerHTML = `<path d="${data.iconPath}"/>`;
+
+            // Bind Narratives
+            document.getElementById('text-narrative').textContent = data.narrative;
+            document.getElementById('text-catalyst').textContent = data.catalyst;
+            document.getElementById('text-institutional').textContent = data.institutional;
+            document.getElementById('text-oneliner').textContent = `"${data.oneliner}"`;
+
+            // Bind Zones
+            document.getElementById('detail-entry').textContent = data.entryZone;
+            document.getElementById('detail-trim').textContent = data.trimZone;
+
+            // Bind Fundamentals
+            document.getElementById('fund-val').textContent = data.fundVal;
+            document.getElementById('fund-rev').textContent = data.fundRev;
+            document.getElementById('fund-earn').textContent = data.fundEarn;
+            document.getElementById('fund-bs').textContent = data.fundBs;
+            document.getElementById('fund-bs').title = data.fundBs;
+
+            document.getElementById('fund-assessment').textContent = data.fairValueText;
+
+            const badge = document.getElementById('valuation-badge');
+            badge.textContent = `Trading ${data.fairValueDir.toUpperCase()} Fair Value`;
+            if (data.fairValueDir === 'above') {
+                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2 bg-red-900/50 text-red-400 border border-red-800';
+            } else if (data.fairValueDir === 'below') {
+                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2 bg-emerald-900/50 text-emerald-400 border border-emerald-800';
+            } else {
+                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2 bg-slate-700 text-slate-300 border border-slate-600';
+            }
+
+            // Setup Calculator
+            document.getElementById('calc-shares').textContent = data.shares;
+
+            const metricLabel = data.calcType === 'sales' ? 'Rev ($M)' : 'EPS ($)';
+            const metricMax = data.calcType === 'sales' ? (ticker === 'MU' ? 30000 : 5000) : 100;
+            const metricStep = data.calcType === 'sales' ? (ticker === 'MU' ? 100 : 10) : 0.05;
+
+            document.getElementById('calc-metric-type').textContent = `Calculating using ${data.calcType === 'sales' ? 'Revenue Multiple (Market Cap / Shares)' : 'EPS Multiple (P/E Ratio)'}`;
+
+            ['bear', 'base', 'bull', 'stretch'].forEach(scen => {
+                const sData = data.scenarios[scen];
+                document.getElementById(`scen-${scen}-desc`).textContent = sData.desc;
+
+                document.getElementById(`label-${scen}-metric`).textContent = metricLabel;
+
+                const metricInput = document.getElementById(`input-${scen}-metric`);
+                metricInput.max = Math.max(sData.metric * 2, metricMax);
+                metricInput.step = metricStep;
+                metricInput.value = sData.metric;
+
+                const multInput = document.getElementById(`input-${scen}-mult`);
+                multInput.max = Math.max(sData.mult * 2, 50);
+                multInput.value = sData.mult;
+
+                // Add event listeners for interactivity
+                metricInput.oninput = () => updateScenarioCalc(scen);
+                multInput.oninput = () => updateScenarioCalc(scen);
+
+                // Initial calculation
+                updateScenarioCalc(scen);
+            });
+        }
+
+        function updateScenarioCalc(scen) {
+            if (!currentTicker) return;
+            const data = stockData[currentTicker];
+
+            const metricVal = parseFloat(document.getElementById(`input-${scen}-metric`).value);
+            const multVal = parseFloat(document.getElementById(`input-${scen}-mult`).value);
+
+            // Update labels
+            document.getElementById(`val-${scen}-metric`).textContent = data.calcType === 'sales' ? metricVal.toLocaleString() : metricVal.toFixed(2);
+            document.getElementById(`val-${scen}-mult`).textContent = multVal.toFixed(1) + 'x';
+
+            // Calculate
+            let price = 0;
+            if (data.calcType === 'sales') {
+                // Revenue * Multiple = Market Cap -> Market Cap / Shares = Price
+                const mcap = metricVal * multVal;
+                price = mcap / data.shares;
+            } else {
+                // EPS * PE Multiple = Price
+                price = metricVal * multVal;
+            }
+
+            document.getElementById(`calc-${scen}-price`).textContent = `$${price.toFixed(2)}`;
+        }
+    </script>
+</body>
+
+</html>
