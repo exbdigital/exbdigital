@@ -73,6 +73,18 @@
             background: #475569;
         }
 
+        /* Hide scrollbar for mobile horizontal scrolling */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
         /* Slider styling for interactive widget */
         input[type=range] {
             -webkit-appearance: none;
@@ -82,12 +94,13 @@
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 16px;
-            width: 16px;
+            height: 20px;
+            /* Increased for better mobile touch target */
+            width: 20px;
             border-radius: 50%;
             background: #0ea5e9;
             cursor: pointer;
-            margin-top: -6px;
+            margin-top: -8px;
         }
 
         input[type=range]::-webkit-slider-runnable-track {
@@ -106,25 +119,26 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <svg class="h-8 w-8 text-brand-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-6 w-6 md:h-8 md:w-8 text-brand-500 mr-2 md:mr-3" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
-                    <span class="font-bold text-xl tracking-tight text-white">SleeperStock Research</span>
+                    <span class="font-bold text-lg md:text-xl tracking-tight text-white">SleeperStocks</span>
                 </div>
-                <div class="text-sm text-slate-400 font-medium">
+                <div class="text-xs md:text-sm text-slate-400 font-medium">
                     <span class="hidden sm:inline">Live Data As Of: </span> May 19, 2026
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col md:flex-row gap-8">
+    <main
+        class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 w-full flex flex-col md:flex-row gap-6 md:gap-8">
 
         <!-- Left Sidebar: Ticker Selection -->
         <aside class="w-full md:w-64 flex-shrink-0">
-            <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-2">Coverage Universe</h2>
-            <div class="space-y-2 flex md:flex-col overflow-x-auto md:overflow-x-visible pb-4 md:pb-0" id="ticker-list">
+            <div id="ticker-list" class="flex flex-col">
                 <!-- Ticker cards will be injected here via JS -->
             </div>
         </aside>
@@ -134,24 +148,27 @@
 
             <!-- Default Welcome State -->
             <div id="welcome-state"
-                class="flex flex-col items-center justify-center h-full min-h-[400px] text-center p-8 border border-slate-800 rounded-xl bg-slate-800/20">
-                <svg class="h-16 w-16 text-slate-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                class="flex flex-col items-center justify-center h-full min-h-[300px] md:min-h-[400px] text-center p-6 md:p-8 border border-slate-800 rounded-xl bg-slate-800/20">
+                <svg class="h-12 w-12 md:h-16 md:w-16 text-slate-600 mb-4" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <h3 class="text-xl font-medium text-slate-300 mb-2">Select a Ticker</h3>
-                <p class="text-slate-500 max-w-md">Choose a company from the coverage universe on the left to view
-                    comprehensive fundamental analysis, price action summaries, and interactive price targets.</p>
+                <h3 class="text-lg md:text-xl font-medium text-slate-300 mb-2">Select a Ticker</h3>
+                <p class="text-sm md:text-base text-slate-500 max-w-md">Choose a company from the coverage universe on
+                    the left to view comprehensive fundamental analysis, price action summaries, and interactive price
+                    targets.</p>
             </div>
 
             <!-- Ticker Data View (Hidden initially) -->
             <div id="ticker-data-view" class="hidden flex-col gap-6">
 
                 <!-- Header: Price & Basic Info -->
-                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm relative overflow-hidden">
+                <div
+                    class="bg-slate-800 rounded-xl p-5 md:p-6 border border-slate-700 shadow-sm relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-4 opacity-10">
                         <!-- Background icon -->
-                        <svg class="h-24 w-24" fill="currentColor" viewBox="0 0 24 24" id="header-icon">
+                        <svg class="h-20 w-20 md:h-24 md:w-24" fill="currentColor" viewBox="0 0 24 24" id="header-icon">
                             <path
                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
                         </svg>
@@ -159,22 +176,26 @@
 
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-end z-10 relative">
                         <div>
-                            <div class="flex items-baseline gap-3 mb-1">
-                                <h1 class="text-3xl font-bold text-white tracking-tight" id="detail-ticker">TICKER</h1>
-                                <span class="text-lg text-slate-400 font-medium" id="detail-name">Company Name</span>
+                            <div class="flex items-baseline gap-2 md:gap-3 mb-1 flex-wrap">
+                                <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight" id="detail-ticker">
+                                    TICKER</h1>
+                                <span class="text-base md:text-lg text-slate-400 font-medium" id="detail-name">Company
+                                    Name</span>
                             </div>
-                            <div class="flex gap-4 text-sm text-slate-400">
+                            <div class="flex gap-4 text-xs md:text-sm text-slate-400">
                                 <span>Market Cap: <strong class="text-slate-200" id="detail-mcap">$0.0B</strong></span>
                                 <span>Sector: <strong class="text-slate-200"
                                         id="detail-sector">Technology</strong></span>
                             </div>
                         </div>
 
-                        <div class="mt-4 md:mt-0 text-left md:text-right">
-                            <div class="text-4xl font-bold text-white metric-value mb-1" id="detail-price">$0.00</div>
+                        <div
+                            class="mt-4 md:mt-0 text-left md:text-right w-full md:w-auto flex flex-row md:flex-col justify-between md:justify-end items-end md:items-end border-t md:border-t-0 border-slate-700 pt-3 md:pt-0">
+                            <div class="text-3xl md:text-4xl font-bold text-white metric-value md:mb-1"
+                                id="detail-price">$0.00</div>
                             <div class="flex items-center gap-2 font-medium" id="detail-perf-container">
-                                <span id="detail-perf" class="metric-value">+0.0%</span>
-                                <span class="text-slate-500 text-sm">30-Day</span>
+                                <span id="detail-perf" class="metric-value text-base md:text-lg">+0.0%</span>
+                                <span class="text-slate-500 text-xs md:text-sm">Return</span>
                             </div>
                         </div>
                     </div>
@@ -182,8 +203,8 @@
 
                 <!-- Summary & Narrative -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm">
-                        <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                    <div class="bg-slate-800 rounded-xl p-5 md:p-6 border border-slate-700 shadow-sm">
+                        <h3 class="text-md md:text-lg font-semibold text-white mb-4 flex items-center">
                             <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -193,24 +214,24 @@
                         </h3>
                         <div class="space-y-4 text-sm text-slate-300">
                             <div>
-                                <strong class="text-slate-100">Social Narrative:</strong> <span
+                                <strong class="text-slate-100 block md:inline">Market Narrative:</strong> <span
                                     id="text-narrative">...</span>
                             </div>
                             <div>
-                                <strong class="text-slate-100">Actual Catalyst:</strong> <span
+                                <strong class="text-slate-100 block md:inline">Actual Catalyst:</strong> <span
                                     id="text-catalyst">...</span>
                             </div>
                             <div>
-                                <strong class="text-slate-100">Institutional View:</strong> <span
+                                <strong class="text-slate-100 block md:inline">Institutional View:</strong> <span
                                     id="text-institutional">...</span>
                             </div>
                         </div>
                     </div>
 
                     <div
-                        class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm flex flex-col justify-between">
+                        class="bg-slate-800 rounded-xl p-5 md:p-6 border border-slate-700 shadow-sm flex flex-col justify-between">
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                            <h3 class="text-md md:text-lg font-semibold text-white mb-4 flex items-center">
                                 <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -218,28 +239,33 @@
                                 </svg>
                                 The Bottom Line
                             </h3>
-                            <blockquote class="border-l-4 border-brand-500 pl-4 py-1 italic text-slate-200 text-lg"
+                            <blockquote
+                                class="border-l-4 border-brand-500 pl-4 py-1 italic text-slate-200 text-base md:text-lg"
                                 id="text-oneliner">
                                 "The stock is moving because [x], but [Y] is the part nobody is talking about."
                             </blockquote>
                         </div>
 
-                        <div class="mt-6 pt-4 border-t border-slate-700 grid grid-cols-2 gap-4">
-                            <div class="bg-emerald-900/20 border border-emerald-800/50 rounded-lg p-3">
-                                <div class="text-xs text-emerald-400 uppercase font-semibold mb-1">Entry Zone</div>
-                                <div class="font-mono text-emerald-200 font-bold" id="detail-entry">$0.00 - $0.00</div>
+                        <div class="mt-6 pt-4 border-t border-slate-700 grid grid-cols-2 gap-3 md:gap-4">
+                            <div class="bg-emerald-900/20 border border-emerald-800/50 rounded-lg p-2 md:p-3">
+                                <div class="text-[10px] md:text-xs text-emerald-400 uppercase font-semibold mb-1">Entry
+                                    Zone</div>
+                                <div class="font-mono text-emerald-200 font-bold text-sm md:text-base"
+                                    id="detail-entry">$0.00 - $0.00</div>
                             </div>
-                            <div class="bg-amber-900/20 border border-amber-800/50 rounded-lg p-3">
-                                <div class="text-xs text-amber-400 uppercase font-semibold mb-1">Trim Levels</div>
-                                <div class="font-mono text-amber-200 font-bold" id="detail-trim">$0.00 - $0.00</div>
+                            <div class="bg-amber-900/20 border border-amber-800/50 rounded-lg p-2 md:p-3">
+                                <div class="text-[10px] md:text-xs text-amber-400 uppercase font-semibold mb-1">Trim
+                                    Levels</div>
+                                <div class="font-mono text-amber-200 font-bold text-sm md:text-base" id="detail-trim">
+                                    $0.00 - $0.00</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Fundamental Snapshot -->
-                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 shadow-sm">
-                    <h3 class="text-lg font-semibold text-white mb-4 flex items-center">
+                <div class="bg-slate-800 rounded-xl p-5 md:p-6 border border-slate-700 shadow-sm">
+                    <h3 class="text-md md:text-lg font-semibold text-white mb-4 flex items-center">
                         <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -247,39 +273,41 @@
                         Fundamental Snapshot
                     </h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 md:gap-y-4 text-xs md:text-sm mb-6">
                         <div class="flex justify-between border-b border-slate-700 pb-2">
                             <span class="text-slate-400">Forward Valuation</span>
-                            <strong class="text-slate-200 metric-value" id="fund-val">...</strong>
+                            <strong class="text-slate-200 metric-value text-right" id="fund-val">...</strong>
                         </div>
                         <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-slate-400">Latest Rev Growth</span>
-                            <strong class="text-slate-200 metric-value" id="fund-rev">...</strong>
+                            <span class="text-slate-400">Yield / Return Profile</span>
+                            <strong class="text-slate-200 metric-value text-right" id="fund-rev">...</strong>
                         </div>
                         <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-slate-400">Earnings Growth</span>
-                            <strong class="text-slate-200 metric-value" id="fund-earn">...</strong>
+                            <span class="text-slate-400">Earnings Data</span>
+                            <strong class="text-slate-200 metric-value text-right" id="fund-earn">...</strong>
                         </div>
                         <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-slate-400">Balance Sheet/Dilution</span>
-                            <strong class="text-slate-200 metric-value text-right max-w-[200px] truncate" id="fund-bs"
-                                title="">...</strong>
+                            <span class="text-slate-400">Balance Sheet/Highlights</span>
+                            <strong
+                                class="text-slate-200 metric-value text-right max-w-[150px] md:max-w-[200px] truncate"
+                                id="fund-bs" title="">...</strong>
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2"
+                    <div class="bg-slate-900/50 p-3 md:p-4 rounded-lg border border-slate-700">
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium mr-2 mb-2"
                             id="valuation-badge">
                             Fair Value Assessment
                         </span>
-                        <p class="text-sm text-slate-300" id="fund-assessment">...</p>
+                        <p class="text-xs md:text-sm text-slate-300" id="fund-assessment">...</p>
                     </div>
                 </div>
 
                 <!-- Interactive Scenario Modeler -->
                 <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-sm overflow-hidden flex flex-col">
-                    <div class="p-6 border-b border-slate-700 bg-slate-800/80">
-                        <h3 class="text-lg font-semibold text-white flex items-center">
+                    <div class="p-5 md:p-6 border-b border-slate-700 bg-slate-800/80">
+                        <h3 class="text-md md:text-lg font-semibold text-white flex items-center">
                             <svg class="h-5 w-5 mr-2 text-brand-400" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -287,27 +315,30 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                             </svg>
-                            Interactive Price Target Framework
+                            Interactive Price Targets
                         </h3>
-                        <p class="text-sm text-slate-400 mt-1">Adjust revenue or EPS estimates and multiples to model
-                            target prices based on execution.</p>
+                        <p class="text-xs md:text-sm text-slate-400 mt-1">Adjust revenue or EPS estimates and multiples
+                            to model target prices based on execution.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-700">
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 divide-y md:divide-y-0 lg:divide-y-0 divide-x-0 md:divide-x divide-slate-700">
 
                         <!-- Scenario: Bear -->
                         <div
-                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-red-500"></div>
-                            <h4 class="text-sm font-bold text-red-400 uppercase tracking-wider mb-1">Bear Case</h4>
-                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-bear-desc">Disappointing catalyst</p>
+                            class="p-4 md:p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors md:border-b-0 border-b border-slate-700">
+                            <div class="absolute top-0 left-0 w-full md:h-1 h-0.5 bg-red-500"></div>
+                            <h4 class="text-xs md:text-sm font-bold text-red-400 uppercase tracking-wider mb-1">Bear
+                                Case</h4>
+                            <p class="text-[10px] md:text-xs text-slate-400 mb-3 md:mb-4 h-auto md:h-12"
+                                id="scen-bear-desc">Disappointing catalyst</p>
 
-                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-bear-price">$0.00
-                            </div>
+                            <div class="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-6 metric-value"
+                                id="calc-bear-price">$0.00</div>
 
                             <div class="space-y-4 mt-auto">
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400" id="label-bear-metric">Rev ($M)</span>
                                         <span class="text-slate-200 font-mono" id="val-bear-metric">0</span>
                                     </div>
@@ -315,7 +346,7 @@
                                         class="w-full">
                                 </div>
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400">Multiple</span>
                                         <span class="text-slate-200 font-mono" id="val-bear-mult">0.0x</span>
                                     </div>
@@ -326,17 +357,19 @@
 
                         <!-- Scenario: Base -->
                         <div
-                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-slate-400"></div>
-                            <h4 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-1">Base Case</h4>
-                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-base-desc">Execution holds</p>
+                            class="p-4 md:p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors md:border-b-0 border-b border-slate-700">
+                            <div class="absolute top-0 left-0 w-full md:h-1 h-0.5 bg-slate-400"></div>
+                            <h4 class="text-xs md:text-sm font-bold text-slate-300 uppercase tracking-wider mb-1">Base
+                                Case</h4>
+                            <p class="text-[10px] md:text-xs text-slate-400 mb-3 md:mb-4 h-auto md:h-12"
+                                id="scen-base-desc">Execution holds</p>
 
-                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-base-price">$0.00
-                            </div>
+                            <div class="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-6 metric-value"
+                                id="calc-base-price">$0.00</div>
 
                             <div class="space-y-4 mt-auto">
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400" id="label-base-metric">Rev ($M)</span>
                                         <span class="text-slate-200 font-mono" id="val-base-metric">0</span>
                                     </div>
@@ -344,7 +377,7 @@
                                         class="w-full">
                                 </div>
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400">Multiple</span>
                                         <span class="text-slate-200 font-mono" id="val-base-mult">0.0x</span>
                                     </div>
@@ -355,17 +388,19 @@
 
                         <!-- Scenario: Bull -->
                         <div
-                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
-                            <h4 class="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-1">Bull Case</h4>
-                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-bull-desc">Everything works</p>
+                            class="p-4 md:p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors md:border-t lg:border-t-0 border-slate-700 md:border-b-0 border-b border-slate-700">
+                            <div class="absolute top-0 left-0 w-full md:h-1 h-0.5 bg-emerald-500"></div>
+                            <h4 class="text-xs md:text-sm font-bold text-emerald-400 uppercase tracking-wider mb-1">Bull
+                                Case</h4>
+                            <p class="text-[10px] md:text-xs text-slate-400 mb-3 md:mb-4 h-auto md:h-12"
+                                id="scen-bull-desc">Everything works</p>
 
-                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-bull-price">$0.00
-                            </div>
+                            <div class="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-6 metric-value"
+                                id="calc-bull-price">$0.00</div>
 
                             <div class="space-y-4 mt-auto">
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400" id="label-bull-metric">Rev ($M)</span>
                                         <span class="text-slate-200 font-mono" id="val-bull-metric">0</span>
                                     </div>
@@ -373,7 +408,7 @@
                                         class="w-full">
                                 </div>
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400">Multiple</span>
                                         <span class="text-slate-200 font-mono" id="val-bull-mult">0.0x</span>
                                     </div>
@@ -384,18 +419,19 @@
 
                         <!-- Scenario: Stretched -->
                         <div
-                            class="p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-brand-500"></div>
-                            <h4 class="text-sm font-bold text-brand-400 uppercase tracking-wider mb-1">Stretched Bull
-                            </h4>
-                            <p class="text-xs text-slate-400 mb-4 h-12" id="scen-stretch-desc">Absolute ceiling</p>
+                            class="p-4 md:p-5 flex flex-col relative overflow-hidden group hover:bg-slate-700/30 transition-colors md:border-t lg:border-t-0 border-slate-700">
+                            <div class="absolute top-0 left-0 w-full md:h-1 h-0.5 bg-brand-500"></div>
+                            <h4 class="text-xs md:text-sm font-bold text-brand-400 uppercase tracking-wider mb-1">
+                                Stretched Bull</h4>
+                            <p class="text-[10px] md:text-xs text-slate-400 mb-3 md:mb-4 h-auto md:h-12"
+                                id="scen-stretch-desc">Absolute ceiling</p>
 
-                            <div class="text-3xl font-bold text-white mb-6 metric-value" id="calc-stretch-price">$0.00
-                            </div>
+                            <div class="text-2xl md:text-3xl font-bold text-white mb-5 md:mb-6 metric-value"
+                                id="calc-stretch-price">$0.00</div>
 
                             <div class="space-y-4 mt-auto">
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400" id="label-stretch-metric">Rev ($M)</span>
                                         <span class="text-slate-200 font-mono" id="val-stretch-metric">0</span>
                                     </div>
@@ -403,7 +439,7 @@
                                         class="w-full">
                                 </div>
                                 <div>
-                                    <div class="flex justify-between text-xs mb-1">
+                                    <div class="flex justify-between text-[10px] md:text-xs mb-1">
                                         <span class="text-slate-400">Multiple</span>
                                         <span class="text-slate-200 font-mono" id="val-stretch-mult">0.0x</span>
                                     </div>
@@ -415,8 +451,8 @@
 
                     </div>
                     <div
-                        class="bg-slate-900 px-6 py-3 border-t border-slate-700 flex justify-between items-center text-xs text-slate-500">
-                        <span>Shares Outstanding used for calculation: <span id="calc-shares"
+                        class="bg-slate-900 px-4 md:px-6 py-3 border-t border-slate-700 flex flex-col md:flex-row justify-between items-start md:items-center text-[10px] md:text-xs text-slate-500 gap-2 md:gap-0">
+                        <span>Shares Outstanding: <span id="calc-shares"
                                 class="font-mono text-slate-300">...</span>M</span>
                         <span id="calc-metric-type">Calculating based on Revenue Multiple</span>
                     </div>
@@ -426,230 +462,219 @@
     </main>
 
     <script>
-        // Data payload derived from previous analysis
+        // Data payload derived from previous analysis & new NGX Equities payload
         const stockData = {
+            // US Equities
             "FLNC": {
-                name: "Fluence Energy",
-                sector: "Renewable Energy Tech",
-                price: 26.74,
-                mcap: "4.8B",
-                perf30: 101.0,
-                iconPath: "M13 10V3L4 14h7v7l9-11h-7z", // Lightning bolt
-
+                region: "US", currency: "$", name: "Fluence Energy", sector: "Renewable Energy Tech", price: 26.74, mcap: "4.8B", perf30: 101.0, iconPath: "M13 10V3L4 14h7v7l9-11h-7z",
                 narrative: "Retail investors are framing Fluence as the ultimate picks-and-shovels play for the renewable energy transition, heavily hyping the stock's massive 100% spike.",
                 catalyst: "Reported Q2 results showing EPS of -$0.16 alongside $465M revenue, but the true driver was a record-breaking $5.6 billion backlog announcement.",
                 institutional: "Increasingly bullish but cautious on supply chain execution. Confident in $3.2B-$3.6B guidance, though some targets remain conservative around $17-$20.",
                 oneliner: "The stock is moving because of a massive $5.6 billion backlog and earnings beat, but the ongoing challenge of converting that backlog into sustained GAAP profitability is the part nobody is talking about.",
-
-                entryZone: "$18.00 - $21.00",
-                trimZone: "$28.00 - $32.00",
-
-                fundVal: "EV/Sales: ~1.4x",
-                fundRev: "+8.0% YoY ($465M)",
-                fundEarn: "Negative (EPS -$0.16)",
-                fundBs: "Healthy cash vs debt; dilution stabilizing",
-                fairValueDir: "at",
-                fairValueText: "FLNC is trading AT its fundamental fair value. A conservative 1.5x EV/Sales on $3.4B midpoint guidance yields $5.1B EV, aligning with current market cap.",
-
-                calcType: "sales", // 'sales' or 'eps'
-                shares: 180,
+                entryZone: "$18.00 - $21.00", trimZone: "$28.00 - $32.00",
+                fundVal: "EV/Sales: ~1.4x", fundRev: "+8.0% YoY ($465M)", fundEarn: "Negative (EPS -$0.16)", fundBs: "Healthy cash vs debt; dilution stabilizing",
+                fairValueDir: "at", fairValueText: "FLNC is trading AT its fundamental fair value. A conservative 1.5x EV/Sales on $3.4B midpoint guidance yields $5.1B EV, aligning with current market cap.",
+                calcType: "sales", shares: 180,
                 scenarios: {
-                    bear: { desc: "Supply chain issues stall backlog", metric: 3200, mult: 1.0 }, // $17.77
-                    base: { desc: "Steady execution of $5.6B backlog", metric: 3400, mult: 1.5 }, // $28.33
-                    bull: { desc: "Margins expand past 13%, hits profit", metric: 4000, mult: 2.0 }, // $44.44
-                    stretch: { desc: "Undisputed grid-storage dominance", metric: 4500, mult: 2.5 }  // $62.50
+                    bear: { desc: "Supply chain issues stall backlog", metric: 3200, mult: 1.0 }, base: { desc: "Steady execution of $5.6B backlog", metric: 3400, mult: 1.5 },
+                    bull: { desc: "Margins expand past 13%, hits profit", metric: 4000, mult: 2.0 }, stretch: { desc: "Undisputed grid-storage dominance", metric: 4500, mult: 2.5 }
                 }
             },
             "SOFI": {
-                name: "SoFi Technologies",
-                sector: "Fintech / Banking",
-                price: 16.00,
-                mcap: "16.5B",
-                perf30: -1.8,
-                iconPath: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z", // Credit card/bank
-
+                region: "US", currency: "$", name: "SoFi Technologies", sector: "Fintech / Banking", price: 16.00, mcap: "16.5B", perf30: -1.8, iconPath: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z",
                 narrative: "Retail traders are frustrated by YTD decline despite GAAP profitability, arguing the market unfairly punishes over student loan macros.",
                 catalyst: "Q1 delivered record net revenue of $1.1B and $166.7M net income, fully validating transition to a vertically integrated financial ecosystem.",
                 institutional: "Wall Street remains stubbornly mixed; acknowledging the beat, but fair value consensus hovers around $14.00 expecting near-term deceleration.",
                 oneliner: "The stock is moving because of fading near-term momentum and macro loan fears, but their accelerating transition to higher-margin, non-lending fee streams is the part nobody is talking about.",
-
-                entryZone: "$12.50 - $14.00",
-                trimZone: "$18.00 - $22.00",
-
-                fundVal: "Fwd P/E: ~24x | P/B: ~2.5x",
-                fundRev: "+26% YoY ($1.1B)",
-                fundEarn: "Positive ($166.7M Net)",
-                fundBs: "Deposit growth funding loans; dilution slowed",
-                fairValueDir: "above",
-                fairValueText: "SOFI is trading SLIGHTLY ABOVE fair value as a bank, but below as a fintech. A 20x P/E on estimated $0.70 EPS gives a target of $14.00.",
-
-                calcType: "eps",
-                shares: 1030, // Approx
+                entryZone: "$12.50 - $14.00", trimZone: "$18.00 - $22.00",
+                fundVal: "Fwd P/E: ~24x | P/B: ~2.5x", fundRev: "+26% YoY ($1.1B)", fundEarn: "Positive ($166.7M Net)", fundBs: "Deposit growth funding loans; dilution slowed",
+                fairValueDir: "above", fairValueText: "SOFI is trading SLIGHTLY ABOVE fair value as a bank, but below as a fintech. A 20x P/E on estimated $0.70 EPS gives a target of $14.00.",
+                calcType: "eps", shares: 1030,
                 scenarios: {
-                    bear: { desc: "Default rates spike, originations stall", metric: 0.60, mult: 15.0 }, // $9.00
-                    base: { desc: "Steady deposit and member growth", metric: 0.80, mult: 20.0 }, // $16.00
-                    bull: { desc: "Tech platform monetization accelerates", metric: 1.00, mult: 25.0 }, // $25.00
-                    stretch: { desc: "Definitive mega-app for US finance", metric: 1.20, mult: 30.0 }  // $36.00
+                    bear: { desc: "Default rates spike, originations stall", metric: 0.60, mult: 15.0 }, base: { desc: "Steady deposit and member growth", metric: 0.80, mult: 20.0 },
+                    bull: { desc: "Tech platform monetization accelerates", metric: 1.00, mult: 25.0 }, stretch: { desc: "Definitive mega-app for US finance", metric: 1.20, mult: 30.0 }
                 }
             },
             "VALE": {
-                name: "Vale S.A.",
-                sector: "Basic Materials / Mining",
-                price: 15.85,
-                mcap: "65.0B",
-                perf30: -5.2,
-                iconPath: "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z", // Beaker/Mining related
-
+                region: "US", currency: "$", name: "Vale S.A.", sector: "Basic Materials / Mining", price: 15.85, mcap: "65.0B", perf30: -5.2, iconPath: "M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z",
                 narrative: "Viewed as an attractive high-yield dividend play (6.5%) and under-the-radar copper/nickel electrification bet, brushing off recent earnings miss.",
                 catalyst: "Q1 missed estimates (Rev $9.26B, EPS $0.44 vs $0.51 est), triggering a 7% selloff despite a 21% YoY increase in pro forma EBITDA.",
                 institutional: "Dialing back short-term targets due to China demand, but maintain 'Buy' ratings based on $813M Q1 FCF and base metals expansion.",
                 oneliner: "The stock is moving because of an unexpected Q1 top/bottom-line miss, but the 48% surge in copper prices driving base metals EBITDA to $1.2B is the part nobody is talking about.",
-
-                entryZone: "$13.50 - $14.50",
-                trimZone: "$18.00 - $19.50",
-
-                fundVal: "Fwd P/E: ~7.6x | EV/EBITDA: ~4.1x",
-                fundRev: "+14% YoY ($9.26B)",
-                fundEarn: "+36% YoY ($1.89B Net)",
-                fundBs: "Massive FCF supports debt/dividends",
-                fairValueDir: "below",
-                fairValueText: "VALE is trading BELOW fundamental fair value. Annualizing Q1 $3.9B EBITDA at a 5x multiple implies equity fair value near $18.50/share.",
-
-                calcType: "eps",
-                shares: 4100, // Approx
+                entryZone: "$13.50 - $14.50", trimZone: "$18.00 - $19.50",
+                fundVal: "Fwd P/E: ~7.6x | EV/EBITDA: ~4.1x", fundRev: "+14% YoY ($9.26B)", fundEarn: "+36% YoY ($1.89B Net)", fundBs: "Massive FCF supports debt/dividends",
+                fairValueDir: "below", fairValueText: "VALE is trading BELOW fundamental fair value. Annualizing Q1 $3.9B EBITDA at a 5x multiple implies equity fair value near $18.50/share.",
+                calcType: "eps", shares: 4100,
                 scenarios: {
-                    bear: { desc: "China real estate collapses further", metric: 1.50, mult: 5.0 }, // $7.50
-                    base: { desc: "Stable commodity prices & dividends", metric: 2.07, mult: 8.0 }, // $16.56
-                    bull: { desc: "Copper/Nickel explode on EV mandates", metric: 2.20, mult: 10.0 }, // $22.00
-                    stretch: { desc: "Sustained commodity supercycle", metric: 2.50, mult: 12.0 }  // $30.00
+                    bear: { desc: "China real estate collapses further", metric: 1.50, mult: 5.0 }, base: { desc: "Stable commodity prices & dividends", metric: 2.07, mult: 8.0 },
+                    bull: { desc: "Copper/Nickel explode on EV mandates", metric: 2.20, mult: 10.0 }, stretch: { desc: "Sustained commodity supercycle", metric: 2.50, mult: 12.0 }
                 }
             },
             "NOK": {
-                name: "Nokia",
-                sector: "Communication Equipment",
-                price: 13.74,
-                mcap: "78.5B",
-                perf30: 8.5,
-                iconPath: "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9", // Globe/Network
-
+                region: "US", currency: "$", name: "Nokia", sector: "Communication Equipment", price: 13.74, mcap: "78.5B", perf30: 8.5, iconPath: "M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9",
                 narrative: "Touted as a sleeper AI infrastructure/cloud networking play. Retail excited by optical network hardware handling data center backbone.",
                 catalyst: "Solid Q1 (EUR 4.5B rev) with margin expanding 320bps. Major highlight: 49% growth in net sales from AI & Cloud customers.",
                 institutional: "Upgrading from legacy telecom to AI-adjacent infra provider. Supportive of projected 12%-14% Network Infrastructure growth.",
                 oneliner: "The stock is moving because of margin expansion and a solid beat, but their strategic shift to high-margin Optical Networks for AI data centers is the part nobody is talking about.",
-
-                entryZone: "$11.00 - $12.50",
-                trimZone: "$18.00 - $21.00",
-
-                fundVal: "Fwd P/E: ~18x | EV/EBITDA: ~8.5x",
-                fundRev: "+4% YoY (EUR 4.5B)",
-                fundEarn: "+67% YoY (Diluted EPS EUR 0.05)",
-                fundBs: "EUR 3.8B net cash; active buybacks",
-                fairValueDir: "below",
-                fairValueText: "NOK is trading SLIGHTLY BELOW fair value. Applying a 12x multiple to EUR 2.25B operating profit + EUR 3.8B cash suggests $16-$18 range.",
-
-                calcType: "eps",
-                shares: 5600, // Approx
+                entryZone: "$11.00 - $12.50", trimZone: "$18.00 - $21.00",
+                fundVal: "Fwd P/E: ~18x | EV/EBITDA: ~8.5x", fundRev: "+4% YoY (EUR 4.5B)", fundEarn: "+67% YoY (Diluted EPS EUR 0.05)", fundBs: "EUR 3.8B net cash; active buybacks",
+                fairValueDir: "below", fairValueText: "NOK is trading SLIGHTLY BELOW fair value. Applying a 12x multiple to EUR 2.25B operating profit + EUR 3.8B cash suggests $16-$18 range.",
+                calcType: "eps", shares: 5600,
                 scenarios: {
-                    bear: { desc: "5G CAPEX from carriers dries up", metric: 0.60, mult: 10.0 }, // $6.00
-                    base: { desc: "Steady Optical Network execution", metric: 0.85, mult: 15.0 }, // $12.75
-                    bull: { desc: "AI infra orders accelerate massively", metric: 1.00, mult: 20.0 }, // $20.00
-                    stretch: { desc: "Premier global backbone for hyperscalers", metric: 1.20, mult: 25.0 }  // $30.00
+                    bear: { desc: "5G CAPEX from carriers dries up", metric: 0.60, mult: 10.0 }, base: { desc: "Steady Optical Network execution", metric: 0.85, mult: 15.0 },
+                    bull: { desc: "AI infra orders accelerate massively", metric: 1.00, mult: 20.0 }, stretch: { desc: "Premier global backbone for hyperscalers", metric: 1.20, mult: 25.0 }
                 }
             },
             "MRAM": {
-                name: "Everspin Technologies",
-                sector: "Semiconductors",
-                price: 13.16,
-                mcap: "972.1M",
-                perf30: 135.3,
-                iconPath: "M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z", // Microchip
-
+                region: "US", currency: "$", name: "Everspin Technologies", sector: "Semiconductors", price: 13.16, mcap: "972.1M", perf30: 135.3, iconPath: "M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z",
                 narrative: "Micro-cap tech hunters obsessed post-earnings. Viewed as a bottleneck component for industrial automation and edge AI.",
                 catalyst: "Blowout Q1: EPS $0.40 (3900% surprise). Revenue $14.9M driven by 28% spike in core MRAM product sales.",
                 institutional: "Light coverage but turning bullish. Focused on new UNISYST line targeting $3B TAM, noting undervaluation relative to growth.",
                 oneliner: "The stock is moving because of a historic 3900% EPS surprise, but the 52.7% gross margin and rapid industrial MRAM adoption is the part nobody is talking about.",
-
-                entryZone: "$9.50 - $11.00",
-                trimZone: "$18.00 - $22.00",
-
-                fundVal: "Fwd P/E: ~35x | Fwd EV/Sales: ~15x",
-                fundRev: "+14% YoY ($14.9M)",
-                fundEarn: "EPS $0.40 (vs $0.02 YoY)",
-                fundBs: "$40.5M cash; zero debt",
-                fairValueDir: "at",
-                fairValueText: "Trading AT momentum fair value, but ABOVE traditional valuation. A 15x EV/Sales on $60M run-rate yields $900M EV, pricing in near-perfect execution.",
-
-                calcType: "sales",
-                shares: 23.3,
+                entryZone: "$9.50 - $11.00", trimZone: "$18.00 - $22.00",
+                fundVal: "Fwd P/E: ~35x | Fwd EV/Sales: ~15x", fundRev: "+14% YoY ($14.9M)", fundEarn: "EPS $0.40 (vs $0.02 YoY)", fundBs: "$40.5M cash; zero debt",
+                fairValueDir: "at", fairValueText: "Trading AT momentum fair value, but ABOVE traditional valuation. A 15x EV/Sales on $60M run-rate yields $900M EV, pricing in near-perfect execution.",
+                calcType: "sales", shares: 23.3,
                 scenarios: {
-                    bear: { desc: "Q1 anomaly (one-time orders)", metric: 60, mult: 5.0 }, // $12.87
-                    base: { desc: "Consistent 15-20% YoY growth", metric: 75, mult: 8.0 }, // $25.75
-                    bull: { desc: "UNISYST captures 5% of $3B TAM", metric: 150, mult: 10.0 }, // $64.37
-                    stretch: { desc: "Undisputed standard for edge AI mem", metric: 250, mult: 15.0 }  // $160ish
+                    bear: { desc: "Q1 anomaly (one-time orders)", metric: 60, mult: 5.0 }, base: { desc: "Consistent 15-20% YoY growth", metric: 75, mult: 8.0 },
+                    bull: { desc: "UNISYST captures 5% of $3B TAM", metric: 150, mult: 10.0 }, stretch: { desc: "Undisputed standard for edge AI mem", metric: 250, mult: 15.0 }
                 }
             },
             "NVTS": {
-                name: "Navitas Semiconductor",
-                sector: "Power Semiconductors",
-                price: 18.25,
-                mcap: "5.4B",
-                perf30: 27.6,
-                iconPath: "M13 10V3L4 14h7v7l9-11h-7z", // Lightning
-
+                region: "US", currency: "$", name: "Navitas Semiconductor", sector: "Power Semiconductors", price: 18.25, mcap: "5.4B", perf30: 27.6, iconPath: "M13 10V3L4 14h7v7l9-11h-7z",
                 narrative: "Retail sees a hyper-growth play on electrification of everything—fast-chargers, EV drivetrains, and AI server power management.",
                 catalyst: "Surged 27% despite EPS miss (-$0.15). Driven by $8.6M rev beat and bullish metrics: AI infra rev grew 50% sequentially.",
                 institutional: "Forgiving unprofitability right now. Upgrading targets based on massive design-win pipeline and operating leverage potential.",
                 oneliner: "The stock is moving because of massive 50% sequential growth in AI infrastructure revenue, but their deliberate, margin-improving exit from lower-tier consumer markets is the part nobody is talking about.",
-
-                entryZone: "$12.00 - $14.50",
-                trimZone: "$22.00 - $26.00",
-
-                fundVal: "Fwd EV/Sales: ~130x (Premium)",
-                fundRev: "$8.6M (+18% sequentially)",
-                fundEarn: "Negative (EPS -$0.15)",
-                fundBs: "Heavy cash burn phase; margins +30bps",
-                fairValueDir: "above",
-                fairValueText: "Trading SIGNIFICANTLY ABOVE current fundamentals. At ~130x Fwd Sales, investors are paying purely for terminal value in 2030 data center/EV markets.",
-
-                calcType: "sales",
-                shares: 185,
+                entryZone: "$12.00 - $14.50", trimZone: "$22.00 - $26.00",
+                fundVal: "Fwd EV/Sales: ~130x (Premium)", fundRev: "$8.6M (+18% sequentially)", fundEarn: "Negative (EPS -$0.15)", fundBs: "Heavy cash burn phase; margins +30bps",
+                fairValueDir: "above", fairValueText: "Trading SIGNIFICANTLY ABOVE current fundamentals. At ~130x Fwd Sales, investors are paying purely for terminal value in 2030 data center/EV markets.",
+                calcType: "sales", shares: 185,
                 scenarios: {
-                    bear: { desc: "Slower AI build-outs collapse multiple", metric: 41.3, mult: 20.0 }, // $4.46
-                    base: { desc: "Rev hits $80M in 2027 as EV scales", metric: 80, mult: 40.0 }, // $17.29
-                    bull: { desc: "Reaches profit, corners AI server pwr", metric: 150, mult: 50.0 }, // $40.54
-                    stretch: { desc: "Indispensable next-gen power monopoly", metric: 250, mult: 60.0 }  // $81.08
+                    bear: { desc: "Slower AI build-outs collapse multiple", metric: 41.3, mult: 20.0 }, base: { desc: "Rev hits $80M in 2027 as EV scales", metric: 80, mult: 40.0 },
+                    bull: { desc: "Reaches profit, corners AI server pwr", metric: 150, mult: 50.0 }, stretch: { desc: "Indispensable next-gen power monopoly", metric: 250, mult: 60.0 }
                 }
             },
             "MU": {
-                name: "Micron Technology",
-                sector: "Semiconductors",
-                price: 682.54,
-                mcap: "817.0B",
-                perf30: 15.2,
-                iconPath: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10", // Server/Database
-
+                region: "US", currency: "$", name: "Micron Technology", sector: "Semiconductors", price: 682.54, mcap: "817.0B", perf30: 15.2, iconPath: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10",
                 narrative: "Dubbed the 'Next Nvidia'. AI accelerators are useless without High-Bandwidth Memory (HBM), and MU is 1 of 3 global suppliers.",
                 catalyst: "Spectacular Q2: $23.9B revenue (+196% YoY). Margins past 70%. Confirmed HBM capacity is 100% sold out through 2026.",
                 institutional: "Aggressively revising targets up. Believe AI super-cycle structurally changed MU's earnings floor, justifying premium.",
                 oneliner: "The stock is moving because of 196% revenue growth and HBM being sold out, but the transition from cyclical commodity maker to indispensable AI tollbooth is the part nobody is talking about.",
-
-                entryZone: "$550.00 - $600.00",
-                trimZone: "$850.00 - $1,000.00",
-
-                fundVal: "Fwd P/E: ~9.5x | EV/EBITDA: ~7x",
-                fundRev: "+196% YoY ($23.9B)",
-                fundEarn: "Explosive (ROE hits 40%)",
-                fundBs: "Fortress balance sheet; active buybacks",
-                fairValueDir: "below",
-                fairValueText: "Trading BELOW fair value if AI cycle persists. If market rerates MU from cyclical (10x) to critical AI hardware (25x), fair value expands drastically.",
-
-                calcType: "eps",
-                shares: 1100, // Approx
+                entryZone: "$550.00 - $600.00", trimZone: "$850.00 - $1,000.00",
+                fundVal: "Fwd P/E: ~9.5x | EV/EBITDA: ~7x", fundRev: "+196% YoY ($23.9B)", fundEarn: "Explosive (ROE hits 40%)", fundBs: "Fortress balance sheet; active buybacks",
+                fairValueDir: "below", fairValueText: "Trading BELOW fair value if AI cycle persists. If market rerates MU from cyclical (10x) to critical AI hardware (25x), fair value expands drastically.",
+                calcType: "eps", shares: 1100,
                 scenarios: {
-                    bear: { desc: "AI hardware bubble pops, CAPEX drops", metric: 50.00, mult: 8.0 }, // $400
-                    base: { desc: "HBM demand steady, competitors add cap", metric: 65.00, mult: 12.0 }, // $780
-                    bull: { desc: "Maintains HBM monopoly & pricing power", metric: 75.00, mult: 18.0 }, // $1350
-                    stretch: { desc: "Market fully rerates MU like Nvidia", metric: 85.00, mult: 30.0 }  // $2550
+                    bear: { desc: "AI hardware bubble pops, CAPEX drops", metric: 50.00, mult: 8.0 }, base: { desc: "HBM demand steady, competitors add cap", metric: 65.00, mult: 12.0 },
+                    bull: { desc: "Maintains HBM monopoly & pricing power", metric: 75.00, mult: 18.0 }, stretch: { desc: "Market fully rerates MU like Nvidia", metric: 85.00, mult: 30.0 }
+                }
+            },
+
+            // NGX Equities
+            "ARADEL": {
+                region: "NGX", currency: "₦", name: "Aradel Holdings", sector: "Energy / Oil & Gas", price: 1834.90, mcap: "N/A", perf30: 173.87, iconPath: "M13 10V3L4 14h7v7l9-11h-7z",
+                narrative: "Retail is heavily rotating into this oil & gas major following its massive 173% YtD run, treating it as the premier energy play on the NGX.",
+                catalyst: "The stock's momentum was temporarily halted by a 2.40% WoW profit-taking, but strong underlying fundamentals and a 57.5% ROE maintain the broader rally.",
+                institutional: "Meristem recommends a BUY with a target of ₦2,278.43 (+24.17% upside), citing positive operating leverage and a lucrative 11% dividend yield.",
+                oneliner: "The stock is moving because of its massive 173% YtD gains, but the 11% dividend yield securing downside risk is the part nobody is talking about.",
+                entryZone: "₦1,750.00 - 1,834.90", trimZone: "₦2,150.00 - 2,278.43",
+                fundVal: "Fwd P/E: 19.85x | P/BV: 2.29x", fundRev: "ROE: 57.54%", fundEarn: "Trailing EPS: ₦247.07", fundBs: "Operating leverage highly positive; low dilution",
+                fairValueDir: "below", fairValueText: "Trading BELOW fundamental fair value. The aggressive target of ₦2,278.43 is justified by its massive EPS and peer multiples.",
+                calcType: "eps", shares: 2000,
+                scenarios: {
+                    bear: { desc: "Oil price slump, output stalls", metric: 247.07, mult: 6.0 }, base: { desc: "Current fundamentals hold steady", metric: 247.07, mult: 9.2 },
+                    bull: { desc: "Meristem Target Achieved", metric: 250.00, mult: 10.0 }, stretch: { desc: "Sustained domestic oil supercycle", metric: 300.00, mult: 12.0 }
+                }
+            },
+            "UBA": {
+                region: "NGX", currency: "₦", name: "United Bank for Africa", sector: "Banking", price: 44.00, mcap: "N/A", perf30: 10.00, iconPath: "M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z",
+                narrative: "Retail investors are piling into UBA as a deep-value banking play, cheering the recent 10% WoW surge that lifted the broader NGXBNK index.",
+                catalyst: "Outperformed the banking index (+10% WoW) on the back of massive portfolio rebalancing and a highly reliable 11% dividend yield.",
+                institutional: "Meristem maintains a strong BUY rating with a ₦71.81 target, implying an extreme +63.20% upside from current levels.",
+                oneliner: "The stock is moving because of the recent 10% WoW jump, but trading at a massive discount of 0.42x Price-to-Book is the part nobody is talking about.",
+                entryZone: "₦40.00 - 44.00", trimZone: "₦65.00 - 71.81",
+                fundVal: "P/E: 5.00x | P/BV: 0.42x", fundRev: "ROE: 18.54%", fundEarn: "Trailing EPS: ₦8.81", fundBs: "Strong liquidity & robust capital metrics",
+                fairValueDir: "below", fairValueText: "Trading SIGNIFICANTLY BELOW fair value. A P/B ratio of just 0.42x implies it's trading at a deep, unwarranted discount to its actual book value.",
+                calcType: "eps", shares: 34190,
+                scenarios: {
+                    bear: { desc: "Asset quality deteriorates slightly", metric: 8.81, mult: 3.0 }, base: { desc: "Maintains current growth trajectory", metric: 8.81, mult: 5.0 },
+                    bull: { desc: "Meristem Target Achieved", metric: 8.81, mult: 8.1 }, stretch: { desc: "Premium bank valuation re-rating", metric: 10.00, mult: 10.0 }
+                }
+            },
+            "MBENEFIT": {
+                region: "NGX", currency: "₦", name: "Mutual Benefits Assurance", sector: "Insurance", price: 4.30, mcap: "N/A", perf30: 38.71, iconPath: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z",
+                narrative: "Traders are hunting for penny stock runners in the insurance sector, with MBENEFIT catching massive retail bids as a turnaround play.",
+                catalyst: "The NGXINS index rose 2.74% WoW. MBENEFIT boasts a massive 38.71% YtD return driven by a strong 22.16% ROE against a low nominal share price.",
+                institutional: "Meristem has an aggressive BUY rating and a ₦7.85 target, implying a monumental +82.52% upside from current levels.",
+                oneliner: "The stock is moving because of broad insurance sector rallies, but the monumental +82% fundamental upside target is the part nobody is talking about.",
+                entryZone: "₦3.80 - 4.30", trimZone: "₦7.00 - 7.85",
+                fundVal: "P/E: 4.13x | P/BV: 1.25x", fundRev: "ROE: 22.16%", fundEarn: "Trailing EPS: ₦1.04", fundBs: "Solid premium growth & adequate solvency",
+                fairValueDir: "below", fairValueText: "Trading DEEPLY BELOW fair value. Analysts see immense room for multiples to expand to reach a normalized target.",
+                calcType: "eps", shares: 11172,
+                scenarios: {
+                    bear: { desc: "Claims ratio spikes unexpectedly", metric: 1.04, mult: 2.0 }, base: { desc: "Steady premium collections hold", metric: 1.04, mult: 4.1 },
+                    bull: { desc: "Meristem Target Achieved", metric: 1.04, mult: 7.5 }, stretch: { desc: "Industry-wide multiple re-rating", metric: 1.50, mult: 10.0 }
+                }
+            },
+            "AFRIPRUD": {
+                region: "NGX", currency: "₦", name: "Africa Prudential", sector: "Other Financial Services", price: 14.90, mcap: "N/A", perf30: 8.45, iconPath: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
+                narrative: "Income investors are heavily accumulating the stock for its reliable yield, viewing it as a safe haven amid broader market volatility.",
+                catalyst: "Sustained demand for B2B financial services drove an impressive 45.16% ROE and a solid ₦1.38 trailing EPS.",
+                institutional: "Upgraded target to ₦27.60 (+85.23% upside) by Meristem with a BUY rating, citing excellent return metrics and steady dividend flow.",
+                oneliner: "The stock is moving slowly on portfolio rebalancing, but the staggering 85% upside potential to ₦27.60 is the part nobody is talking about.",
+                entryZone: "₦14.00 - 15.00", trimZone: "₦24.00 - 27.60",
+                fundVal: "P/E: 10.82x | P/BV: 2.21x", fundRev: "ROE: 45.16%", fundEarn: "Trailing EPS: ₦1.38", fundBs: "Exceptional Return on Equity metric",
+                fairValueDir: "below", fairValueText: "Trading BELOW fundamental fair value. The extremely high 45% ROE justifies a premium valuation multiple rather than a discount.",
+                calcType: "eps", shares: 2000,
+                scenarios: {
+                    bear: { desc: "Registrar revenues contract heavily", metric: 1.38, mult: 8.0 }, base: { desc: "Steady digital service growth", metric: 1.38, mult: 10.8 },
+                    bull: { desc: "Meristem Target Achieved", metric: 1.38, mult: 20.0 }, stretch: { desc: "Total dominance in B2B financial tech", metric: 1.80, mult: 25.0 }
+                }
+            },
+            "MTNN": {
+                region: "NGX", currency: "₦", name: "MTN Nigeria", sector: "Telecoms", price: 820.00, mcap: "N/A", perf30: 60.47, iconPath: "M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0",
+                narrative: "Retail and institutional capital alike view MTNN as the undisputed blue-chip anchor of the NGX, treating it as a must-hold tech/telecom play.",
+                catalyst: "Sustained network investments, rural expansion, and AI adoption are driving an astronomical 147.65% ROE and an EPS of ₦63.57.",
+                institutional: "Meristem gives a BUY rating with a ₦1,019.31 target (+24.31%). RSI of 49.84 indicates the stock is currently neutral and perfectly primed for entry.",
+                oneliner: "The stock is moving because of its dominant telecom monopoly, but their aggressive AI and rural network expansion is the part nobody is talking about.",
+                entryZone: "₦750.00 - 820.00", trimZone: "₦950.00 - 1,019.31",
+                fundVal: "P/E: 12.90x | P/BV: 19.05x", fundRev: "ROE: 147.65%", fundEarn: "Trailing EPS: ₦63.57", fundBs: "High leverage but stable, massive cash flows",
+                fairValueDir: "below", fairValueText: "Trading BELOW fundamental fair value. The extreme 147% ROE supports sustained upside to the ₦1,019+ target despite the high Price-to-Book.",
+                calcType: "eps", shares: 20354,
+                scenarios: {
+                    bear: { desc: "Severe Regulatory/FX headwinds", metric: 60.00, mult: 10.0 }, base: { desc: "Steady subscriber additions", metric: 63.57, mult: 12.9 },
+                    bull: { desc: "Meristem Target Achieved", metric: 63.57, mult: 16.0 }, stretch: { desc: "Complete 5G & mobile money dominance", metric: 80.00, mult: 18.0 }
+                }
+            },
+            "CADBURY": {
+                region: "NGX", currency: "₦", name: "Cadbury Nigeria", sector: "Packaged Foods", price: 70.90, mcap: "N/A", perf30: 22.43, iconPath: "M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z",
+                narrative: "Consumer goods investors are rotating into Cadbury as a defensive, Shariah-compliant staple amid market fluctuations.",
+                catalyst: "Despite mild profit-taking WoW, the stock maintains a 73.41% ROE and a trailing EPS of ₦5.30, benefiting from resilient core product demand.",
+                institutional: "Meristem maintains a BUY rating with an ₦86.80 target (+22.43% upside), noting that the 10-day RSI of 50.97 shows neutral, healthy momentum.",
+                oneliner: "The stock is moving because of sustained consumer demand, but its Shariah-compliant status attracting niche institutional funds is the part nobody is talking about.",
+                entryZone: "₦65.00 - 70.90", trimZone: "₦80.00 - 86.80",
+                fundVal: "P/E: 13.37x | P/BV: 9.82x", fundRev: "ROE: 73.41%", fundEarn: "Trailing EPS: ₦5.30", fundBs: "Solid margins in an inflationary environment",
+                fairValueDir: "below", fairValueText: "Trading BELOW fair value. The stock trades slightly below its 20-DMA (₦70.77), suggesting emerging bullish momentum.",
+                calcType: "eps", shares: 1878,
+                scenarios: {
+                    bear: { desc: "Input cost inflation hurts margins", metric: 5.30, mult: 10.0 }, base: { desc: "Sustained core product demand", metric: 5.30, mult: 13.3 },
+                    bull: { desc: "Meristem Target Achieved", metric: 5.30, mult: 16.3 }, stretch: { desc: "Export revenues surge significantly", metric: 7.00, mult: 18.0 }
+                }
+            },
+            "WAPCO": {
+                region: "NGX", currency: "₦", name: "Lafarge Africa (WAPCO)", sector: "Construction", price: 337.00, mcap: "N/A", perf30: 150.56, iconPath: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
+                narrative: "The domestic market is aggressively buying mid-to-large cap industrials, and WAPCO is the standout favorite for infrastructure plays.",
+                catalyst: "A staggering 150.56% YtD return, bolstered by a 27.97% ROE and an EPS of ₦20.02, alongside strong institutional portfolio rebalancing.",
+                institutional: "Meristem rates BUY with an upside target of ₦384.08 (+13.97%), cementing it as a core holding in their 2026 strategic portfolio.",
+                oneliner: "The stock is moving because of its massive 150% YtD run, but its 7% dividend yield and robust trailing EPS are the parts nobody is talking about.",
+                entryZone: "₦310.00 - 337.00", trimZone: "₦370.00 - 384.00",
+                fundVal: "P/E: 16.84x | P/BV: 6.85x", fundRev: "ROE: 27.97%", fundEarn: "Trailing EPS: ₦20.02", fundBs: "Shariah-compliant; strong balance sheet",
+                fairValueDir: "below", fairValueText: "Trading SLIGHTLY BELOW fair value. Market is currently pricing in solid infrastructure spending tailwinds driving future earnings.",
+                calcType: "eps", shares: 16107,
+                scenarios: {
+                    bear: { desc: "Infrastructure spending freezes up", metric: 20.02, mult: 12.0 }, base: { desc: "Current construction levels hold", metric: 20.02, mult: 16.8 },
+                    bull: { desc: "Meristem Target Achieved", metric: 20.02, mult: 19.1 }, stretch: { desc: "Massive government infra stimulus", metric: 25.00, mult: 22.0 }
                 }
             }
         };
@@ -661,39 +686,71 @@
 
             // Select first ticker by default if not on mobile
             if (window.innerWidth >= 768) {
-                selectTicker('FLNC');
+                selectTicker('FLNC'); // Keep FLNC default, or first one
             }
         });
 
         function renderSidebar() {
             const list = document.getElementById('ticker-list');
-            Object.keys(stockData).forEach(ticker => {
-                const data = stockData[ticker];
-                const perfColor = data.perf30 >= 0 ? 'text-emerald-400' : 'text-red-400';
-                const perfSign = data.perf30 >= 0 ? '+' : '';
+            list.innerHTML = ''; // Clear the list first
 
-                const btn = document.createElement('div');
-                btn.className = `ticker-card w-48 md:w-full flex-shrink-0 flex items-center justify-between p-3 rounded-lg border border-slate-700 bg-slate-800/50 hover:bg-slate-700 text-left`;
-                btn.id = `nav-${ticker}`;
-                btn.onclick = () => selectTicker(ticker);
+            const createGroupHeader = (title) => {
+                const header = document.createElement('h2');
+                header.className = 'text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 md:mb-3 px-1 md:px-2 flex-shrink-0';
+                header.textContent = title;
+                return header;
+            };
 
-                btn.innerHTML = `
-                    <div>
-                        <div class="font-bold text-slate-100">${ticker}</div>
-                        <div class="text-xs text-slate-400 truncate max-w-[100px] md:max-w-[120px]">${data.name}</div>
-                    </div>
-                    <div class="text-right">
-                        <div class="font-mono text-sm text-slate-200">$${data.price.toFixed(2)}</div>
-                        <div class="text-xs ${perfColor}">${perfSign}${data.perf30}%</div>
-                    </div>
-                `;
-                list.appendChild(btn);
-            });
+            const renderGroup = (regionCode, groupTitle) => {
+                const groupContainer = document.createElement('div');
+                groupContainer.className = "mb-4 md:mb-6 last:mb-0";
+
+                const header = createGroupHeader(groupTitle);
+                groupContainer.appendChild(header);
+
+                // Horizontal scroll container on mobile, standard column on desktop
+                const cardsContainer = document.createElement('div');
+                cardsContainer.className = "flex md:flex-col overflow-x-auto md:overflow-visible gap-3 pb-2 md:pb-0 snap-x hide-scrollbar";
+
+                Object.keys(stockData)
+                    .filter(ticker => stockData[ticker].region === regionCode)
+                    .forEach(ticker => {
+                        const data = stockData[ticker];
+                        const perfColor = data.perf30 >= 0 ? 'text-emerald-400' : 'text-red-400';
+                        const perfSign = data.perf30 >= 0 ? '+' : '';
+                        const cur = data.currency || '$';
+
+                        const btn = document.createElement('div');
+                        // Fixed width for snapping on mobile, full width on desktop
+                        btn.className = `snap-start ticker-card w-56 md:w-full flex-shrink-0 flex items-center justify-between p-3 rounded-lg border border-slate-700 bg-slate-800/50 hover:bg-slate-700 text-left`;
+                        btn.id = `nav-${ticker}`;
+                        btn.onclick = () => selectTicker(ticker);
+
+                        btn.innerHTML = `
+                            <div>
+                                <div class="font-bold text-slate-100">${ticker}</div>
+                                <div class="text-[10px] md:text-xs text-slate-400 truncate max-w-[100px] md:max-w-[120px]">${data.name}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-mono text-xs md:text-sm text-slate-200">${cur}${data.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                                <div class="text-[10px] md:text-xs ${perfColor}">${perfSign}${data.perf30}%</div>
+                            </div>
+                        `;
+                        cardsContainer.appendChild(btn);
+                    });
+
+                groupContainer.appendChild(cardsContainer);
+                list.appendChild(groupContainer);
+            };
+
+            renderGroup('US', 'US Equities');
+            renderGroup('NGX', 'NGX Equities');
         }
 
         function selectTicker(ticker) {
             currentTicker = ticker;
             const data = stockData[ticker];
+            const cur = data.currency || '$';
 
             // Update Active State in Sidebar
             document.querySelectorAll('.ticker-card').forEach(el => {
@@ -711,16 +768,21 @@
             document.getElementById('ticker-data-view').classList.remove('hidden');
             document.getElementById('ticker-data-view').classList.add('flex');
 
+            // Scroll to content on mobile devices
+            if (window.innerWidth < 768) {
+                document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+            }
+
             // Bind Basic Info
             document.getElementById('detail-ticker').textContent = ticker;
             document.getElementById('detail-name').textContent = data.name;
             document.getElementById('detail-mcap').textContent = data.mcap;
             document.getElementById('detail-sector').textContent = data.sector;
-            document.getElementById('detail-price').textContent = `$${data.price.toFixed(2)}`;
+            document.getElementById('detail-price').textContent = `${cur}${data.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
             const perfEl = document.getElementById('detail-perf');
             perfEl.textContent = `${data.perf30 >= 0 ? '+' : ''}${data.perf30}%`;
-            perfEl.className = `metric-value ${data.perf30 >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
+            perfEl.className = `metric-value text-base md:text-lg ${data.perf30 >= 0 ? 'text-emerald-400' : 'text-red-400'}`;
 
             // Set SVG Icon
             document.getElementById('header-icon').innerHTML = `<path d="${data.iconPath}"/>`;
@@ -747,19 +809,27 @@
             const badge = document.getElementById('valuation-badge');
             badge.textContent = `Trading ${data.fairValueDir.toUpperCase()} Fair Value`;
             if (data.fairValueDir === 'above') {
-                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2 bg-red-900/50 text-red-400 border border-red-800';
+                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium mr-2 mb-2 bg-red-900/50 text-red-400 border border-red-800';
             } else if (data.fairValueDir === 'below') {
-                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2 bg-emerald-900/50 text-emerald-400 border border-emerald-800';
+                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium mr-2 mb-2 bg-emerald-900/50 text-emerald-400 border border-emerald-800';
             } else {
-                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium mr-2 mb-2 bg-slate-700 text-slate-300 border border-slate-600';
+                badge.className = 'inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] md:text-xs font-medium mr-2 mb-2 bg-slate-700 text-slate-300 border border-slate-600';
             }
 
             // Setup Calculator
             document.getElementById('calc-shares').textContent = data.shares;
 
-            const metricLabel = data.calcType === 'sales' ? 'Rev ($M)' : 'EPS ($)';
-            const metricMax = data.calcType === 'sales' ? (ticker === 'MU' ? 30000 : 5000) : 100;
-            const metricStep = data.calcType === 'sales' ? (ticker === 'MU' ? 100 : 10) : 0.05;
+            const metricLabel = data.calcType === 'sales' ? 'Rev ($M)' : 'EPS';
+            let metricMax = 100;
+            let metricStep = 0.05;
+
+            if (data.calcType === 'sales') {
+                metricMax = (ticker === 'MU') ? 30000 : 5000;
+                metricStep = (ticker === 'MU') ? 100 : 10;
+            } else {
+                metricMax = (data.scenarios.stretch.metric * 1.5) > 100 ? (data.scenarios.stretch.metric * 1.5) : 100;
+                metricStep = (data.scenarios.stretch.metric > 100) ? 1.0 : 0.05;
+            }
 
             document.getElementById('calc-metric-type').textContent = `Calculating using ${data.calcType === 'sales' ? 'Revenue Multiple (Market Cap / Shares)' : 'EPS Multiple (P/E Ratio)'}`;
 
@@ -790,6 +860,7 @@
         function updateScenarioCalc(scen) {
             if (!currentTicker) return;
             const data = stockData[currentTicker];
+            const cur = data.currency || '$';
 
             const metricVal = parseFloat(document.getElementById(`input-${scen}-metric`).value);
             const multVal = parseFloat(document.getElementById(`input-${scen}-mult`).value);
@@ -809,7 +880,7 @@
                 price = metricVal * multVal;
             }
 
-            document.getElementById(`calc-${scen}-price`).textContent = `$${price.toFixed(2)}`;
+            document.getElementById(`calc-${scen}-price`).textContent = `${cur}${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         }
     </script>
 </body>
