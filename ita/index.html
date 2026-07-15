@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Italy Schengen Visa Checklist — Ogunleye Family</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Spectral:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDE4C8;
+    --paper-2:#F5EFDB;
+    --ink:#1F2E27;
+    --ink-soft:#54615A;
+    --line:#C7BC98;
+    --red:#A23B2E;
+    --red-soft:#EBD9CE;
+    --green:#3C6B47;
+    --green-soft:#DCE7D6;
+    --brass:#93712F;
+    --brass-soft:#EFE2C2;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Spectral',serif;
+    padding:0 0 5rem;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 1.5rem;}
+
+  /* Hero */
+  .hero{
+    background:var(--ink);
+    color:var(--paper-2);
+    padding:3.5rem 0 3rem;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:900px;margin:0 auto;padding:0 1.5rem;
+    display:flex;align-items:center;justify-content:space-between;gap:2rem;
+    flex-wrap:wrap;
+  }
+  .hero-text{flex:1;min-width:260px;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:#C9B98A;margin:0 0 .6rem;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(28px,4vw,42px);
+    line-height:1.08;
+    margin:0 0 .5rem;
+    color:var(--paper-2);
+  }
+  .hero-sub{
+    font-size:16px;color:#CBBE99;margin:0;line-height:1.6;
+  }
+  .stamp{
+    width:150px;height:150px;flex-shrink:0;position:relative;
+    animation:stampIn .7s cubic-bezier(.2,1.4,.4,1) both;
+    animation-delay:.15s;
+  }
+  @keyframes stampIn{
+    0%{opacity:0;transform:scale(1.6) rotate(-18deg);}
+    100%{opacity:1;transform:scale(1) rotate(-8deg);}
+  }
+  .stamp svg{width:100%;height:100%;display:block;transform:rotate(8deg);}
+  .stamp-pct{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;transform:rotate(-8deg);
+  }
+  .stamp-pct b{font-family:'Fraunces',serif;font-size:30px;color:#E7CBBE;line-height:1;}
+  .stamp-pct span{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:#C9A798;margin-top:2px;}
+
+  /* Traveller rings */
+  .travellers{
+    display:flex;gap:1.5rem;margin-top:2rem;flex-wrap:wrap;
+  }
+  .trav{
+    display:flex;align-items:center;gap:.6rem;
+    font-family:'Space Mono',monospace;font-size:12px;color:#CBBE99;
+  }
+  .ring{width:40px;height:40px;position:relative;flex-shrink:0;}
+  .ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .ring circle{fill:none;stroke-width:4;}
+  .ring .bg{stroke:#3A4B41;}
+  .ring .fg{stroke:#D08769;stroke-linecap:round;transition:stroke-dashoffset .4s ease;}
+  .trav b{color:#F1E6C8;font-size:13px;}
+
+  /* Sections */
+  .section{margin-top:2.5rem;}
+  .section-head{
+    display:flex;align-items:center;gap:.9rem;margin-bottom:.9rem;
+  }
+  .badge{
+    font-family:'Space Mono',monospace;font-weight:700;font-size:12px;
+    color:var(--red);border:1.5px solid var(--red);
+    padding:3px 9px;border-radius:3px;
+    transform:rotate(-3deg);white-space:nowrap;
+  }
+  .section-head h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:20px;margin:0;color:var(--ink);
+  }
+  .card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .row{
+    display:grid;
+    grid-template-columns:1fr 132px 3fr;
+    border-top:1px solid var(--line);
+  }
+  .row:first-child{border-top:none;}
+  .row.head{
+    background:var(--ink);color:var(--paper-2);
+    font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  }
+  .row.head > div{padding:9px 12px;}
+  .doc{padding:14px 14px 14px 16px;font-size:14.5px;line-height:1.45;}
+  .doc .flag{
+    display:inline-block;font-family:'Space Mono',monospace;font-size:10px;
+    color:var(--brass);border:1px solid var(--brass);border-radius:2px;
+    padding:1px 5px;margin-left:7px;vertical-align:middle;letter-spacing:.05em;
+  }
+  .checks{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border-left:1px solid var(--line);border-right:1px solid var(--line);
+    align-items:center;
+  }
+  .chk-cell{display:flex;align-items:center;justify-content:center;height:100%;padding:10px 0;}
+  .chk{
+    width:22px;height:22px;border:1.5px solid var(--ink-soft);border-radius:3px;
+    cursor:pointer;position:relative;background:transparent;flex-shrink:0;
+  }
+  .chk.done{background:var(--green);border-color:var(--green);}
+  .chk.done::after{
+    content:"";position:absolute;left:6px;top:2px;width:6px;height:11px;
+    border:solid var(--paper-2);border-width:0 2px 2px 0;transform:rotate(40deg);
+  }
+  .chk.na{border-style:dashed;border-color:var(--line);cursor:default;}
+  .notes{padding:14px 16px;font-size:13px;color:var(--ink-soft);line-height:1.5;display:flex;align-items:center;}
+
+  .legend{
+    display:flex;gap:1.6rem;flex-wrap:wrap;margin:1.6rem 0 0;
+    font-family:'Space Mono',monospace;font-size:11.5px;color:var(--ink-soft);
+  }
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:2px;display:inline-block;}
+
+  .notes-final{
+    margin-top:3rem;padding-top:1.6rem;border-top:2px solid var(--ink);
+  }
+  .notes-final h3{font-family:'Fraunces',serif;font-size:17px;margin:0 0 .7rem;}
+  .notes-final ul{margin:0;padding-left:1.2rem;font-size:14px;line-height:1.7;color:var(--ink-soft);}
+
+  @media (max-width:640px){
+    .row{grid-template-columns:1fr;}
+    .checks{border-left:none;border-right:none;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+    .row.head{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <p class="eyebrow">Consulate General of Italy · Lagos</p>
+      <h1>Schengen tourist visa<br>checklist</h1>
+      <p class="hero-sub">Ogunleye family &middot; Milan, 1&ndash;7 November 2026</p>
+      <div class="travellers">
+        <div class="trav">
+          <div class="ring"><svg viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="17"></circle><circle class="fg" data-trav="a" cx="20" cy="20" r="17"></circle></svg></div>
+          <div><b>Applicant</b><br><span data-out="a">0%</span></div>
+        </div>
+        <div class="trav">
+          <div class="ring"><svg viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="17"></circle><circle class="fg" data-trav="w" cx="20" cy="20" r="17"></circle></svg></div>
+          <div><b>Wife</b><br><span data-out="w">0%</span></div>
+        </div>
+        <div class="trav">
+          <div class="ring"><svg viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="17"></circle><circle class="fg" data-trav="c" cx="20" cy="20" r="17"></circle></svg></div>
+          <div><b>Child</b><br><span data-out="c">0%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stamp">
+      <svg viewBox="0 0 150 150">
+        <circle cx="75" cy="75" r="70" fill="none" stroke="#7A3226" stroke-width="2"/>
+        <circle cx="75" cy="75" r="62" fill="none" stroke="#7A3226" stroke-width="1"/>
+      </svg>
+      <div class="stamp-pct"><b id="overall-pct">0%</b><span>ready</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="legend">
+    <span><i class="dot" style="background:var(--green)"></i>Done — tap to toggle</span>
+    <span><i class="dot" style="background:var(--paper-2);border:1.5px solid var(--ink-soft)"></i>Outstanding</span>
+    <span><i class="dot" style="border:1.5px dashed var(--line)"></i>Not applicable</span>
+    <span style="color:var(--brass)">&#9873; Verify — double-check before submission</span>
+    <span><button id="reset-btn" style="font-family:'Space Mono',monospace;font-size:11.5px;background:none;border:1px solid var(--ink-soft);color:var(--ink-soft);border-radius:3px;padding:3px 9px;cursor:pointer;">Reset progress</button></span>
+  </div>
+
+  <div id="sections"></div>
+
+  <div class="notes-final">
+    <h3>Notes on the consulate's rules</h3>
+    <ul>
+      <li>Submit all documents in original and copy — originals are returned, except bank statements.</li>
+      <li>Do not purchase flight tickets before the visa is granted — a reservation or hold is enough.</li>
+      <li>A forged or fake document will not be returned, and can lead to prosecution in both Italy and Nigeria.</li>
+      <li>The consulate may request additional documents beyond this list at its discretion.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  { title: "Core documents — every applicant", rows: [
+    ["Visa application form, block capitals, signed at submission", "o","o","o", "Form for the child must be signed by both parents"],
+    ["2 recent colour passport photos (3.5\u00d74.5cm, white background, not stapled)", "o","o","o", "Check the technical spec on the consulate site before printing"],
+    ["Passport valid 3+ months beyond trip end, with 2 blank pages", "o","o","o", "Confirm expiry dates and blank pages for all three passports", "verify"],
+    ["Colour photocopy of passport bio-data page", "o","o","o", ""],
+    ["Colour photocopy of previous Schengen visa(s)", "o","o","n", "You and your wife should have 2024 Milan visa copies; confirm son's status"],
+    ["Overseas medical insurance, min &euro;30,000 cover incl. repatriation", "o","o","o", "Not yet arranged — needed for all three travellers"],
+  ]},
+  { title: "Travel and accommodation", rows: [
+    ["Flight reservation — hold only, do not purchase tickets yet", "o","o","o", "One reservation can usually cover the family"],
+    ["Hotel booking, or letter of hospitality from an Italy-based host", "o","o","o", "Not yet arranged"],
+  ]},
+  { title: "Financial means — employment (applicant and wife)", rows: [
+    ["Salary payslips, last 6 months", "o","o","n", "Not yet compiled for either of you"],
+    ["Employment letter — duration and financial terms", "d","d","n", "HerVest letter (Solape Akinpelu, Mercy Uguomore) and Meristem letter (Yemisi Ilile) drafted"],
+    ["Employer letter — professional status and approved leave period", "o","o","n", "Confirm both drafted letters state the approved leave dates, 1–7 Nov 2026", "verify"],
+  ]},
+  { title: "Financial means — all applicants", rows: [
+    ["Personal bank statement, last 6 months", "o","o","n", "Stanbic IBTC / Standard Chartered for you; wife's bank(s) tbc"],
+    ["Personal Income Tax Clearance Certificate (PIT)", "o","o","n", ""],
+    ["Additional proof: investments, property income, real estate", "o","o","n", "Standard Chartered investment, Stanbic IBTC AM, Meristem Stockbrokers, RSA / pension statement"],
+    ["Proof of integration — documents on professional status", "o","o","n", "HerVest role and CAC docs can support this for you"],
+  ]},
+  { title: "Family situation", rows: [
+    ["Marriage certificate", "o","o","n", "Needed to document the family relationship for the joint application"],
+  ]},
+  { title: "Child-specific requirements", rows: [
+    ["Birth certificate + other proof of parents' identity", "n","n","o", "Not yet obtained"],
+    ["Letter from school confirming class + leave permission", "n","n","n", "Not applicable — son is under 5, pre-school age"],
+    ["Absent-parent consent affidavit (Federal High Court)", "n","n","n", "Not needed — both parents travelling with the child"],
+  ]},
+  { title: "Sponsorship (household)", rows: [
+    ["Letter of Sponsorship — applicant covering wife and son", "o","n","n", "Discussed but not yet drafted"],
+  ]},
+];
+
+const STORAGE_KEY = "italy-visa-checklist-ogunleye";
+let state = { a: {}, w: {}, c: {} };
+let uid = 0;
+const container = document.getElementById("sections");
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){ /* storage unavailable — fall back to defaults */ }
+  return null;
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){ /* storage unavailable — state just won't persist */ }
+}
+
+const saved = loadState();
+
+function chkCell(col, initial, rowId){
+  if(initial === "n"){
+    return '<div class="chk-cell"><div class="chk na"></div></div>';
+  }
+  let done = initial === "d";
+  if(saved && saved[col] && Object.prototype.hasOwnProperty.call(saved[col], rowId)){
+    done = !!saved[col][rowId];
+  }
+  state[col][rowId] = done;
+  return `<div class="chk-cell"><button class="chk${done?" done":""}" data-col="${col}" data-row="${rowId}" aria-label="Toggle status"></button></div>`;
+}
+
+DATA.forEach((section, si) => {
+  const roman = ["I","II","III","IV","V","VI","VII"][si];
+  const head = document.createElement("div");
+  head.className = "section";
+  let rowsHtml = "";
+  section.rows.forEach(r => {
+    const [doc, a, w, c, note, flag] = r;
+    const rid = "r" + (uid++);
+    rowsHtml += `
+      <div class="row">
+        <div class="doc">${doc}${flag ? '<span class="flag">verify</span>' : ""}</div>
+        <div class="checks">
+          ${chkCell("a", a, rid)}
+          ${chkCell("w", w, rid)}
+          ${chkCell("c", c, rid)}
+        </div>
+        <div class="notes">${note || ""}</div>
+      </div>`;
+  });
+  head.innerHTML = `
+    <div class="section-head">
+      <span class="badge">SEZ. ${roman}</span>
+      <h2>${section.title}</h2>
+    </div>
+    <div class="card">
+      <div class="row head"><div>Document</div><div style="text-align:center">A &nbsp; W &nbsp; C</div><div>Notes</div></div>
+      ${rowsHtml}
+    </div>`;
+  container.appendChild(head);
+});
+
+function recalc(){
+  let totalAll = 0, doneAll = 0;
+  ["a","w","c"].forEach(col => {
+    const entries = Object.values(state[col]);
+    const total = entries.length;
+    const done = entries.filter(Boolean).length;
+    totalAll += total; doneAll += done;
+    const pct = total ? Math.round((done/total)*100) : 0;
+    document.querySelector(`[data-out="${col}"]`).textContent = pct + "%";
+    const circle = document.querySelector(`.fg[data-trav="${col}"]`);
+    const r = 17, circ = 2 * Math.PI * r;
+    circle.style.strokeDasharray = circ;
+    circle.style.strokeDashoffset = circ - (pct/100) * circ;
+  });
+  const overall = totalAll ? Math.round((doneAll/totalAll)*100) : 0;
+  document.getElementById("overall-pct").textContent = overall + "%";
+}
+
+container.addEventListener("click", (e) => {
+  const btn = e.target.closest(".chk");
+  if(!btn || btn.classList.contains("na")) return;
+  const col = btn.dataset.col, row = btn.dataset.row;
+  state[col][row] = !state[col][row];
+  btn.classList.toggle("done", state[col][row]);
+  saveState();
+  recalc();
+});
+
+document.getElementById("reset-btn").addEventListener("click", () => {
+  if(!confirm("Clear all saved progress on this checklist?")) return;
+  ["a","w","c"].forEach(col => {
+    Object.keys(state[col]).forEach(k => state[col][k] = false);
+  });
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  document.querySelectorAll(".chk").forEach(b => b.classList.remove("done"));
+  recalc();
+});
+
+recalc();
+</script>
+</body>
+</html>
