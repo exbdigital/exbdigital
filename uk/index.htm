@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Visa Checklist</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f9fafb;
+            padding: 2rem;
+            color: #111827;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            color: #1d70b8;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 999px;
+            height: 12px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #00703c;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: #374151;
+            margin-top: 1.5rem;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f3f4f6;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .item:hover {
+            background: #e5e7eb;
+        }
+
+        .item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            background: #dcfce7;
+        }
+
+        input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>UK Visitor Visa Checklist (Family of 4)</h1>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <h2 class="section-title">Primary Applicant</h2>
+        <label class="item"><input type="checkbox" onchange="update()"> Valid Nigerian Passport</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Inargy CAC Registration Documents</label>
+        <label class="item"><input type="checkbox" onchange="update()"> 6 Months Personal & Business Bank
+            Statements</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Cover Letter & Travel History (Berlin Schengen
+            stamps)</label>
+
+        <h2 class="section-title">Spouse</h2>
+        <label class="item"><input type="checkbox" onchange="update()"> Valid Nigerian Passport</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Employer Letter (Accountant role & approved
+            leave)</label>
+        <label class="item"><input type="checkbox" onchange="update()"> 6 Months Personal Bank Statements</label>
+        <label class="item"><input type="checkbox" onchange="update()"> 3-6 Months Payslips</label>
+
+        <h2 class="section-title">Children</h2>
+        <label class="item"><input type="checkbox" onchange="update()"> 3yo: Valid Nigerian Passport</label>
+        <label class="item"><input type="checkbox" onchange="update()"> 2yo: Valid Canadian Passport (ETA applied via
+            App)</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Birth Certificates (Both children)</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Creche/Preschool Enrollment Letters</label>
+
+        <h2 class="section-title">Shared Family Documents</h2>
+        <label class="item"><input type="checkbox" onchange="update()"> Marriage Certificate</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Flight Reservation (Hold only)</label>
+        <label class="item"><input type="checkbox" onchange="update()"> Accommodation Booking</label>
+    </div>
+
+    <script>
+        function update() {
+            const boxes = document.querySelectorAll('input[type="checkbox"]');
+            let checked = 0;
+            const state = {};
+
+            boxes.forEach((box, index) => {
+                // Save the checked status of each box to the state object
+                state['checkbox-' + index] = box.checked;
+
+                if (box.checked) {
+                    checked++;
+                    box.parentElement.classList.add('completed');
+                } else {
+                    box.parentElement.classList.remove('completed');
+                }
+            });
+
+            // Save the state object to the browser's localStorage
+            localStorage.setItem('visaChecklistState', JSON.stringify(state));
+
+            // Update the visual progress bar
+            document.getElementById('progress').style.width = (checked / boxes.length) * 100 + '%';
+        }
+
+        function loadState() {
+            // Retrieve saved data from localStorage, or default to an empty object
+            const savedState = JSON.parse(localStorage.getItem('visaChecklistState')) || {};
+            const boxes = document.querySelectorAll('input[type="checkbox"]');
+
+            boxes.forEach((box, index) => {
+                // If a checkbox was marked true in the saved state, check it here
+                if (savedState['checkbox-' + index]) {
+                    box.checked = true;
+                }
+            });
+
+            // Run update once on load to style completed items and set the progress bar
+            update();
+        }
+
+        // Initialize the script when the window loads
+        window.onload = loadState;
+    </script>
+</body>
+
+</html>
