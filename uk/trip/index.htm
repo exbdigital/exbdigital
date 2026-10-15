@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ogunleye Family UK & France Trip + 5th Anniversary (Nov 2026)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-16">
+
+    <!-- Hero Header -->
+    <header class="bg-gradient-to-r from-indigo-950 via-blue-900 to-rose-900 text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-amber-200 text-xs font-semibold tracking-wide uppercase mb-3">
+                        <span>✨ 5th Wedding Anniversary & Family Tour</span>
+                        <span>•</span>
+                        <span>Nov 4 – Nov 23, 2026</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
+                        UK & France Ultimate Family Itinerary
+                    </h1>
+                    <p class="mt-1 text-blue-100 text-sm sm:text-base">
+                        London • Romford • Paris & Disneyland • Aberdeen • Heathrow & Shopping (Ages 3 & 2 Ride FREE!)
+                    </p>
+                </div>
+
+                <!-- Master Progress Card -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 min-w-[260px]">
+                    <div
+                        class="flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-blue-200 mb-1">
+                        <span>Overall Checklist Progress</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-2.5 mb-3 overflow-hidden">
+                        <div id="progress-bar" class="bg-emerald-400 h-2.5 rounded-full transition-all duration-300"
+                            style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-white/85">
+                        <span id="completed-count">0 / 0 items checked</span>
+                        <button onclick="resetAllData()" class="underline hover:text-rose-300 transition">Reset Saved
+                            Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 space-y-6">
+
+        <!-- Top-Level Mode Switcher & Filter Bar -->
+        <div
+            class="bg-white p-3.5 rounded-2xl shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap gap-2" id="phase-tabs">
+                <button onclick="setView('itinerary', 'all')" data-tab="all"
+                    class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-sm transition">🗓️
+                    All Days (20)</button>
+                <button onclick="setView('itinerary', 'romford')" data-tab="romford"
+                    class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">🇬🇧
+                    Leg 1: Romford & Zoo (Nov 4–10)</button>
+                <button onclick="setView('itinerary', 'paris')" data-tab="paris"
+                    class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">🇫🇷
+                    Leg 2: Paris & Disney (Nov 10–13)</button>
+                <button onclick="setView('itinerary', 'aberdeen')" data-tab="aberdeen"
+                    class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">🏴󠁧󠁢󠁳󠁣󠁴󠁿
+                    Leg 3: Aberdeen (Nov 13–17)</button>
+                <button onclick="setView('itinerary', 'heathrow')" data-tab="heathrow"
+                    class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">🛍️
+                    Leg 4: Heathrow & Malls (Nov 17–23)</button>
+                <button onclick="setView('checklists', 'checklists')" data-tab="checklists"
+                    class="nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition">✅
+                    Master Checklists Hub</button>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <label
+                    class="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer bg-slate-100 px-3 py-2 rounded-xl hover:bg-slate-200 transition">
+                    <input type="checkbox" id="hide-completed-toggle" onchange="toggleHideCompleted(this.checked)"
+                        class="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+                    <span>Hide Completed</span>
+                </label>
+                <button onclick="toggleSection('transit-modal')"
+                    class="px-3 py-2 rounded-xl text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 transition">
+                    🚕 Transit Costs
+                </button>
+                <button onclick="toggleSection('malls-modal')"
+                    class="px-3 py-2 rounded-xl text-xs font-semibold bg-fuchsia-50 text-fuchsia-700 border border-fuchsia-200 hover:bg-fuchsia-100 transition">
+                    🛍️ Malls Guide
+                </button>
+            </div>
+        </div>
+
+        <!-- Collapsible Transit Costs Cheat-Sheet -->
+        <section id="transit-modal" class="hidden bg-white rounded-2xl shadow-sm border border-amber-200 p-5">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">🚕 2026 Family Transit Cost Cheat-Sheet (2 Adults + 2
+                        Free Toddlers)</h2>
+                    <p class="text-xs text-slate-500">Under-5s ride 100% FREE in London and Under-4s ride 100% FREE in
+                        Paris. All public transit prices are the total for 2 Adults.</p>
+                </div>
+                <button onclick="toggleSection('transit-modal')"
+                    class="text-slate-400 hover:text-slate-600 text-sm font-semibold">Close ✕</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div class="p-3.5 rounded-xl bg-amber-50/60 border border-amber-200">
+                    <span class="px-2 py-0.5 rounded bg-amber-600 text-white font-bold">LONDON BUSES</span>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">£3.50 Family Total / Ride</p>
+                    <p class="text-slate-600 mt-1">£1.75/adult (unlimited Hopper transfers within 1 hr). Daily Cap:
+                        £10.50 total.</p>
+                    <p class="text-emerald-700 font-semibold mt-1">★ Direct U3 Bus outside Radisson RED goes to Uxbridge
+                        Mall!</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200">
+                    <span class="px-2 py-0.5 rounded bg-blue-600 text-white font-bold">TUBE & ELIZABETH LINE</span>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">£6.20–£11.80 Family / Ride</p>
+                    <p class="text-slate-600 mt-1">Zones 1–2 Cap: <strong>£17.80/day</strong> total.<br />Zones 1–6 Cap
+                        (Romford & Heathrow): <strong>£32.60/day</strong> max for 2 adults.</p>
+                    <p class="text-emerald-700 font-semibold mt-1">★ Direct Elizabeth Line runs from Romford to Hayes &
+                        Harlington!</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-200">
+                    <span class="px-2 py-0.5 rounded bg-indigo-600 text-white font-bold">PARIS METRO & RER A</span>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">€5.10 Family Total / Ride</p>
+                    <p class="text-slate-600 mt-1">Flat €2.55/adult rate across ALL zones—including Disneyland Paris!
+                    </p>
+                    <p class="text-emerald-700 font-semibold mt-1">★ Round-trip to Disneyland on RER A is just €10.20
+                        total!</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <span class="px-2 py-0.5 rounded bg-slate-800 text-white font-bold">UBER / BOLT / TAXI</span>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">Key E-Hailing Estimates</p>
+                    <p class="text-slate-600 mt-1">• LCY → Romford: <strong>£28–£38</strong><br />• Romford → Radisson
+                        RED: <strong>£55–£75</strong><br />• Hotel → Westfield/Wembley: <strong>£24–£34</strong><br />•
+                        Hotel → Heathrow T4: <strong>£12–£18</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collapsible Malls Guide Panel -->
+        <section id="malls-modal" class="hidden bg-white rounded-2xl shadow-sm border border-fuchsia-200 p-5">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">🛍️ Family-Friendly Malls Near Radisson RED London
+                        Heathrow</h2>
+                    <p class="text-xs text-slate-500">All within 12–30 minutes of your hotel on Bath Road, Hillingdon —
+                        with stroller access, baby rooms & dining.</p>
+                </div>
+                <button onclick="toggleSection('malls-modal')"
+                    class="text-slate-400 hover:text-slate-600 text-sm font-semibold">Close ✕</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
+                <div class="p-4 rounded-xl bg-fuchsia-50/50 border border-fuchsia-200">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded bg-fuchsia-600 text-white font-bold">#1 ULTIMATE MALL</span>
+                        <span class="font-semibold text-fuchsia-800">Uber: £24–£34 | Transit: £9</span>
+                    </div>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">Westfield London (Shepherd's Bush)</p>
+                    <p class="text-slate-600 mt-1"><strong>450+ Stores:</strong> M&S, Next, John Lewis, Zara, Primark,
+                        LEGO, Hamleys, Apple + Luxury Village.</p>
+                    <p class="text-emerald-700 font-medium mt-1.5">🍽️ Eat: Ichiba Japanese Food Hall, Bill's, Wahaca,
+                        Nando's, The Real Greek.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">CLOSEST LOCAL
+                            MALL</span>
+                        <span class="font-semibold text-slate-600">Uber: £12–£16 | U3 Bus: £3.50</span>
+                    </div>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">The Chimes & Pavilions (Uxbridge)</p>
+                    <p class="text-slate-600 mt-1"><strong>12 Mins Away:</strong> Huge M&S, Next, H&M, Boots, TK Maxx,
+                        Decathlon, Clarks & Primark.</p>
+                    <p class="text-emerald-700 font-medium mt-1.5">🍽️ Eat: Wagamama, Nando's, Pizza Express, Prezzo,
+                        M&S Café.</p>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <div class="flex justify-between items-center">
+                        <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold">30%–70% OFF OUTLETS</span>
+                        <span class="font-semibold text-slate-600">Uber: £24–£32 (25–30 mins)</span>
+                    </div>
+                    <p class="font-bold text-slate-900 mt-2 text-sm">London Designer Outlet (Wembley)</p>
+                    <p class="text-slate-600 mt-1"><strong>Outlet Bargains:</strong> Clarks Outlet (toddler shoes!),
+                        Nike, Adidas, Next Outlet, M&S Outlet, Levi's & Lindt.</p>
+                    <p class="text-emerald-700 font-medium mt-1.5">🍽️ Eat: Wagamama, Las Iguanas, Nando's, Pizza
+                        Express, TGI Fridays.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 1: MASTER CHECKLISTS HUB (Bookings, Packing, Shopping Wishlist) -->
+        <section id="checklists-view" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-5">
+            <!-- Pre-Bookings Checklist -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">🎟️ Pre-Booking & Tickets Checklist</h2>
+                            <p class="text-xs text-slate-500">Confirmed flights/trains + attraction slots</p>
+                        </div>
+                        <span id="bookings-counter"
+                            class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700">0/0</span>
+                    </div>
+                    <div id="bookings-checklist" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                    <input id="new-booking-input" type="text" placeholder="Add a ticket or reservation..."
+                        class="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500" />
+                    <button onclick="addChecklistItem('bookings', 'new-booking-input')"
+                        class="px-3 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition">+
+                        Add</button>
+                </div>
+            </div>
+
+            <!-- Toddler & Weather Packing Checklist -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">🧳 Toddler & Autumn Packing List</h2>
+                            <p class="text-xs text-slate-500">Essential gear for ages 3 & 2 in Nov weather</p>
+                        </div>
+                        <span id="packing-counter"
+                            class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">0/0</span>
+                    </div>
+                    <div id="packing-checklist" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                    <input id="new-packing-input" type="text" placeholder="Add a packing item..."
+                        class="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500" />
+                    <button onclick="addChecklistItem('packing', 'new-packing-input')"
+                        class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition">+
+                        Add</button>
+                </div>
+            </div>
+
+            <!-- Final-Week Shopping Wishlist -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900">🛍️ UK & Paris Shopping Wishlist</h2>
+                            <p class="text-xs text-slate-500">For Westfield, Uxbridge, Wembley & Disney</p>
+                        </div>
+                        <span id="shopping-counter"
+                            class="text-xs font-bold px-2.5 py-1 rounded-full bg-fuchsia-50 text-fuchsia-700">0/0</span>
+                    </div>
+                    <div id="shopping-checklist" class="space-y-2 max-h-[420px] overflow-y-auto pr-1"></div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                    <input id="new-shopping-input" type="text" placeholder="Add a store or item to buy..."
+                        class="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-fuchsia-500" />
+                    <button onclick="addChecklistItem('shopping', 'new-shopping-input')"
+                        class="px-3 py-1.5 rounded-xl bg-fuchsia-600 text-white text-xs font-semibold hover:bg-fuchsia-700 transition">+
+                        Add</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: DAY-BY-DAY ITINERARY CARDS -->
+        <div id="itinerary-container" class="space-y-4"></div>
+
+    </main>
+
+    <script>
+        const STORAGE_KEY = 'ogunleye_uk_france_2026_final_v5';
+
+        const defaultItinerary = [
+            {
+                id: 'day-1',
+                date: 'Wed, Nov 4',
+                phase: 'romford',
+                phaseLabel: 'Leg 1: Transit to UK',
+                location: 'Lagos (LOS) → Amsterdam (AMS)',
+                title: 'Overnight Departure from Lagos',
+                badge: '✈️ KLM Flight (Booked)',
+                transitCost: '🚕 Lagos Airport Drop-off + Pre-booked KLM Flight',
+                dining: '🍽️ Eat: Pre-flight family dinner in Lagos or airport lounge + KLM in-flight dinner & toddler meals.',
+                activities: [
+                    { id: 'd1-a1', time: '19:30', text: 'Arrive at Murtala Muhammed International Airport (LOS) with strollers & 4 hold bags', tag: 'Transit', done: false },
+                    { id: 'd1-a2', time: '23:05', text: 'Depart Lagos (LOS) on KLM overnight flight to Amsterdam (toddlers sleep on plane)', tag: 'Flight', done: false }
+                ],
+                notes: 'Keep toddler warm layers, spare clothes, wipes, and snacks in cabin bags for landing in chilly Europe.'
+            },
+            {
+                id: 'day-2',
+                date: 'Thu, Nov 5',
+                phase: 'romford',
+                phaseLabel: 'Leg 1: Romford & London',
+                location: 'Amsterdam → London City (LCY) → Romford',
+                title: 'Touchdown in London & Reunion in Romford',
+                badge: '🏡 Family Host Stay',
+                transitCost: '🚕 Uber XL / Black Cab LCY → Romford: £28–£38 (vs. DLR + Elizabeth Line: £6.20–£7.60 total)',
+                dining: '🍽️ Eat: Warm welcome lunch & home-cooked dinner with your childhood friend’s family in Romford (or Nando’s / Pitstop Grill Romford).',
+                activities: [
+                    { id: 'd2-a1', time: '07:10', text: 'Transit connection at Amsterdam Schiphol (AMS) → Depart for London City Airport', tag: 'Flight', done: false },
+                    { id: 'd2-a2', time: '07:15', text: 'Arrive at London City Airport (LCY) GMT — quick, compact stroller-friendly customs', tag: 'Arrival', done: false },
+                    { id: 'd2-a3', time: '08:30', text: 'Take Uber XL / Black Cab (25–30 mins, est. £28–£38) directly to childhood friend’s home in Romford', tag: 'Transfer', done: false },
+                    { id: 'd2-a4', time: '13:00', text: 'Long afternoon nap for the toddlers, unpacking, and warm welcome dinner with friend’s family', tag: 'Family', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-3',
+                date: 'Fri, Nov 6',
+                phase: 'romford',
+                phaseLabel: 'Leg 1: 5th Wedding Anniversary',
+                location: 'ExCeL London & Central London',
+                title: '💖 Happy 5th Anniversary! House of Dreamers & Romantic Dinner',
+                badge: '🥂 5th Anniversary',
+                highlight: true,
+                transitCost: '🚆 Public Transit: £12–£15.20 (ExCeL RT) or £32.60 All-Day Cap | 🚕 Evening Uber back: £35–£50',
+                dining: '🍽️ Lunch near ExCeL: Zero Sette (waterfront Italian, 4m walk) or The Bridge (inside ExCeL). 🥂 Evening Anniversary Dinner: Clos Maggiore (Covent Garden), SUSHISAMBA / Duck & Waffle (Bishopsgate), or Ikoyi / Akoko.',
+                activities: [
+                    { id: 'd3-a1', time: '10:00', text: 'Take Elizabeth Line from Romford to Custom House (£6.00–£7.60 total for 2 adults; toddlers free!)', tag: 'Transit', done: false },
+                    { id: 'd3-a2', time: '10:30', text: 'House of Dreamers at ExCeL London (Requested) — immersive pastel sensory rooms, ball pits & family photoshoot!', tag: 'Requested', done: false },
+                    { id: 'd3-a3', time: '13:00', text: 'Family Lunch at Zero Sette (Royal Victoria Dock) or The Bridge at ExCeL, then return to Romford for toddler naps', tag: 'Dining', done: false },
+                    { id: 'd3-a4', time: '19:00', text: 'Romantic 5th Anniversary Dinner for Two in Central London while toddlers stay with your friend’s family', tag: 'Anniversary', done: false }
+                ],
+                notes: 'SUSHISAMBA & Duck & Waffle are a 3-minute walk from Liverpool Street station (direct Elizabeth Line back to Romford!).'
+            },
+            {
+                id: 'day-4',
+                date: 'Sat, Nov 7',
+                phase: 'romford',
+                phaseLabel: 'Leg 1: Romford & London',
+                location: 'Baker Street & Regent Street, London',
+                title: 'Madame Tussauds, Regent’s Park & Hamleys Toy Wonderland',
+                badge: '🎭 Requested Activity',
+                transitCost: '🚆 Public Transit: £16.00–£22.00 total (Elizabeth Line & Tube) | 🚕 Uber XL: £38–£52 each way',
+                dining: '🍽️ Eat near Baker St: Bill’s Baker Street (2m walk, kids coloring menu & pancakes) or Pizza Express (Piccolo toddler menu). 🍽️ Eat near Hamleys: Heddon Street Kitchen by Gordon Ramsay (Kids Under 8 Eat Free!).',
+                activities: [
+                    { id: 'd4-a1', time: '09:45', text: 'Direct Elizabeth Line from Romford to Bond Street + 1 stop on Jubilee Line to Baker Street (£8.00 off-peak total for 2 adults)', tag: 'Transit', done: false },
+                    { id: 'd4-a2', time: '10:30', text: 'Madame Tussauds London (Requested) — Spirit of London taxi ride, Marvel 4D & vibrant interactive zones', tag: 'Requested', done: false },
+                    { id: 'd4-a3', time: '13:00', text: 'Lunch at Bill’s Baker Street or Pizza Express, followed by a stroller walk/nap through Regent’s Park', tag: 'Dining', done: false },
+                    { id: 'd4-a4', time: '15:30', text: 'Suggested: Hamleys Toy Store on Regent Street (7 floors of live toy demos) + early dinner at Heddon Street Kitchen', tag: 'Suggestion', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-5',
+                date: 'Sun, Nov 8',
+                phase: 'romford',
+                phaseLabel: 'Leg 1: Romford & Essex',
+                location: 'Romford / Brentwood',
+                title: 'Relaxed Family Sunday Roast & Local Farm Park',
+                badge: '🌳 Family Day',
+                transitCost: '🚗 Friend’s Car OR 🚕 Uber to Brentwood: £14–£20 each way (Elizabeth Line: £7.00 RT total)',
+                dining: '🍽️ Eat: Traditional Sunday Roast with your friend’s family, Toby Carvery Romford, or Evoke Brasserie inside Raphael Park.',
+                activities: [
+                    { id: 'd5-a1', time: '10:30', text: 'Suggested Outing: Old MacDonald’s Farm & Fun Park in nearby Brentwood (15m drive — petting zoo, soft play & toddler rides)', tag: 'Suggestion', done: false },
+                    { id: 'd5-a2', time: '14:30', text: 'Traditional British Sunday Roast with both families', tag: 'Dining', done: false },
+                    { id: 'd5-a3', time: '16:30', text: 'Fresh autumn walk around Raphael Park lake in Romford', tag: 'Suggestion', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-6',
+                date: 'Mon, Nov 9',
+                phase: 'romford',
+                phaseLabel: 'Leg 1: Romford & London Zoo',
+                location: 'Regent’s Park, London (From Romford)',
+                title: '🦁 ZSL London Zoo Adventure (100% Luggage-Free Day Trip!)',
+                badge: '🦒 Requested Activity',
+                highlight: true,
+                transitCost: '🚆 Public Transit: £16.00–£23.00 round-trip total (Elizabeth Line to Bond St/Paddington + short bus/Tube) | 🚕 Uber: £38–£50 each way',
+                dining: '🍽️ Lunch inside London Zoo: Terrace Restaurant (equipped with highchairs, microwave station for warming toddler food, stone-baked pizzas & hot kids’ meals) or Feng Shang Princess (floating pagoda restaurant 5m walk).',
+                activities: [
+                    { id: 'd6-a1', time: '09:15', text: 'Depart Romford luggage-free via Elizabeth Line into Central London + short connection to Regent’s Park', tag: 'Transit', done: false },
+                    { id: 'd6-a2', time: '10:00', text: 'ZSL London Zoo in Regent’s Park (Requested) — Penguin Beach, Gorilla Kingdom, warm indoor Butterfly Paradise & Tiny Giants', tag: 'Requested', done: false },
+                    { id: 'd6-a3', time: '12:30', text: 'Family lunch at London Zoo’s Terrace Restaurant + playtime inside Hullabazoo Indoor Play (built for ages 2 & 3)', tag: 'Dining', done: false },
+                    { id: 'd6-a4', time: '16:30', text: 'Return to Romford & pack for Paris/Scotland (Pro Tip: Leave 1–2 heavy suitcases at your friend’s house in Romford until Tue, Nov 17!)', tag: 'Prep', done: false }
+                ],
+                notes: 'Visiting London Zoo today from Romford means zero suitcases and zero rented luggage storage!'
+            },
+            {
+                id: 'day-7',
+                date: 'Tue, Nov 10',
+                phase: 'paris',
+                phaseLabel: 'Leg 2: Paris & Disneyland',
+                location: 'London St. Pancras → Paris Gare de Lyon',
+                title: 'High-Speed Eurostar to Paris & Aparthotel Check-In',
+                badge: '🚄 Eurostar ES 9028 (€188)',
+                transitCost: '🚆 Romford → St. Pancras: £8.00–£11.80 total (Uber XL: £38–£50) | 🚕 Paris Gare du Nord → Hotel: €18–€26 (RER D: €5.10)',
+                dining: '🍽️ Eat in St. Pancras: EL&N Café or Pret a Manger. 🍽️ Dinner near Paris Hotel: Bercy Village (Cour Saint-Émilion, 5m away) — L’Atelier Artisan Crêpier, Roberta (Italian) or Vapiano.',
+                activities: [
+                    { id: 'd7-a1', time: '10:45', text: 'Depart Romford via Elizabeth Line (to Farringdon) + Thameslink 1 stop to St. Pancras (£8–£11.80 total, 100% step-free)', tag: 'Transit', done: false },
+                    { id: 'd7-a2', time: '13:31', text: 'Depart London on Eurostar ES 9028 (€188 Booked) → Arrive Paris Gare du Nord at 16:59', tag: 'Booked', done: false },
+                    { id: 'd7-a3', time: '17:30', text: 'Take G7 Famille Taxi / Uber (€18–€26) or direct RER D (2 stops, €5.10 total) to Residhome Paris Gare de Lyon', tag: 'Transit', done: false },
+                    { id: 'd7-a4', time: '18:00', text: 'Check in to Residhome Paris Gare de Lyon (€882.68 Confirmed) + dinner at Bercy Village & Monoprix grocery run', tag: 'Hotel', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-8',
+                date: 'Wed, Nov 11',
+                phase: 'paris',
+                phaseLabel: 'Leg 2: Paris & Disneyland',
+                location: 'Marne-la-Vallée (Disneyland Paris)',
+                title: '🏰 Full Magical Day at Disneyland Paris!',
+                badge: '🎆 Requested Activity',
+                highlight: true,
+                transitCost: '🚆 Direct RER A Train: €10.20 Round-Trip Total for Family (€2.55/adult each way, toddlers FREE!) | 🚕 Uber: €65–€85 each way',
+                dining: '🍽️ Eat inside Disneyland: Bistrot Chez Rémy (Ratatouille-themed restaurant!), Plaza Gardens (Character Buffet with Mickey & Pooh), or Au Chalet de la Marionnette (roast chicken & fries in Fantasyland).',
+                activities: [
+                    { id: 'd8-a1', time: '08:30', text: 'Walk 5 mins to Paris Gare de Lyon and board direct RER A train to Marne-la-Vallée/Chessy (only €5.10 each way for the whole family!)', tag: 'Transit', done: false },
+                    { id: 'd8-a2', time: '09:30', text: 'Disneyland Paris (Requested) — Fantasyland Toddler Favorites: "it’s a small world", Dumbo, Peter Pan’s Flight, Carousel & Tea Cups', tag: 'Requested', done: false },
+                    { id: 'd8-a3', time: '12:45', text: 'Lunch at Bistrot Chez Rémy, Plaza Gardens Character Buffet, or Au Chalet de la Marionnette + break at Baby Care Center', tag: 'Dining', done: false },
+                    { id: 'd8-a4', time: '15:00', text: 'Ratatouille: The Adventure, Cars Quatre Roues Rallye, Disney Junior Dream Factory show & afternoon parade', tag: 'Requested', done: false },
+                    { id: 'd8-a5', time: '18:30', text: 'Direct RER A train (€5.10 total) back to Gare de Lyon for a cozy evening', tag: 'Transit', done: false }
+                ],
+                notes: 'Reserve Bistrot Chez Rémy or Plaza Gardens in the official Disneyland Paris App as early as possible!'
+            },
+            {
+                id: 'day-9',
+                date: 'Thu, Nov 12',
+                phase: 'paris',
+                phaseLabel: 'Leg 2: Paris & Disneyland',
+                location: 'Eiffel Tower, River Seine & Bois de Boulogne',
+                title: 'Eiffel Tower Carousel, Heated Seine Cruise & Parisian Gardens',
+                badge: '🗼 Paris Highlights',
+                transitCost: '🚇 Paris Metro/RER: €10.20–€15.30 total for day (€2.55/adult per ride) | 🚕 Uber/Bolt: €18–€28 per trip',
+                dining: '🍽️ Eat near Eiffel Tower: Francette (heated barge right next to the Seine Cruise pier) or Café Kleber (Trocadéro). 🍽️ Eat at Jardin d’Acclimatation: La Grande Verrière (kids’ menu right beside the toddler rides).',
+                activities: [
+                    { id: 'd9-a1', time: '10:00', text: 'Suggested: Morning family photos at Trocadéro & ride the vintage Carrousel de la Tour Eiffel at the foot of the Eiffel Tower', tag: 'Suggestion', done: false },
+                    { id: 'd9-a2', time: '11:30', text: 'Suggested: 1-Hour Bateaux Parisiens Seine River Cruise + lunch at Francette on the Seine or Trocadéro', tag: 'Dining', done: false },
+                    { id: 'd9-a3', time: '15:00', text: 'Suggested: Jardin d’Acclimatation (toddler rides, farm animals & La Grande Verrière café) OR Jardin du Luxembourg', tag: 'Suggestion', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-10',
+                date: 'Fri, Nov 13',
+                phase: 'aberdeen',
+                phaseLabel: 'Leg 3: Transit to Scotland',
+                location: 'Paris → London St. Pancras → Luton → Aberdeen',
+                title: 'Eurostar to London & Evening Flight to Aberdeen',
+                badge: '✈️ easyJet EZY617 (£277.88)',
+                transitCost: '🚕 Paris Hotel → Gare du Nord: €18–€25 (RER D: €5.10) | 🚆 St. Pancras → Luton: £24.60–£34.40 total | 🚕 Aberdeen Airport: Host pickup or £15–£22 taxi',
+                dining: '🍽️ Eat: Croissants & coffee at Gare du Nord; late lunch at Luton Airport (Bella Italia — kids’ pasta/pizza, Nando’s, or Pret a Manger); late supper in Aberdeen.',
+                activities: [
+                    { id: 'd10-a1', time: '10:30', text: 'Check out of Residhome Gare de Lyon and take Uber/G7 Taxi (€18–€25) or RER D (€5.10) to Paris Gare du Nord', tag: 'Transit', done: false },
+                    { id: 'd10-a2', time: '12:30', text: 'Depart Paris Gare du Nord on Eurostar → Arrive London St. Pancras at 14:00 (2h 30m direct)', tag: 'Booked', done: false },
+                    { id: 'd10-a3', time: '14:45', text: 'Board direct Thameslink train from St. Pancras to Luton Airport Parkway (arrives 15:07, £12.30/adult = £24.60 total) + Luton DART shuttle', tag: 'Booked', done: false },
+                    { id: 'd10-a4', time: '15:45', text: 'Drop hold bags at easyJet desk and have family lunch/dinner at Bella Italia or Nando’s inside Luton Terminal', tag: 'Dining', done: false },
+                    { id: 'd10-a5', time: '18:05', text: 'Fly easyJet EZY617 (Seats 11A–11D) from London Luton → Arrive Aberdeen (ABZ) at 19:30; greeted by sister-in-law & husband', tag: 'Booked', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-11',
+                date: 'Sat, Nov 14',
+                phase: 'aberdeen',
+                phaseLabel: 'Leg 3: Aberdeen Family Visit',
+                location: 'Aberdeen, Scotland',
+                title: 'Duthie Park Winter Gardens & Aberdeen Science Centre',
+                badge: '🌵 Indoor Tropical Gardens',
+                transitCost: '🚗 Family Host Car OR 🚕 Aberdeen Uber / Rainbow City Taxi: £8–£14 per ride (First Bus Day Ticket: £5.00/adult)',
+                dining: '🍽️ Eat: The Old Boathouse Café (inside Duthie Park next to the Winter Gardens) + The Silver Darling or Pier Bistro at Aberdeen Beach.',
+                activities: [
+                    { id: 'd11-a1', time: '10:30', text: 'Suggested: David Welch Winter Gardens at Duthie Park (Free) — warm indoor tropical oasis with the famous "Talking Cactus" & koi ponds', tag: 'Suggestion', done: false },
+                    { id: 'd11-a2', time: '12:30', text: 'Warm lunch at The Old Boathouse Café inside Duthie Park', tag: 'Dining', done: false },
+                    { id: 'd11-a3', time: '14:00', text: 'Suggested: Aberdeen Science Centre (dedicated interactive Under-6s Zone) & hot chocolate by Aberdeen Beach Esplanade', tag: 'Suggestion', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-12',
+                date: 'Sun, Nov 15',
+                phase: 'aberdeen',
+                phaseLabel: 'Leg 3: Aberdeen Family Visit',
+                location: 'Kingswells / Stonehaven, Aberdeenshire',
+                title: 'Wynford Farm Park OR Stonehaven & Dunnottar Castle Coastal Drive',
+                badge: '🏰 Scottish Coast & Farm',
+                transitCost: '🚗 Family Host Car OR 🚕 Taxi/Uber to Kingswells (£14–£18) / Stonehaven Train (£11 total)',
+                dining: '🍽️ Eat at Wynford: The CowShed Café (overlooking the toddler play barn!). 🍽️ Eat in Stonehaven: The Bay Fish & Chips (award-winning) + Aunty Betty’s Ice Cream parlour.',
+                activities: [
+                    { id: 'd12-a1', time: '10:30', text: 'Suggested Option A: Wynford Farm Park (Kingswells) — premier indoor soft play barn, animal petting farm & CowShed Café', tag: 'Suggestion', done: false },
+                    { id: 'd12-a2', time: '13:30', text: 'Suggested Option B: 25-min scenic drive to Stonehaven Harbour for The Bay Fish & Chips, Aunty Betty’s sweets & Dunnottar Castle views', tag: 'Dining', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-13',
+                date: 'Mon, Nov 16',
+                phase: 'aberdeen',
+                phaseLabel: 'Leg 3: Aberdeen Family Visit',
+                location: 'Aberdeen, Scotland',
+                title: 'Hazlehead Park Pets’ Corner & Farewell Family Dinner',
+                badge: '🦙 Toddler Zoo',
+                transitCost: '🚗 Family Host Car OR 🚕 Local Taxi: £8–£12',
+                dining: '🍽️ Lunch: Hazlehead Park Tearoom. 🍽️ Farewell Dinner: Miller & Carter Aberdeen, Café Boheme, or cozy home feast with your sister-in-law & brother-in-law.',
+                activities: [
+                    { id: 'd13-a1', time: '10:30', text: 'Suggested: Hazlehead Park Pets’ Corner (alpacas, miniature donkeys, meerkats & indoor reptile house)', tag: 'Suggestion', done: false },
+                    { id: 'd13-a2', time: '17:30', text: 'Farewell family dinner in Aberdeen & packing toddler activity bags for tomorrow’s scenic train', tag: 'Dining', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-14',
+                date: 'Tue, Nov 17',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Train South & Romford Stopover',
+                location: 'Aberdeen → London Kings Cross → Romford',
+                title: 'Scenic East Coast Main Line Train & Overnight in Romford',
+                badge: '🚆 LNER Direct (€171.83)',
+                transitCost: '🚆 Pre-booked LNER Train (€171.83) + King’s Cross → Romford: £8.00 total on Train/Liz Line (or £38–£50 Uber XL)',
+                dining: '🍽️ Eat on Train: LNER Café Bar & at-seat ordering (warm bacon rolls, paninis, kids’ snack boxes) + Marks & Spencer Simply Food at King’s Cross + Reunion Dinner in Romford.',
+                activities: [
+                    { id: 'd14-a1', time: '07:52', text: 'Depart Aberdeen on direct LNER train to London Kings Cross (coastal views past Dundee, Forth Bridges, Edinburgh, Newcastle & York)', tag: 'Booked', done: false },
+                    { id: 'd14-a2', time: '15:01', text: 'Arrive at London Kings Cross Station (€171.83 Confirmed)', tag: 'Booked', done: false },
+                    { id: 'd14-a3', time: '15:30', text: 'Transfer to childhood friend’s home in Romford (£8.00 total via Thameslink 1 stop to Farringdon + Elizabeth Line, or £38–£50 Uber XL)', tag: 'Transit', done: false },
+                    { id: 'd14-a4', time: '18:00', text: 'Reunion dinner in Romford, consolidate all suitcases left in Romford, and restful overnight stay', tag: 'Family', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-15',
+                date: 'Wed, Nov 18',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Direct Hotel Check-In & Local Mall',
+                location: 'Romford → Straight to Radisson RED Heathrow → Uxbridge',
+                title: '🏨 Straight from Romford to Radisson RED Heathrow + Uxbridge Shopping',
+                badge: '🧳 Zero Rented Storage!',
+                highlight: true,
+                transitCost: '🚆 Direct Elizabeth Line (Romford → Hayes & Harlington on 1 train): £11.80 total + £10 Uber to hotel | OR 🚕 Door-to-Door Uber XL: £55–£75',
+                dining: '🍽️ Lunch at Hotel: Filini Bar & Restaurant or The Deli inside Radisson RED. 🍽️ Dinner at The Chimes Uxbridge: Wagamama, Nando’s, or Pizza Express.',
+                activities: [
+                    { id: 'd15-a1', time: '10:30', text: 'Relaxed morning & breakfast with your friend’s family in Romford — no rushing!', tag: 'Family', done: false },
+                    { id: 'd15-a2', time: '11:00', text: 'Travel STRAIGHT from Romford to Radisson RED London Heathrow with all suitcases (Door-to-door Uber XL £55–£75 OR 100% step-free direct Elizabeth Line train from Romford to Hayes & Harlington £11.80 total + 8m taxi)', tag: 'Transit', done: false },
+                    { id: 'd15-a3', time: '12:30', text: 'Arrive at Radisson RED London Heathrow, Hillingdon (€1,026 Confirmed for Nov 18–23) — check in / drop bags with hotel reception & have lunch at Filini', tag: 'Hotel', done: false },
+                    { id: 'd15-a4', time: '15:00', text: '🛍️ Afternoon Local Shopping Haul: 12-min hop (direct U3 bus £3.50 round-trip total or £12–£16 Uber) to The Chimes & Pavilions Mall in Uxbridge (M&S, Next, H&M, Boots, TK Maxx, Clarks & Primark) + dinner at Wagamama/Nando’s', tag: 'Shopping', done: false }
+                ],
+                notes: 'The Elizabeth Line runs directly from Romford Station to Hayes & Harlington on a single train with zero changes and level boarding!'
+            },
+            {
+                id: 'day-16',
+                date: 'Thu, Nov 19',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Shopping Day #1 & Kew Trail',
+                location: 'Wembley OR Kingston upon Thames + Kew Gardens',
+                title: '🛍️ Dedicated Shopping Spree (Outlets or Kingston) + Christmas at Kew',
+                badge: '🛍️ Shopping Day #1',
+                highlight: true,
+                transitCost: '🚌 Direct SL7 Bus to Kingston: £3.50 total each way! | 🚕 Uber to Wembley Outlet / Kingston / Kew: £22–£32 per leg',
+                dining: '🍽️ Eat at Wembley Outlet: Wagamama (free kids’ crayons & mini katsu curry), Las Iguanas, or Pizza Express. 🍽️ Eat in Kingston: John Lewis Place to Eat Café or Browns Riverside. 🍽️ Eat at Kew: Kew Family Kitchen.',
+                activities: [
+                    { id: 'd16-a1', time: '10:00', text: '🛍️ Option A (30%–70% Off Outlets - £24–£32 Uber): London Designer Outlet in Wembley Park — Clarks Outlet (toddler shoes!), Nike, Adidas, Next Outlet, M&S Outlet & free kids’ playground', tag: 'Shopping', done: false },
+                    { id: 'd16-a2', time: '10:00', text: '🛍️ Option B (Upscale Mall + Soft Play - £3.50 total on SL7 Bus or £24 Uber): The Bentall Centre & 4-Floor John Lewis in Kingston (with "123 Jump" indoor toddler soft play!)', tag: 'Shopping', done: false },
+                    { id: 'd16-a3', time: '16:30', text: 'Suggested Evening: "Christmas at Kew" at Royal Botanic Gardens, Kew — stroller-friendly winter light tunnels, festive music & dinner at Kew Family Kitchen', tag: 'Suggestion', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-17',
+                date: 'Fri, Nov 20',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Museums & Knightsbridge Shopping',
+                location: 'South Kensington & Knightsbridge / Oxford Street',
+                title: '🦖 Dinosaurs, Under-3s Sensory Play & Harrods Toy Kingdom',
+                badge: '🦖 Kids + Iconic Shopping',
+                transitCost: '🚇 Public Transit: £19.50–£27.00 round-trip total (Bus + Direct Piccadilly Line) | 🚕 Uber: £32–£45 each way',
+                dining: '🍽️ Eat near Museums: Comptoir Libanais or Ceru (Exhibition Rd, 2m walk — grilled chicken, rice & flatbreads) or T-Rex Grill inside Museum. 🍽️ Eat in Knightsbridge: Harrods Pizzeria / Rotisserie.',
+                activities: [
+                    { id: 'd17-a1', time: '10:00', text: 'Take Bus U3/105 to Heathrow/Hatton Cross + direct Piccadilly Line to South Kensington (~£9.75/adult off-peak)', tag: 'Transit', done: false },
+                    { id: 'd17-a2', time: '10:45', text: 'Suggested: Natural History Museum (Animatronic T-Rex & Blue Whale) + Science Museum next door ("The Garden" basement sensory play zone for under-3s!)', tag: 'Suggestion', done: false },
+                    { id: 'd17-a3', time: '13:00', text: 'Family lunch at Comptoir Libanais (Exhibition Road) or T-Rex Grill', tag: 'Dining', done: false },
+                    { id: 'd17-a4', time: '14:30', text: '🛍️ Iconic Afternoon Shopping: Walk 10 mins to Harrods in Knightsbridge (explore Harrods Toy Kingdom & Food Halls) OR hop to Oxford Street / Selfridges', tag: 'Shopping', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-18',
+                date: 'Sat, Nov 21',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Shopping Day #2 (Westfield London)',
+                location: 'Hounslow & Shepherd’s Bush (Westfield London)',
+                title: '🛍️ Toddler Play Morning & Full Shopping Spree at Westfield London',
+                badge: '🛍️ Shopping Day #2',
+                highlight: true,
+                transitCost: '🚕 Uber to Hobbledown Heath: £12–£16 | 🚕 Uber XL Westfield ↔ Radisson RED: £24–£34 (Public Transit: £14–£18 total)',
+                dining: '🍽️ Eat at Hobbledown: The Hobbler’s Café. 🍽️ Eat at Westfield London: Ichiba (Europe’s largest Japanese food hall — fresh noodles & fish-shaped taiyaki pancakes!), Bill’s, Wahaca, The Real Greek, or Nando’s.',
+                activities: [
+                    { id: 'd18-a1', time: '10:00', text: 'Morning Option (£12–£16 Uber, 15m from hotel): Hobbledown Heath Indoor Play Village (Hounslow) so toddlers burn energy in the Under-5s village — OR head straight to Westfield!', tag: 'Suggestion', done: false },
+                    { id: 'd18-a2', time: '12:30', text: '🛍️ Ultimate Family Shopping Spree at Westfield London (Shepherd’s Bush): Rent "kiddie car" strollers and shop 450+ stores (John Lewis, Next, Zara, M&S, Primark, LEGO Store, Apple & Luxury Village)', tag: 'Shopping', done: false },
+                    { id: 'd18-a3', time: '17:30', text: 'Family dinner at Ichiba Food Hall, Bill’s, or Wahaca inside Westfield, then take an Uber XL (£24–£34) straight back to Radisson RED with all your bags', tag: 'Dining', done: false }
+                ],
+                notes: ''
+            },
+            {
+                id: 'day-19',
+                date: 'Sun, Nov 22',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Final Haul & Packing',
+                location: 'Uxbridge / Staines & Radisson RED Heathrow',
+                title: '🎠 Last-Minute Local Mall Haul & Packing 4 x 23kg Bags',
+                badge: '🧳 Final Full Day',
+                transitCost: '🚌 Direct U3 Bus to Uxbridge: £3.50 total each way! | 🚕 Uber to Uxbridge or Staines: £12–£16 each way',
+                dining: '🍽️ Eat: Prezzo, Wagamama, or M&S Café in Uxbridge/Staines + relaxed farewell dinner at Filini Restaurant inside Radisson RED Heathrow.',
+                activities: [
+                    { id: 'd19-a1', time: '10:00', text: 'Morning Option: Hyde Park Winter Wonderland (10am calm family session for Santaland) OR relaxed morning at the hotel pool', tag: 'Suggestion', done: false },
+                    { id: 'd19-a2', time: '13:00', text: '🛍️ Last-Minute Top-Up Shopping (12–15m away via £3.50 U3 bus or £14 Uber): The Chimes & Primark (Uxbridge) OR Two Rivers (Staines) for final gifts & snacks', tag: 'Shopping', done: false },
+                    { id: 'd19-a3', time: '17:30', text: 'Weigh and pack all 4 x 23kg hold bags + 4 cabin bags at Radisson RED Heathrow & enjoy dinner at Filini Restaurant on site', tag: 'Prep', done: false }
+                ],
+                notes: 'Note: UK Sunday trading hours for large malls are typically 11:00 AM – 5:00 PM!'
+            },
+            {
+                id: 'day-20',
+                date: 'Mon, Nov 23',
+                phase: 'heathrow',
+                phaseLabel: 'Leg 4: Return Home',
+                location: 'London Heathrow (LHR) → Paris (CDG) → Lagos (LOS)',
+                title: 'Homeward Bound to Nigeria!',
+                badge: '✈️ Air France (Booked)',
+                transitCost: '🚕 Uber XL / Hotel Taxi Radisson RED → Heathrow Terminal 4: £12–£18 (8–10 mins door-to-door)',
+                dining: '🍽️ Eat: Early hotel breakfast or Café Rouge / Comptoir Libanais inside Heathrow Terminal 4 + Air France in-flight meals.',
+                activities: [
+                    { id: 'd20-a1', time: '08:15', text: 'Check out of Radisson RED London Heathrow and take a 10-minute Uber XL (£12–£18) to Heathrow Terminal 4', tag: 'Hotel', done: false },
+                    { id: 'd20-a2', time: '11:30', text: 'Depart London Heathrow (LHR) on Air France → Arrive Paris (CDG) at 14:55 for transit connection', tag: 'Booked', done: false },
+                    { id: 'd20-a3', time: '21:30', text: 'Touchdown at Murtala Muhammed International Airport, Lagos (LOS) — Welcome Home!', tag: 'Booked', done: false }
+                ],
+                notes: ''
+            }
+        ];
+
+        const defaultChecklists = {
+            bookings: [
+                { id: 'b1', text: 'KLM Outbound Flight: Lagos (Nov 4, 23:05) → Amsterdam → London City (Nov 5, 07:15)', done: true },
+                { id: 'b2', text: 'Eurostar Return Tickets: London St. Pancras ⇄ Paris Gare du Nord (Nov 10 & Nov 13 — €188)', done: true },
+                { id: 'b3', text: 'Paris Hotel: Residhome Paris Gare de Lyon (Nov 10–13 — €882.68 Confirmed)', done: true },
+                { id: 'b4', text: 'easyJet Flight EZY617: London Luton → Aberdeen (Fri Nov 13, 18:05 — £277.88 Confirmed)', done: true },
+                { id: 'b5', text: 'LNER Direct Train: Aberdeen → London Kings Cross (Tue Nov 17, 07:52–15:01 — €171.83)', done: true },
+                { id: 'b6', text: 'London Hotel: Radisson RED London Heathrow (Nov 18–23 — €1,026 Confirmed)', done: true },
+                { id: 'b7', text: 'Air France Return Flight: Heathrow (Nov 23, 11:30) → Paris CDG → Lagos (21:30)', done: true },
+                { id: 'b8', text: 'Book House of Dreamers ExCeL London morning tickets for Friday, Nov 6 (10:30 AM)', done: false },
+                { id: 'b9', text: 'Reserve 5th Wedding Anniversary Dinner table for Friday, Nov 6 evening (Clos Maggiore / SUSHISAMBA)', done: false },
+                { id: 'b10', text: 'Book Madame Tussauds London timed entry for Saturday, Nov 7 (10:30 AM)', done: false },
+                { id: 'b11', text: 'Book ZSL London Zoo tickets for Monday, Nov 9 (10:00 AM — luggage-free day from Romford!)', done: false },
+                { id: 'b12', text: 'Book Disneyland Paris 1-Day Park Tickets + Bistrot Chez Rémy / Plaza Gardens table for Wed, Nov 11', done: false },
+                { id: 'b13', text: 'Book Natural History Museum free timed entry for Friday, Nov 20 (10:45 AM)', done: false },
+                { id: 'b14', text: 'Optional: Book Christmas at Kew Gardens evening trail for Thursday, Nov 19 (16:30)', done: false }
+            ],
+            packing: [
+                { id: 'p1', text: 'Passports (4x) with valid UK & Schengen Visas + printed hotel/train/flight confirmations', done: false },
+                { id: 'p2', text: 'Lightweight travel stroller(s) + universal waterproof rain covers & warm fleece footmuffs', done: false },
+                { id: 'p3', text: 'Toddler thermal base layers, fleece mid-layers, waterproof puffer coats, hats & mittens', done: false },
+                { id: 'p4', text: '2x Separate Contactless Bank Cards / Apple Pay (1 per adult for London TfL daily fare capping)', done: false },
+                { id: 'p5', text: 'Île-de-France Mobilités App on phones (for €2.55 Paris Metro / Disneyland RER A tickets)', done: false },
+                { id: 'p6', text: 'UK (Type G) and European/French (Type C/E) power adapters + portable power bank', done: false },
+                { id: 'p7', text: 'Digital handheld luggage scale (for weighing your 4 x 23kg hold bags after shopping!)', done: false },
+                { id: 'p8', text: 'Smart outfits for 5th Wedding Anniversary dinner (Nov 6) & family photo shoot', done: false },
+                { id: 'p9', text: 'Tablets with offline downloaded cartoons, toddler headphones & sticker books (for 7h LNER train)', done: false },
+                { id: 'p10', text: 'Toddler medicines (Calpol/paracetamol, thermometer, saline spray, plasters) & familiar snacks', done: false }
+            ],
+            shopping: [
+                { id: 's1', text: 'Clarks Outlet (Wembley LDO) or Clarks (Uxbridge/Westfield) — Toddler shoes & school shoes', done: false },
+                { id: 's2', text: 'Marks & Spencer & Next (The Chimes Uxbridge / Westfield) — Kids’ clothing, multipacks & knitwear', done: false },
+                { id: 's3', text: 'John Lewis Flagship (Westfield London / Kingston) — Nursery gear, kids’ gifts & homeware', done: false },
+                { id: 's4', text: 'Primark (Uxbridge / Westfield) — Toddler winter pyjamas, socks, basics & Disney merch', done: false },
+                { id: 's5', text: 'Nike & Adidas Outlets (Wembley LDO) — Family trainers & sportswear at 30%–70% off', done: false },
+                { id: 's6', text: 'Boots & TK Maxx (Uxbridge / Staines) — Toiletries, vitamins, baby care & designer bargains', done: false },
+                { id: 's7', text: '5th Anniversary Keepsake Gift ("Wood" theme or luxury gift at Westfield Village / Harrods)', done: false }
+            ]
+        };
+
+        let state = {
+            view: 'itinerary',
+            filter: 'all',
+            hideCompleted: false,
+            itinerary: JSON.parse(JSON.stringify(defaultItinerary)),
+            checklists: JSON.parse(JSON.stringify(defaultChecklists))
+        };
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.itinerary) state.itinerary = parsed.itinerary;
+                    if (parsed.checklists) state.checklists = parsed.checklists;
+                    if (typeof parsed.hideCompleted === 'boolean') {
+                        state.hideCompleted = parsed.hideCompleted;
+                        document.getElementById('hide-completed-toggle').checked = state.hideCompleted;
+                    }
+                }
+            } catch (e) {
+                console.error('Could not load state from localStorage', e);
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                updateProgress();
+            } catch (e) {
+                console.error('Could not save state to localStorage', e);
+            }
+        }
+
+        function updateProgress() {
+            let total = 0;
+            let done = 0;
+            state.itinerary.forEach(day => {
+                day.activities.forEach(act => {
+                    total++;
+                    if (act.done) done++;
+                });
+            });
+            ['bookings', 'packing', 'shopping'].forEach(cat => {
+                state.checklists[cat].forEach(item => {
+                    total++;
+                    if (item.done) done++;
+                });
+            });
+            const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+            document.getElementById('progress-text').textContent = pct + '%';
+            document.getElementById('progress-bar').style.width = pct + '%';
+            document.getElementById('completed-count').textContent = `${done} / ${total} items checked`;
+        }
+
+        function setView(viewMode, filterValue) {
+            state.view = viewMode;
+            state.filter = filterValue;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const isActive = btn.dataset.tab === filterValue;
+                if (btn.dataset.tab === 'checklists') {
+                    btn.className = isActive
+                        ? 'nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 text-white shadow-sm transition'
+                        : 'nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition';
+                } else {
+                    btn.className = isActive
+                        ? 'nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 text-white shadow-sm transition'
+                        : 'nav-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+                }
+            });
+
+            if (viewMode === 'checklists') {
+                document.getElementById('checklists-view').classList.remove('hidden');
+                document.getElementById('itinerary-container').classList.add('hidden');
+                renderChecklistsHub();
+            } else {
+                document.getElementById('checklists-view').classList.add('hidden');
+                document.getElementById('itinerary-container').classList.remove('hidden');
+                renderItinerary();
+            }
+        }
+
+        function toggleHideCompleted(checked) {
+            state.hideCompleted = checked;
+            saveState();
+            renderChecklistsHub();
+            renderItinerary();
+        }
+
+        function toggleActivity(dayId, actId) {
+            const day = state.itinerary.find(d => d.id === dayId);
+            if (!day) return;
+            const act = day.activities.find(a => a.id === actId);
+            if (act) {
+                act.done = !act.done;
+                saveState();
+                renderItinerary();
+            }
+        }
+
+        function toggleAllDay(dayId) {
+            const day = state.itinerary.find(d => d.id === dayId);
+            if (!day) return;
+            const allDone = day.activities.every(a => a.done);
+            day.activities.forEach(a => { a.done = !allDone; });
+            saveState();
+            renderItinerary();
+        }
+
+        function addCustomActivity(dayId) {
+            const timeInput = document.getElementById(`time-${dayId}`);
+            const textInput = document.getElementById(`text-${dayId}`);
+            const timeVal = (timeInput.value || 'Flex').trim();
+            const textVal = (textInput.value || '').trim();
+            if (!textVal) return;
+
+            const day = state.itinerary.find(d => d.id === dayId);
+            if (day) {
+                day.activities.push({
+                    id: 'custom-' + Date.now(),
+                    time: timeVal,
+                    text: textVal,
+                    tag: 'Custom',
+                    done: false
+                });
+                timeInput.value = '';
+                textInput.value = '';
+                saveState();
+                renderItinerary();
+            }
+        }
+
+        function deleteActivity(dayId, actId) {
+            const day = state.itinerary.find(d => d.id === dayId);
+            if (!day) return;
+            day.activities = day.activities.filter(a => a.id !== actId);
+            saveState();
+            renderItinerary();
+        }
+
+        function updateDayNotes(dayId, value) {
+            const day = state.itinerary.find(d => d.id === dayId);
+            if (day) {
+                day.notes = value;
+                saveState();
+            }
+        }
+
+        function toggleChecklistItem(category, itemId) {
+            const list = state.checklists[category];
+            if (!list) return;
+            const item = list.find(i => i.id === itemId);
+            if (item) {
+                item.done = !item.done;
+                saveState();
+                renderChecklistsHub();
+            }
+        }
+
+        function addChecklistItem(category, inputId) {
+            const input = document.getElementById(inputId);
+            const val = (input.value || '').trim();
+            if (!val) return;
+            state.checklists[category].push({
+                id: category + '-' + Date.now(),
+                text: val,
+                done: false,
+                custom: true
+            });
+            input.value = '';
+            saveState();
+            renderChecklistsHub();
+        }
+
+        function deleteChecklistItem(category, itemId) {
+            state.checklists[category] = state.checklists[category].filter(i => i.id !== itemId);
+            saveState();
+            renderChecklistsHub();
+        }
+
+        function toggleSection(id) {
+            document.getElementById(id).classList.toggle('hidden');
+        }
+
+        function resetAllData() {
+            if (confirm('Reset all checkboxes, custom items, and notes back to the master itinerary?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                state.itinerary = JSON.parse(JSON.stringify(defaultItinerary));
+                state.checklists = JSON.parse(JSON.stringify(defaultChecklists));
+                state.hideCompleted = false;
+                document.getElementById('hide-completed-toggle').checked = false;
+                saveState();
+                renderChecklistsHub();
+                renderItinerary();
+            }
+        }
+
+        function getTagStyle(tag) {
+            switch (tag) {
+                case 'Requested': return 'bg-rose-100 text-rose-800 border-rose-200';
+                case 'Shopping': return 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-300';
+                case 'Dining': return 'bg-orange-100 text-orange-800 border-orange-200';
+                case 'Anniversary': return 'bg-pink-100 text-pink-800 border-pink-200';
+                case 'Booked':
+                case 'Flight': return 'bg-blue-100 text-blue-800 border-blue-200';
+                case 'Hotel': return 'bg-purple-100 text-purple-800 border-purple-200';
+                case 'Suggestion': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+                case 'Family': return 'bg-amber-100 text-amber-900 border-amber-300';
+                case 'Custom': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
+                default: return 'bg-slate-100 text-slate-700 border-slate-200';
+            }
+        }
+
+        function renderChecklistsHub() {
+            ['bookings', 'packing', 'shopping'].forEach(cat => {
+                const container = document.getElementById(`${cat}-checklist`);
+                const counter = document.getElementById(`${cat}-counter`);
+                const allItems = state.checklists[cat] || [];
+                const doneCount = allItems.filter(i => i.done).length;
+                counter.textContent = `${doneCount}/${allItems.length}`;
+
+                const visibleItems = state.hideCompleted ? allItems.filter(i => !i.done) : allItems;
+                container.innerHTML = visibleItems.map(item => `
+          <div class="flex items-start justify-between gap-2 p-2.5 rounded-xl border ${item.done ? 'bg-slate-50 border-slate-200 text-slate-400 line-through' : 'bg-white border-slate-200 text-slate-700'} hover:bg-slate-50 transition">
+            <label class="flex items-start gap-2.5 cursor-pointer flex-1">
+              <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem('${cat}', '${item.id}')" class="mt-0.5 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+              <span class="text-xs font-medium leading-relaxed">${item.text}</span>
+            </label>
+            ${item.custom ? `<button onclick="deleteChecklistItem('${cat}', '${item.id}')" class="text-xs text-slate-400 hover:text-rose-600 px-1">✕</button>` : ''}
+          </div>
+        `).join('');
+            });
+        }
+
+        function renderItinerary() {
+            const container = document.getElementById('itinerary-container');
+            const filtered = state.filter === 'all'
+                ? state.itinerary
+                : state.itinerary.filter(d => d.phase === state.filter);
+
+            container.innerHTML = filtered.map(day => {
+                const ringClass = day.highlight
+                    ? 'border-2 border-rose-300 bg-gradient-to-br from-white via-white to-rose-50/40'
+                    : 'border border-slate-200 bg-white';
+
+                const dayDoneCount = day.activities.filter(a => a.done).length;
+                const allDayDone = day.activities.length > 0 && dayDoneCount === day.activities.length;
+                const visibleActivities = state.hideCompleted
+                    ? day.activities.filter(a => !a.done)
+                    : day.activities;
+
+                const activitiesHtml = visibleActivities.map(act => `
+          <div class="flex items-start justify-between gap-3 p-3 rounded-xl border ${act.done ? 'bg-slate-50 border-slate-200 opacity-65' : 'bg-white border-slate-200/80 hover:border-indigo-200'} transition">
+            <label class="flex items-start gap-3 cursor-pointer flex-1">
+              <input type="checkbox" ${act.done ? 'checked' : ''} onchange="toggleActivity('${day.id}', '${act.id}')" class="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">${act.time}</span>
+                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded border ${getTagStyle(act.tag)}">${act.tag}</span>
+                </div>
+                <p class="text-sm font-medium text-slate-800 mt-1 ${act.done ? 'line-through text-slate-400' : ''}">${act.text}</p>
+              </div>
+            </label>
+            ${act.tag === 'Custom' ? `<button onclick="deleteActivity('${day.id}', '${act.id}')" class="text-xs text-slate-400 hover:text-rose-600 px-1" title="Delete">✕</button>` : ''}
+          </div>
+        `).join('');
+
+                return `
+          <article class="rounded-2xl shadow-sm p-5 ${ringClass} transition">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+              <div>
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-600">${day.date}</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="text-xs font-semibold text-slate-500">${day.phaseLabel}</span>
+                  <span class="text-xs text-slate-400">•</span>
+                  <span class="text-xs font-medium text-slate-600">📍 ${day.location}</span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900 mt-1">${day.title}</h3>
+              </div>
+              <div class="flex items-center gap-2 self-start sm:self-center">
+                <button onclick="toggleAllDay('${day.id}')" class="px-2.5 py-1 rounded-lg text-xs font-semibold border ${allDayDone ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'} transition">
+                  ${allDayDone ? '✓ Day Complete' : `Check Day (${dayDoneCount}/${day.activities.length})`}
+                </button>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 whitespace-nowrap">
+                  ${day.badge}
+                </span>
+              </div>
+            </div>
+
+            <!-- Transit Cost & Dining Info Bar -->
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
+              <div class="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200/80 text-blue-950 font-medium">
+                ${day.transitCost}
+              </div>
+              <div class="p-2.5 rounded-xl bg-orange-50/70 border border-orange-200/80 text-orange-950 font-medium">
+                ${day.dining}
+              </div>
+            </div>
+
+            <!-- Activities List -->
+            <div class="mt-3 space-y-2">
+              ${activitiesHtml || '<p class="text-xs text-slate-400 italic py-2">All activities for this day are checked off!</p>'}
+            </div>
+
+            <!-- Add Custom Activity & Personal Notes -->
+            <div class="mt-4 pt-3 border-t border-slate-100 grid grid-cols-1 lg:grid-cols-2 gap-3">
+              <div class="flex items-center gap-2">
+                <input id="time-${day.id}" type="text" placeholder="Time (e.g. 14:00)" class="w-28 px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500" />
+                <input id="text-${day.id}" type="text" placeholder="Add a custom checklist item for ${day.date}..." class="flex-1 px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500" />
+                <button onclick="addCustomActivity('${day.id}')" class="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition whitespace-nowrap">+ Add</button>
+              </div>
+              <div>
+                <input type="text" value="${(day.notes || '').replace(/"/g, '&quot;')}" oninput="updateDayNotes('${day.id}', this.value)" placeholder="📝 Click to add personal notes for ${day.date} (auto-saved)..." class="w-full px-3 py-1.5 text-xs rounded-xl bg-amber-50/70 border border-amber-200 text-amber-900 placeholder-amber-700/60 focus:outline-none focus:border-amber-400" />
+              </div>
+            </div>
+          </article>
+        `;
+            }).join('');
+        }
+
+        // Initialize App
+        loadState();
+        renderChecklistsHub();
+        renderItinerary();
+        updateProgress();
+    </script>
+</body>
+
+</html>
